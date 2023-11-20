@@ -21,7 +21,7 @@ using namespace std;
 #define WAIT_TIME_WHEN_IDLE 100000
 
 // enable printing all found frequent patterns
-#define VERBOSE_MODE
+// #define VERBOSE_MODE
 
 // enable optimized version of subgraph matching methods
 #define OPTIMIZED_MATCH
