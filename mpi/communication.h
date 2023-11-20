@@ -22,7 +22,7 @@
 #include <mpi.h>
 #include "timer.h"
 #include "serialization.h"
-#include "global.h"
+#include "mpi_global.h"
 
 //============================================
 //binstream-level send/recv

@@ -23,7 +23,7 @@
 #include <set>
 #include <string>
 #include <map>
-#include "global.h"
+#include "mpi_global.h"
 
 using namespace std;
 
