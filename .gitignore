@@ -1,0 +1,12 @@
+build/*
+.vscode/*
+legacy/*
+examples/*
+script/*
+a.out
+.DS_Store
+*.o
+main
+run
+.g
+.lg
