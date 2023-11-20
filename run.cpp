@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
     if (_my_rank == MASTER_RANK)
     {
         ui ttl_result = std::accumulate(results_counter.begin(), results_counter.end(), 0);
-        cout << "Results by each worker: " << ttl; 
+        cout << "Results by each worker: " << ttl_result; 
         for (int i=0; i<_num_workers; ++i)
         {
             if (i != MASTER_RANK)
