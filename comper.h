@@ -5,6 +5,8 @@
 #include "gmatch.h"
 #include "decompose.h"
 
+#include "mpi_global.h"
+
 #include <iostream>
 #include <string>
 #include <deque>
