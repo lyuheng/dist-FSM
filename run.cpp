@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
             if (i != MASTER_RANK)
             {
                 ui found = recv_data<ui>(i, RESULT_CHANNEL);
-                cout << found << " ";
+                cout << " " << found;
                 ttl_result += found;
             }
         }
