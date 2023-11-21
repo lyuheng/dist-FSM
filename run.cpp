@@ -22,6 +22,9 @@ int main(int argc, char *argv[])
 
     init_worker(&argc, &argv);
 
+
+    cout << "Rank: " << _my_rank << endl; 
+
     string fileName;
     int support, thread_num = 32;
 
