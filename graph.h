@@ -561,10 +561,7 @@ public:
         size_t seed = 0;
         for (int i = 0; i < dfscodes.size(); ++i)
             dfscodes[i].hash(seed);
-        if (seed >= 0)
-            return seed % _num_workers;
-        else
-            return (-seed) % _num_workers;
+        return seed % _num_workers;
     }
 };
 
