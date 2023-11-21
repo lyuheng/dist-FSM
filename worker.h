@@ -57,7 +57,8 @@ public:
 
     void initialize_pattern()
     {
-        results_counter[0] += grami.initialize();
+        if (_my_rank == MASTER_RANK)
+            results_counter[0] += grami.initialize();
 
         vector<task_container *> sep_results;
 
