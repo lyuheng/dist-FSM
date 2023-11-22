@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "comper.h"
+#include "communication.h"
 #include "serialization.h"
 
 struct steal_plan
@@ -17,18 +18,6 @@ struct steal_plan
         return m;
     }
     friend ibinstream & operator<<(ibinstream & m, const steal_plan & s)
-    {
-        m << s.id;
-        m << s.num;
-        return m;
-    }
-    friend ofbinstream & operator>>(ofbinstream & m, steal_plan & s)
-    {
-        m >> s.id;
-        m >> s.num;
-        return m;
-    }
-    friend ifbinstream & operator<<(ifbinstream & m, const steal_plan & s)
     {
         m << s.id;
         m << s.num;
