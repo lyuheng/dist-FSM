@@ -88,3 +88,23 @@ public:
         delete[] edge_;
     }
 };
+
+struct max_heap_entry
+{
+    int num_remain;
+    int rank;
+    bool operator<(const max_heap_entry& o) const
+    {
+        return num_remain < o.num_remain;
+    }
+};
+
+struct min_heap_entry
+{
+    int num_remain;
+    int rank;
+    bool operator<(const min_heap_entry& o) const
+    {
+        return num_remain > o.num_remain;
+    }
+};

@@ -1,40 +1,29 @@
-//########################################################################
-//## Copyright 2022 Da Yan http://www.cs.uab.edu/yanda
-//##
-//## Licensed under the Apache License, Version 2.0 (the "License");
-//## you may not use this file except in compliance with the License.
-//## You may obtain a copy of the License at
-//##
-//## //http://www.apache.org/licenses/LICENSE-2.0
-//##
-//## Unless required by applicable law or agreed to in writing, software
-//## distributed under the License is distributed on an "AS IS" BASIS,
-//## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-//## See the License for the specific language governing permissions and
-//## limitations under the License.
-//########################################################################
-
 #ifndef CONSTACK_H
 #define CONSTACK_H
 
 #include <mutex>
-#include <stack>
+#include <deque>
 #include <vector>
-#include <iostream>
 
 using namespace std;
+
+/**
+ *      ------------------------
+ * <--- front                   <--- back     
+ *      ------------------------
+ */
 
 template <typename T> 
 class constack
 {
 public:
-    stack<T> s;
+    deque<T> s;
     mutex mtx;
 
-    void enstack(T value) 
+    void enstack(T & value) 
     {
         mtx.lock();
-        s.push(value);
+        s.push_back(value);
         mtx.unlock();
     }
 
@@ -43,7 +32,7 @@ public:
         mtx.lock();
         for(T &el: val_vec)
         {
-            s.push(el);
+            s.push_back(el);
         }
         mtx.unlock();
     }
@@ -53,8 +42,28 @@ public:
         mtx.lock();
         if(!s.empty())
         {
-            to_get = s.top();
-            s.pop();
+            to_get = s.back();
+            s.pop_back();
+            mtx.unlock();
+            return true;
+        }
+        else
+        {
+            mtx.unlock();
+            return false;
+        }
+    }
+
+    bool pop_fronts(vector<T> &to_gets, int count, int above) 
+    {
+        mtx.lock();
+        if(size() >= count + above)
+        {
+            for (int i=0; i<count; ++i)
+            {
+                to_gets.push_back(s.front());
+                s.pop_front();
+            }
             mtx.unlock();
             return true;
         }
@@ -72,6 +81,16 @@ public:
         mtx.unlock();
         return ret;
     }
+
+    int size()
+    {
+        mtx.lock();
+        int ret = s.size();
+        mtx.unlock();
+        return ret;
+    }
+
+    
 };
 
 #endif

@@ -18,7 +18,7 @@
 
 using namespace std;
 
-#define WAIT_TIME_WHEN_IDLE 100000
+#define WAIT_TIME_WHEN_IDLE 100000 // 0.1s
 
 // enable printing all found frequent patterns
 // #define VERBOSE_MODE

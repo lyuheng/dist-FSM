@@ -106,7 +106,6 @@ struct TimeOutTask_Container
 struct task_container
 {
     int qid;
-    vector<FILE *> fout_map;
 
     TaskQ Q_domain;
     mutex Q_domain_mtx;

@@ -7,6 +7,8 @@
 
 #define SLEEP_PARAM 2000 // POLLING_TIME = SLEEP_PARAM * _num_workers
 
+#define MAX_STEAL_PATTERN_NUM 10
+
 int _my_rank;
 int _num_workers;
 inline int get_worker_id()
@@ -46,7 +48,6 @@ void worker_barrier()
 {
     MPI_Barrier(MPI_COMM_WORLD); //only usable before creating threads
 }
-
 
 enum MPICHANNEL
 {
