@@ -271,7 +271,7 @@ public:
             if (other < 0)
             {
                 vector<task_container *> tc_vec;
-                recv_data<vector<task_container *>>(-other-1, STATUS_CHANNEL, tc_vec);
+                // recv_data<vector<task_container *>>(-other-1, STATUS_CHANNEL, tc_vec);
                 if (!tc_vec.empty())
                 {
                     data_stack->enstack(tc_vec);
@@ -282,7 +282,7 @@ public:
                 int steal_num = my_single_steal_list[i].num;
                 vector<task_container *> tc_vec;
                 data_stack->pop_fronts(tc_vec, steal_num, avg_num);
-                send_data(tc_vec, other, STATUS_CHANNEL);
+                // send_data(tc_vec, other, STATUS_CHANNEL);
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 // delete every pointer in tc_vec !!!!!!!!!!!!!!!!!
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
