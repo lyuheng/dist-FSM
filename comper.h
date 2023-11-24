@@ -170,8 +170,9 @@ struct task_container
     {
         m >> tc.qid;
         m >> tc.pattern;
-        tc.pattern.parent_prog = NULL;
-        tc.pattern.non_candidates.resize(tc.pattern->size());
+        tc.pattern->prog = new PatternProgress;
+        tc.pattern->parent_prog = NULL;
+        tc.pattern->non_candidates.resize(tc.pattern->size());
         return m;
     }
     friend ibinstream & operator<<(ibinstream & m, const task_container & tc)

@@ -42,6 +42,8 @@ obinstream recv_obinstream(int src, int tag)
     return obinstream(buf, size);
 }
 
+// binstream-level send/recv for task_container type
+
 //============================================
 //obj-level send/recv
 template <class T>
