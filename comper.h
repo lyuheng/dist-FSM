@@ -182,10 +182,9 @@ struct task_container
         return m;
     }
 
-    task_container(int id)
-    {
-        qid = id;
-    }
+    task_container() {}
+
+    task_container(int id): qid(id) {}
 
     void init() // called when query is added to activeQ_list
     {   
