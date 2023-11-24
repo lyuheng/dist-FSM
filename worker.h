@@ -315,7 +315,7 @@ public:
                 }
             }
         }
-        worker_idle = worker_idle && sth_stealed;
+        worker_idle = worker_idle && !sth_stealed; // nothing to steal and idle 
 
         if (_my_rank != MASTER_RANK)
 		{
