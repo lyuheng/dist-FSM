@@ -16,6 +16,7 @@
 
 #include "types.h"
 #include "mpi_global.h"
+#include "serialization.h"
 
 #define FILE_MAX_LINE 1024
 #define INVALID_EDGE_LABEL 1000000000
