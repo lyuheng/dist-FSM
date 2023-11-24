@@ -41,6 +41,22 @@ struct edge_t
         return ((from == t.from && to == t.to) || (to == t.from && from == t.to))
                 && label == t.label;
     }
+    friend obinstream & operator>>(obinstream & m, edge_t & e)
+    {
+        m >> e.from;
+        m >> e.label;
+        m >> e.to;
+        m >> e.id;
+        return m;
+    }
+    friend ibinstream & operator<<(ibinstream & m, const edge_t & e)
+    {
+        m << e.from;
+        m << e.label;
+        m << e.to;
+        m << e.id;
+        return m;
+    }
 };
 
 typedef vector<edge_t> EdgeType;
@@ -57,6 +73,20 @@ struct vertex_t
     bool operator==(const vertex_t &t) const
     {
         return label == t.label;
+    }
+    friend obinstream & operator>>(obinstream & m, vertex_t & v)
+    {
+        m >> v.id;
+        m >> v.label;
+        m >> v.edges;
+        return m;
+    }
+    friend ibinstream & operator<<(ibinstream & m, const vertex_t & v)
+    {
+        m << v.id;
+        m << v.label;
+        m << v.edges;
+        return m;
     }
 };
 
@@ -339,6 +369,25 @@ struct dfs_code_t
         hash_combine(seed, to_label);
     }
 
+    friend obinstream & operator>>(obinstream & m, dfs_code_t & c)
+    {
+        m >> c.from;
+        m >> c.to;
+        m >> c.from_label;
+        m >> c.edge_label;
+        m >> c.to_label;
+        return m;
+    }
+    friend ibinstream & operator<<(ibinstream & m, const dfs_code_t & c)
+    {
+        m << c.from;
+        m << c.to;
+        m << c.from_label;
+        m << c.edge_label;
+        m << c.to_label;
+        return m;
+    }
+
     VertexID from;
     VertexID to;
     vLabel from_label;
@@ -445,6 +494,31 @@ public:
     // unordered_map<EdgeID, edge_t> edge2vertex; // EdgeID to edge entity
 
     EdgeType edge2vertex;
+
+    friend obinstream & operator>>(obinstream & m, Pattern & p)
+    {
+        m >> p.vertex_id;
+        m >> p.edge_id;
+        m >> p.vertices_; 
+        m >> p.dfscodes;
+        m >> p.right_most_path;
+        // m >> parent_prog;  //@@@@@: temporarily don't copy parent prog;
+        // m >> p.non_candidates; // since this struct is empty, no need to be copied
+        m >> p.edge2vertex;
+        return m;
+    }
+    friend ibinstream & operator<<(ibinstream & m, const Pattern & p)
+    {
+        m << p.vertex_id;
+        m << p.edge_id;
+        m << p.vertices_; 
+        m << p.dfscodes;
+        m << p.right_most_path;
+        // m << parent_prog;  //@@@@@: temporarily don't copy parent prog;
+        // m << p.non_candidates; // since this struct is empty, no need to be copied
+        m << p.edge2vertex;
+        return m;
+    }
 
     // VtxSetVec autos;
 

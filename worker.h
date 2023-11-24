@@ -256,7 +256,7 @@ public:
             else 
             {
                 vector<task_container *> tc_vec;
-                data_stack->destack(tc_vec, MAX_STEAL_PATTERN_NUM, avg_num);
+                data_stack->pop_fronts(tc_vec, MAX_STEAL_PATTERN_NUM, avg_num);
                 send_data(tc_vec, other, STATUS_CHANNEL);
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 // delete every pointer in tc_vec !!!!!!!!!!!!!!!!!
@@ -280,7 +280,7 @@ public:
             {
                 int steal_num = my_single_steal_list[i].num;
                 vector<task_container *> tc_vec;
-                data_stack->destack(tc_vec, steal_num, avg_num);
+                data_stack->pop_fronts(tc_vec, steal_num, avg_num);
                 send_data(tc_vec, other, STATUS_CHANNEL);
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 // delete every pointer in tc_vec !!!!!!!!!!!!!!!!!
@@ -320,7 +320,7 @@ public:
 		{
 			send_data(worker_idle, MASTER_RANK, STATUS_CHANNEL);
 			bool all_idle = recv_data<bool>(MASTER_RANK, STATUS_CHANNEL);
-			if (all_idle) 
+			if (all_idle)
                 global_end_label = true;
 		}
 		else

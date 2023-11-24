@@ -20,9 +20,11 @@
 #define SERIALIZATION_H
 
 #include <vector>
+#include <unordered_set>
 #include <set>
 #include <string>
 #include <map>
+#include <unordered_map>
 #include "mpi_global.h"
 
 using namespace std;
@@ -134,6 +136,16 @@ ibinstream& operator<<(ibinstream& m, const vector<double>& v)
 }
 
 template <class T>
+ibinstream& operator<<(ibinstream& m, const unordered_set<T>& v)
+{
+    m << v.size();
+    for (auto it = v.begin(); it != v.end(); ++it) {
+        m << *it;
+    }
+    return m;
+}
+
+template <class T>
 ibinstream& operator<<(ibinstream& m, const set<T>& v)
 {
     m << v.size();
@@ -147,6 +159,17 @@ ibinstream& operator<<(ibinstream& m, const string& str)
 {
     m << str.length();
     m.raw_bytes(str.c_str(), str.length());
+    return m;
+}
+
+template <class KeyT, class ValT>
+ibinstream& operator<<(ibinstream& m, const unordered_map<KeyT, ValT>& v)
+{
+    m << v.size();
+    for (auto it = v.begin(); it != v.end(); ++it) {
+        m << it->first;
+        m << it->second;
+    }
     return m;
 }
 
@@ -303,6 +326,19 @@ obinstream& operator>>(obinstream& m, vector<double>& v)
 }
 
 template <class T>
+obinstream& operator>>(obinstream& m, unordered_set<T>& v)
+{
+    size_t size;
+    m >> size;
+    for (size_t i = 0; i < size; i++) {
+        T tmp;
+        m >> tmp;
+        v.insert(tmp);
+    }
+    return m;
+}
+
+template <class T>
 obinstream& operator>>(obinstream& m, set<T>& v)
 {
     size_t size;
@@ -322,6 +358,19 @@ obinstream& operator>>(obinstream& m, string& str)
     str.clear();
     char* data = (char*)m.raw_bytes(length);
     str.append(data, length);
+    return m;
+}
+
+template <class KeyT, class ValT>
+obinstream& operator>>(obinstream& m, unordered_map<KeyT, ValT>& v)
+{
+    size_t size;
+    m >> size;
+    for (size_t i = 0; i < size; i++) {
+        KeyT key;
+        m >> key;
+        m >> v[key];
+    }
     return m;
 }
 

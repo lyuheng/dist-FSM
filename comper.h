@@ -166,6 +166,20 @@ struct task_container
     vector<VertexID **> all_bn;
     vector<ui *> all_bn_count;
 
+    friend obinstream & operator>>(obinstream & m, task_container & tc)
+    {
+        m >> tc.qid;
+        m >> tc.pattern;
+        tc.pattern.parent_prog = NULL;
+        tc.pattern.non_candidates.resize(tc.pattern->size());
+        return m;
+    }
+    friend ibinstream & operator<<(ibinstream & m, const task_container & tc)
+    {
+        m << tc.qid;
+        m << tc.pattern;
+        return m;
+    }
 
     task_container(int id)
     {
