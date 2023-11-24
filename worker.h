@@ -239,7 +239,8 @@ public:
 			}
         }
 
-        if (my_single_steal_list.empty() && my_batch_steal_list.empty()) return false;
+        if (my_single_steal_list.empty() && my_batch_steal_list.empty()) 
+            return false;
 
         for (int i=0; i<my_batch_steal_list.size(); ++i)
         {
