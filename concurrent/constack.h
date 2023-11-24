@@ -57,7 +57,8 @@ public:
     bool pop_fronts(vector<T> &to_gets, int count, int above) 
     {
         mtx.lock();
-        if(size() >= count + above)
+
+        if(s.size() >= count + above)
         {
             for (int i=0; i<count; ++i)
             {
