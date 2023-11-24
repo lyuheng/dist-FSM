@@ -351,6 +351,7 @@ public:
         for (int i = 0; i < num_compers; i++)
         {
             compers[i].start(i);
+            cout << "thread " << i << " create" << endl;
         }
         while (global_end_label == false)
         {   
