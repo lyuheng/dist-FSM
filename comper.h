@@ -1751,9 +1751,19 @@ public:
         }
     }
 
+    void bind_to_core(size_t core)
+    {
+        cpu_set_t mask;
+        CPU_ZERO(&mask);
+        CPU_SET(core, &mask);
+        if (sched_setaffinity(0, sizeof(mask), &mask) != 0)
+            exit(0);
+    }
+
     void start(int thread_id)
     {
         this->thread_id = thread_id;
+        bind_to_core(thread_id);
         main_thread = thread(&Comper::run, this);
     }
 };
