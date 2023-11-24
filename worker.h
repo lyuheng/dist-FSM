@@ -281,7 +281,7 @@ public:
             {
                 int steal_num = my_single_steal_list[i].num;
                 vector<task_container *> tc_vec;
-                data_stack->pop_fronts(tc_vec, steal_num, avg_num);
+                // data_stack->pop_fronts(tc_vec, steal_num, avg_num);
                 // send_data(tc_vec, other, STATUS_CHANNEL);
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 // delete every pointer in tc_vec !!!!!!!!!!!!!!!!!
