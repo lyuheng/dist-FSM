@@ -113,9 +113,9 @@ public:
             {
 
                 // cout << (*it2)->hash() << endl;
-                // if ((*it2)->hash() != _my_rank) continue; // if this pattern isn't supposed be computed by me, then skip
+                if ((*it2)->hash() != _my_rank) continue; // if this pattern isn't supposed be computed by me, then skip
 
-                if (_my_rank == 1) continue; //@@@@: for testing!!!!!!!!!
+                // if (_my_rank == 1) continue; //@@@@: for testing!!!!!!!!!
 
                 // cout << "Assigned to rank " << _my_rank << endl;
 
