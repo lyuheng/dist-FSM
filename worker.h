@@ -163,7 +163,7 @@ public:
             }
             priority_queue<max_heap_entry> max_heap;
 			priority_queue<min_heap_entry> min_heap;
-			int avg_num = ceil((float)accumulate(remain_vec.begin(), remain_vec.end(), 0)/remain_vec.size());
+			avg_num = ceil((float)accumulate(remain_vec.begin(), remain_vec.end(), 0)/remain_vec.size());
 			for (int i=0; i<_num_workers; i++)
 			{
 				if (remain_vec[i] > avg_num)
@@ -220,7 +220,7 @@ public:
 						min_heap.push(min);
                 }
             }
-            if (total_plans_num > 0) 
+            if (total_plans_num > 0)
                 cout << total_plans_num <<" stealing plans generated at the master" << endl;
             
             for(int i=0; i<_num_workers; i++)

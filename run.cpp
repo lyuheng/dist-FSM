@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
         {
             if (i != MASTER_RANK)
                 send_data(std::accumulate(results_counter.begin(), results_counter.end(), 0), MASTER_RANK, RESULT_CHANNEL);
-        }   
+        }
     }
     // global_end_label_mem = false;
     // t.join();
