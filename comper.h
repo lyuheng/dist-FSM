@@ -1638,7 +1638,8 @@ public:
 
                         PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
 
-                        if(pattern_prog != NULL)
+                        // if(pattern_prog != NULL)
+                        if(tc_new->pattern->get_nedges() > 2)
                         {
                             pattern_prog->children_mtx.lock();
                             pattern_prog->children_cnt--;
@@ -1674,15 +1675,17 @@ public:
                         /** case 1, # edges = 2, parent_prog = NULL
                          *  case 2, # edges > 2, parent_prog != NULL, normal case
                          *  case 3, # edges > 2, parent_prog = NULL, request from other machine.
-                         *      - block here?
+                         *      - block here? <-- go this
                          *      - use KV-table to hold
                          */
-                        
+
                         bool keep = gmatch_engine.DPisoFilter(false, grami.nsupport_); // degree-based pruning
 
                         // delete parent pattern
                         PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
-                        if(pattern_prog != NULL)
+                        
+                        // if(pattern_prog != NULL)
+                        if(tc_new->pattern->get_nedges() > 2)
                         {
                             pattern_prog->children_mtx.lock();
                             pattern_prog->children_cnt--;

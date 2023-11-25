@@ -293,7 +293,6 @@ public:
         return true;
     }
 
-
     void status_sync(bool sth_stealed)
     {
         bool worker_idle = false;
