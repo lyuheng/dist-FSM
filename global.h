@@ -53,7 +53,7 @@ size_t MINI_BATCH_NUM = 800;
 
 int RT_THRESHOLD_FOR_REFILL = 800;
 
-atomic<int> qid(1); // 0 is occupied by a void pattern
+atomic<int> qid{1}; // 0 is occupied by a void pattern
 
 size_t num_compers = 32;
 
