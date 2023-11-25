@@ -30,6 +30,8 @@
 #include <ext/hash_set>
 #include <mutex>
 #include <cassert>
+#include <bitset>
+#include <iostream>
 //#include <map>
 
 #define hash_map __gnu_cxx::hash_map
@@ -121,7 +123,7 @@ public:
 		buck.lock();
 		bool ret = buck.insert(key, value);
 		if (!ret)
-			cout << "conflict key: " <<  std::bitset<32>(key) << endl;
+			cout << "conflict key: " << std::bitset<32>(key) << endl;
 		assert(ret);
 		buck.unlock();
 		return ret;
