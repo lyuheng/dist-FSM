@@ -1553,6 +1553,7 @@ public:
                         // fout[thread_id] << "delete qid = " << tc->qid << "'s prog" << endl;
 
                         delete tc->pattern->prog;
+                        g_pattern_prog_map.erase(tc->qid);
 
                         // fout[thread_id] << "delete QID: " << tc->qid << " in frequent_tag" << endl;
 
@@ -1677,6 +1678,7 @@ public:
                         else
                         {
                             delete tc_new->pattern->prog;
+                            g_pattern_prog_map.erase(tc_new->qid);
                             delete tc_new;
                         }
                         activeQ_lock.wrlock();
