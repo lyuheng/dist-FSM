@@ -1074,6 +1074,7 @@ public:
         if(pattern->prog->children_cnt == 0)
         {
             delete pattern->prog;
+            g_pattern_prog_map.erase(tc->qid);
         }
 
         for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
@@ -1156,6 +1157,7 @@ public:
             if(pattern->prog->children_cnt == 0)
             {
                 delete pattern->prog;
+                g_pattern_prog_map.erase(tc->qid);
             }
 
             for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
@@ -1534,8 +1536,8 @@ public:
                     if(tc->normal_exit) // activeQ is unlock
                     {
                         if(!task_obtained) activeQ_lock.unlock();
-                        if(!check_freq_and_extend())
-                        {
+                        if(!check_freq_and_extend()) // always return true
+                        { 
                             cout << "check_freq_and_extend() #########!!!!!!!!!!" << "QID: " << tc->qid<< endl;
                             // fout[thread_id] << "delete qid = " << tc->qid << "'s prog" << endl;
                             
