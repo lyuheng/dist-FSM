@@ -31,7 +31,7 @@ void init_worker(int * argc, char*** argv)
 	if(provided != MPI_THREAD_MULTIPLE)
 	{
 	    printf("MPI do not Support Multiple thread\n");
-	    exit(0);
+	    // exit(0);
 	}
 	MPI_Comm_size(MPI_COMM_WORLD, &_num_workers);
 	MPI_Comm_rank(MPI_COMM_WORLD, &_my_rank);

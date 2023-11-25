@@ -1630,7 +1630,6 @@ public:
 
                     // ============= unique label pruning ====================
 
-                    
                     if(tc_new->pattern->distinct_labels() && tc_new->pattern->is_acyclic())
                     {
                         gmatch_engine.set(&grami.pruned_graph, tc_new->pattern);
@@ -1638,11 +1637,12 @@ public:
                         gmatch_engine.reset();
 
                         PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
+
                         if(pattern_prog != NULL)
                         {
                             pattern_prog->children_mtx.lock();
                             pattern_prog->children_cnt--;
-                            if(pattern_prog->children_cnt == 0)
+                            if(pattern_prog->children_cnt == 0) 
                             {
                                 delete pattern_prog;
                             }
@@ -1671,6 +1671,13 @@ public:
                     {
                         gmatch_engine.set(&grami.pruned_graph, tc_new->pattern);
 
+                        /** case 1, # edges = 2, parent_prog = NULL
+                         *  case 2, # edges > 2, parent_prog != NULL, normal case
+                         *  case 3, # edges > 2, parent_prog = NULL, request from other machine.
+                         *      - block here?
+                         *      - use KV-table to hold
+                         */
+                        
                         bool keep = gmatch_engine.DPisoFilter(false, grami.nsupport_); // degree-based pruning
 
                         // delete parent pattern
