@@ -113,13 +113,13 @@ public:
             {
                 if ((*it2)->hash() != _my_rank) continue; // if this pattern isn't supposed be computed by me, then skip
 
-                cout << "qid = " << qid << endl;
+                // cout << "qid = " << qid << endl;
                 task_container *new_tc = new task_container(qid.load());
                 qid++;
                 new_tc->pattern = *it2;
                 new_tc->pattern->non_candidates.resize(new_tc->pattern->size());
 
-                cout << "new_tc->qid = " << new_tc->qid << endl;
+                // cout << "new_tc->qid = " << new_tc->qid << endl;
                 g_pattern_prog_map.insert(new_tc->qid, new_tc->pattern->prog);
 
                 sep_results.push_back(new_tc);
