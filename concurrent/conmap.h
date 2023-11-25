@@ -121,7 +121,7 @@ public:
 		buck.lock();
 		bool ret = buck.insert(key, value);
 		if (!ret)
-			cout << "conflict key: " << key << endl;
+			cout << "conflict key: " <<  std::bitset<32>(key) << endl;
 		assert(ret);
 		buck.unlock();
 		return ret;
