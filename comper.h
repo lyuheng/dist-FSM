@@ -1744,6 +1744,7 @@ public:
                             activeQ_lock.unlock();
 
                             delete tc_new->pattern->prog;
+                            g_pattern_prog_map.erase(tc_new->qid);
                             delete tc_new;
                         }
                     }
