@@ -29,6 +29,7 @@
 #include <ext/hash_map>
 #include <ext/hash_set>
 #include <mutex>
+#include <cassert>
 //#include <map>
 
 #define hash_map __gnu_cxx::hash_map
@@ -138,7 +139,7 @@ public:
 	{
 		for (int i=0; i<CONMAP_BUCKET_NUM; ++i)
 		{
-			if (!pos[i].empty())
+			if (!pos(i).empty())
 				return false;
 		}
 		return true;

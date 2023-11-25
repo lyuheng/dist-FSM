@@ -1079,7 +1079,7 @@ public:
         for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
         {
             // add into datastack
-            task_container *new_tc = new task_container(qid++, pattern->qid);
+            task_container *new_tc = new task_container(qid++, tc_->qid);
 
             Pattern * child_pattern = *it;
             child_pattern->parent_prog = pattern->prog;
@@ -1161,7 +1161,7 @@ public:
             for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
             {
                 // add into datastack
-                task_container *new_tc = new task_container(qid++, pattern->qid);
+                task_container *new_tc = new task_container(qid++, tc->qid);
 
                 Pattern * child_pattern = *it;
                 child_pattern->parent_prog = tc->pattern->prog;
