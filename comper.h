@@ -35,7 +35,7 @@ enum MATCH_RETURN_RESULTS {
     TIMEOUT = -3
 };
 
-#define GEN_PATTERN_ID(id) (_my_rank << 25 + (id))
+#define GEN_PATTERN_ID(id) ((_my_rank << 25) + (id))
 #define RET_WORKER_ID(qid) (qid >> 25)
 
 using namespace std;
