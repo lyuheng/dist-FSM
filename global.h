@@ -53,7 +53,7 @@ size_t MINI_BATCH_NUM = 800;
 
 int RT_THRESHOLD_FOR_REFILL = 800;
 
-atomic<int> qid(0);
+atomic<int> qid(1); // 0 is occupied by a void pattern
 
 size_t num_compers = 32;
 
@@ -77,3 +77,9 @@ mutex fmtx;
 unordered_map<subPattern, VtxSetVec, subPatternHashCode> cache;
 rwlock cache_mtx;
 
+
+// =======================================================
+// Below are needed to support distributed environment
+// =======================================================
+
+conmap<int, PatternProgress *> g_pattern_prog_map; // global pattern progress map

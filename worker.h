@@ -123,6 +123,8 @@ public:
                 new_tc->pattern = *it2;
                 new_tc->pattern->non_candidates.resize(new_tc->pattern->size());
 
+                g_pattern_prog_map.insert(new_tc->qid, new_tc->pattern->prog);
+
                 sep_results.push_back(new_tc);
             }
 
@@ -363,5 +365,7 @@ public:
             // Avoid busy-checking
             usleep(WAIT_TIME_WHEN_IDLE);
         }
+
+        assert(g_pattern_prog_map.empty());
     }
 };

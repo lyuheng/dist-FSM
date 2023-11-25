@@ -11,13 +11,15 @@
 
 using namespace std;
 
-template <typename T> struct node_t
+template <typename T> 
+struct node_t
 {
     T value;
     atomic<node_t<T> *> next;
 };
 
-template <typename T> class conque
+template <typename T> 
+class conque
 {
 public:
     typedef node_t<T> NODE;

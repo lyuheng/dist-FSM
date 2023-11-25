@@ -534,12 +534,12 @@ public:
         }
     }
 
-    inline vector<Domain> & get_parent_cands()
+    vector<Domain> & get_parent_cands()
     {
         return parent_prog->candidates;
     }
 
-    inline vector<Domain> & get_cands()
+    vector<Domain> & get_cands()
     {
         return prog->candidates;
     }

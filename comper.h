@@ -29,9 +29,14 @@ typedef conmap<string, VtxSetVec>::bucket bucket;
 typedef conmap<string, VtxSetVec>::bucket_map bucket_map;
 
 // 3 return values
-#define MATCH_FOUND -1
-#define MATCH_NOT_FOUND -2
-#define TIMEOUT -3
+enum MATCH_RETURN_RESULTS { 
+    MATCH_FOUND = -1,
+    MATCH_NOT_FOUND = -2,
+    TIMEOUT = -3
+};
+
+#define GEN_PATTERN_ID(id) (_my_rank << 25 + (id))
+#define RET_WORKER_ID(qid) (qid >> 25)
 
 using namespace std;
 using namespace std::chrono;
@@ -105,7 +110,7 @@ struct TimeOutTask_Container
 
 struct task_container
 {
-    int qid;
+    int qid, parent_qid;
 
     TaskQ Q_domain;
     mutex Q_domain_mtx;
@@ -169,6 +174,7 @@ struct task_container
     friend obinstream & operator>>(obinstream & m, task_container & tc)
     {
         m >> tc.qid;
+        m >> tc.parent_qid;
         m >> tc.pattern;
         tc.pattern->prog = new PatternProgress;
         tc.pattern->parent_prog = NULL;
@@ -178,13 +184,18 @@ struct task_container
     friend ibinstream & operator<<(ibinstream & m, const task_container & tc)
     {
         m << tc.qid;
+        m << tc.parent_qid;
         m << tc.pattern;
         return m;
     }
 
     task_container() {}
 
-    task_container(int id): qid(id) {}
+    // combine _my_rank with qid
+    task_container(int id): qid(GEN_PATTERN_ID(id)), parent_qid(0) {}
+
+    // combine _my_rank with qid
+    task_container(int id, int pqid): qid(GEN_PATTERN_ID(id)), parent_qid(pqid) {}
 
     void init() // called when query is added to activeQ_list
     {   
@@ -1068,12 +1079,14 @@ public:
         for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
         {
             // add into datastack
-            task_container *new_tc = new task_container(qid++);
+            task_container *new_tc = new task_container(qid++, pattern->qid);
 
             Pattern * child_pattern = *it;
             child_pattern->parent_prog = pattern->prog;
             child_pattern->non_candidates.resize(child_pattern->size());
             new_tc->pattern = child_pattern;
+
+            g_pattern_prog_map.insert(new_tc->qid, new_tc->pattern->prog); // add into global map
             
             data_stack.enstack(new_tc);
         }
@@ -1148,12 +1161,14 @@ public:
             for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
             {
                 // add into datastack
-                task_container *new_tc = new task_container(qid++);
+                task_container *new_tc = new task_container(qid++, pattern->qid);
 
                 Pattern * child_pattern = *it;
                 child_pattern->parent_prog = tc->pattern->prog;
                 child_pattern->non_candidates.resize(child_pattern->size());
                 new_tc->pattern = child_pattern;
+
+                g_pattern_prog_map.insert(new_tc->qid, new_tc->pattern->prog); // add into global map
                 
                 data_stack.enstack(new_tc);
             }
@@ -1638,14 +1653,15 @@ public:
 
                         PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
 
-                        // if(pattern_prog != NULL)
-                        if(tc_new->pattern->get_nedges() > 2)
+                        if(pattern_prog != NULL)
+                        // if(tc_new->pattern->get_nedges() > 2)
                         {
                             pattern_prog->children_mtx.lock();
                             pattern_prog->children_cnt--;
                             if(pattern_prog->children_cnt == 0) 
                             {
                                 delete pattern_prog;
+                                g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
                             }
                             else
                             {
@@ -1684,18 +1700,22 @@ public:
                         // delete parent pattern
                         PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
                         
-                        // if(pattern_prog != NULL)
-                        if(tc_new->pattern->get_nedges() > 2)
+                        if(pattern_prog != NULL)
+                        // if(tc_new->pattern->get_nedges() > 2)
                         {
-                            pattern_prog->children_mtx.lock();
-                            pattern_prog->children_cnt--;
-                            if(pattern_prog->children_cnt == 0)
+                            // if (pattern_prog != NULL)
                             {
-                                delete pattern_prog;
-                            }
-                            else
-                            {
-                                pattern_prog->children_mtx.unlock();
+                                pattern_prog->children_mtx.lock();
+                                pattern_prog->children_cnt--;
+                                if(pattern_prog->children_cnt == 0)
+                                {
+                                    delete pattern_prog;
+                                    g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
+                                }
+                                else
+                                {
+                                    pattern_prog->children_mtx.unlock();
+                                }
                             }
                         }
 

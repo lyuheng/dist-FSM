@@ -88,9 +88,7 @@ public:
         int ret = s.size();
         mtx.unlock();
         return ret;
-    }
-
-    
+    }    
 };
 
 #endif

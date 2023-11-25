@@ -45,7 +45,8 @@ struct hash<long long> {
 };
 }
 
-template <typename K, typename V> struct conmap_bucket
+template <typename K, typename V> 
+struct conmap_bucket
 {
 	typedef hash_map<K, V> KVMap;
 //	typedef map<K, V> KVMap;
@@ -83,9 +84,15 @@ template <typename K, typename V> struct conmap_bucket
 		size_t num_erased = bucket.erase(key);
 		return (num_erased == 1);
 	}
+
+	bool empty()
+	{
+		return bucket.empty();
+	}
 };
 
-template <typename K, typename V> struct conmap
+template <typename K, typename V> 
+struct conmap
 {
 public:
 	typedef conmap_bucket<K, V> bucket;
@@ -105,6 +112,36 @@ public:
 	bucket & pos(size_t pos)
 	{
 		return buckets[pos];
+	}
+
+	bool insert(K key, V value)
+	{
+		bucket & buck = get_bucket(key);
+		buck.lock();
+		bool ret = buck.insert(key, value);
+		assert(ret);
+		buck.unlock();
+		return ret;
+	}
+
+	bool erase(K key)
+	{
+		bucket & buck = get_bucket(key);
+		buck.lock();
+		bool ret = buck.erase(key);
+		assert(ret);
+		buck.unlock();
+		return ret;
+	}
+
+	bool empty()
+	{
+		for (int i=0; i<CONMAP_BUCKET_NUM; ++i)
+		{
+			if (!pos[i].empty())
+				return false;
+		}
+		return true;
 	}
 
 	~conmap()
