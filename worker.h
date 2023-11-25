@@ -114,7 +114,8 @@ public:
                 if ((*it2)->hash() != _my_rank) continue; // if this pattern isn't supposed be computed by me, then skip
 
                 cout << "qid = " << qid << endl;
-                task_container *new_tc = new task_container(qid++);
+                task_container *new_tc = new task_container(qid.load());
+                qid++;
                 new_tc->pattern = *it2;
                 new_tc->pattern->non_candidates.resize(new_tc->pattern->size());
 
