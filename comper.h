@@ -110,7 +110,7 @@ struct TimeOutTask_Container
 
 struct task_container
 {
-    int qid, parent_qid;
+    int qid, parent_qid; // pattern ID, parent pattern ID
 
     TaskQ Q_domain;
     mutex Q_domain_mtx;

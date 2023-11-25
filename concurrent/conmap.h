@@ -122,8 +122,6 @@ public:
 		bucket & buck = get_bucket(key);
 		buck.lock();
 		bool ret = buck.insert(key, value);
-		if (!ret)
-			cout << "conflict key: " << std::bitset<32>(key) << endl;
 		assert(ret);
 		buck.unlock();
 		return ret;
@@ -143,7 +141,7 @@ public:
 	{
 		for (int i=0; i<CONMAP_BUCKET_NUM; ++i)
 		{
-			if (!pos(i).empty())
+			if (!pos(i).empty()) 
 				return false;
 		}
 		return true;
