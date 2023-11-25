@@ -111,14 +111,8 @@ public:
 
             for(auto it2 = ext_pattern_vec.begin(); it2 != ext_pattern_vec.end(); ++it2) 
             {
-
-                // cout << (*it2)->hash() << endl;
                 if ((*it2)->hash() != _my_rank) continue; // if this pattern isn't supposed be computed by me, then skip
-
-                // if (_my_rank == 1) continue; //@@@@: for testing!!!!!!!!!
-
-                // cout << "Assigned to rank " << _my_rank << endl;
-
+                
                 task_container *new_tc = new task_container(qid++);
                 new_tc->pattern = *it2;
                 new_tc->pattern->non_candidates.resize(new_tc->pattern->size());

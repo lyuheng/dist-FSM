@@ -120,6 +120,8 @@ public:
 		bucket & buck = get_bucket(key);
 		buck.lock();
 		bool ret = buck.insert(key, value);
+		if (!ret)
+			cout << "conflict key: " << key << endl;
 		assert(ret);
 		buck.unlock();
 		return ret;
