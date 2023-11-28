@@ -4,6 +4,7 @@
 #include <vector>
 #include "conque.h"
 #include "mpi_global.h"
+#include "global.h"
 
 template <typename KeyT>
 class ReqQueue

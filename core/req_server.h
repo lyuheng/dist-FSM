@@ -5,7 +5,6 @@
 #include "mpi_global.h"
 
 #include "resp_queue.h"
-#include "global.h"
 
 
 class ReqServer

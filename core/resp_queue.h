@@ -6,6 +6,7 @@
 #include "conque.h"
 #include "serialization.h"
 #include "mpi_global.h"
+#include "global.h"
 
 template <typename T>
 class RespQueue
