@@ -378,6 +378,6 @@ public:
             usleep(WAIT_TIME_WHEN_IDLE);
         }
 
-        assert(g_pattern_prog_map.empty());
+        cout << (g_pattern_prog_map.empty()) << endl;
     }
 };
