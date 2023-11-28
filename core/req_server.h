@@ -68,7 +68,7 @@ public:
         if(main_thread.joinable())
             main_thread.join();
 
-        cout << "ReqServer done" << endl;
+        cout << "ReqServer done at rank" << _my_rank << endl;
     }
 };
 

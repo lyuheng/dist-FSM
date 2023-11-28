@@ -63,6 +63,6 @@ public:
         if(main_thread.joinable())
     	    main_thread.join();
         
-        cout << "RespServer done" << endl;
+        cout << "RespServer done at rank" << _my_rank << endl;
 	}
 };

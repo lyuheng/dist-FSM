@@ -101,6 +101,7 @@ public:
     {
         if(main_thread.joinable())
             main_thread.join();
-		cout << "RespQueue done" << endl;
+
+		cout << "RespQueue done at rank" << _my_rank << endl;
     }
 };

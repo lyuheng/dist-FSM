@@ -104,6 +104,6 @@ public:
     {  
         if(main_thread.joinable())
     	    main_thread.join();
-		cout << "ReqQueue done" << endl;
+		cout << "ReqQueue done at rank" << _my_rank << endl;
     }
 };
