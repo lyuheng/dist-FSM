@@ -24,7 +24,9 @@ public:
         while (succ)
         {
             m << temp;
-            if(m.size() > MAX_BATCH_SIZE) break;
+            if(m.size() > MAX_BATCH_SIZE) {
+				cout << "m.size() = " << m.size() << endl;
+			}
 			succ = buf.dequeue(temp);
         }
     }
