@@ -91,7 +91,7 @@ public:
     	int tgt = GET_WORKER_ID(key.parent_qid);
     	Buffer & buf = q[tgt];
     	buf.enqueue(key);
-		cout << "enqueue once" << endl;
+		cout << "enqueue once key.pqid = " << key.parent_qid << endl;
     }
     
     ReqQueue()
