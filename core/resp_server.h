@@ -23,7 +23,7 @@ public:
             // cache_table.insert(value.qid, value.candidates);
             // temporarily don't notify
 
-            cout << &value << endl;
+            cout << &value << " " << value.qid << endl;
         }
     }
 
