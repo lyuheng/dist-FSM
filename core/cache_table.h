@@ -96,7 +96,7 @@ public:
 		}
     	else
     	{
-        	CandValue & cpair = it->second;
+        	CandValue<ValueT> & cpair = it->second;
         	if(cpair.counter == 0)
                 bucket.zeros.erase(key); //zero-cache.remove
         	cpair.counter++;
@@ -113,7 +113,7 @@ public:
 		auto & kvmap = bucket.get_map();
 		auto it = kvmap.find(key);
 		assert(it != kvmap.end());
-		ValType * val = it->second.value;
+		ValueT * val = it->second.value;
 		bucket.unlock();
 		return val;
     }
@@ -122,7 +122,7 @@ public:
     {
         auto & bucket = candcache.get_bucket(key);
 		bucket.lock();
-		CandValue cpair;
+		CandValue<ValueT> cpair;
 		cpair.value = value;
 		cpair.counter = pcache.erase(key);
 		bool inserted = bucket.insert(key, cpair);
