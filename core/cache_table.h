@@ -22,7 +22,7 @@ public:
 
     PCache pcache;
 
-    size_t erase(KeyT key, PatternIDVec & pid_collector)
+    size_t erase(KeyT key)
     {
     	auto & bucket = pcache.get_bucket(key);
     	auto & kvmap = bucket.get_map();
@@ -31,7 +31,7 @@ public:
     	PatternIDVec & ids = it->second;
     	size_t ret = ids.size();
 		assert(ret > 0);
-		pid_collector.swap(ids);
+		// pid_collector.swap(ids);
 		kvmap.erase(it);
         return ret;
     }
@@ -98,7 +98,9 @@ public:
     	{
         	CandValue<ValueT> & cpair = it->second;
         	if(cpair.counter == 0)
+			{
                 bucket.zeros.erase(key); //zero-cache.remove
+			}
         	cpair.counter++;
         	ret = cpair.value;
     	}

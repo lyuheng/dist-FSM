@@ -87,7 +87,7 @@ public:
 
 	void add(KeyT key)
     {
-    	int tgt = GET_WORKER_ID(key->parent_qid);
+    	int tgt = GET_WORKER_ID(key.parent_qid);
     	Buffer & buf = q[tgt];
     	buf.enqueue(key);
     }
