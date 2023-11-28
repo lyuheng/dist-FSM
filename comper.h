@@ -1656,12 +1656,12 @@ public:
                      *      - use KV-table to hold
                      */
                     // bool need_req = false;
-                    // if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
-                    // {
+                    if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
+                    {
                     //     assert(GET_WORKER_ID(tc_new->parent_qid) != _my_rank);
                     //     tc_new->pattern->parent_prog = new PatternProgress;
                     //     // check if it's in local cache_table 
-                    //     vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
+                        vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
                         
                     //     if (!parent_domain)
                     //     { 
@@ -1676,7 +1676,7 @@ public:
                     //     need_req = true;
 
                     //     tc_new->pattern->parent_prog->candidates = *parent_domain; // FIXME: temporarily copy, fix later
-                    // }
+                    }
                     
                     // ====== request parent domain here done =======
 
