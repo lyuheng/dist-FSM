@@ -7,6 +7,7 @@
 
 #include "mpi_global.h"
 #include "communication.h"
+#include "cache.h"
 
 #include <iostream>
 #include <string>
