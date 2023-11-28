@@ -27,7 +27,7 @@ public:
             auto it = kvmap.find(key.parent_qid);
             assert(it != kvmap.end());
             bucket.unlock();
-            q_resp.add({key.parent_qid, &(it->second->candidates)}, src);
+            q_resp.add(RespondMsg{key.parent_qid, &(it->second->candidates)}, src);
 		}
     }
 
