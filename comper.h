@@ -1693,7 +1693,6 @@ public:
                         PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
 
                         if(pattern_prog != NULL)
-                        // if(tc_new->pattern->get_nedges() > 2)
                         {
                             pattern_prog->children_mtx.lock();
                             pattern_prog->children_cnt--;
