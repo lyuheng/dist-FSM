@@ -22,7 +22,7 @@ public:
 
     PCache pcache;
 
-    size_t erase(KeyType key, PatternIDVec & pid_collector)
+    size_t erase(KeyT key, PatternIDVec & pid_collector)
     {
     	auto & bucket = pcache.get_bucket(key);
     	auto & kvmap = bucket.get_map();
@@ -61,8 +61,9 @@ class CacheTable
 public:
     typedef conmap_zero<KeyT, CandValue<ValueT>> CandCacheT;
 
-    ReqQueue q_req;
+    ReqQueue<RequestMsg> q_req;
     CandCacheT candcache;
+	PullCache<KeyT> pcache;
 
     ~CacheTable()
     {

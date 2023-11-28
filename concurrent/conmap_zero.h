@@ -57,12 +57,12 @@ struct conmap_bucket_zero
 	KVMap bucket;
     KSet zeros;
 
-	inline void lock()
+	void lock()
 	{
 		mtx.lock();
 	}
 
-	inline void unlock()
+	void unlock()
 	{
 		mtx.unlock();
 	}
@@ -108,9 +108,14 @@ public:
 	typedef hash_map<K, V> bucket_map;
 	bucket* buckets;
 
-	conmap()
+	conmap_zero()
 	{
 		buckets = new bucket[CONMAP_BUCKET_NUM];
+	}
+	
+	~conmap_zero()
+	{
+		delete[] buckets;
 	}
 
 	bucket & get_bucket(K key)
@@ -151,11 +156,6 @@ public:
 				return false;
 		}
 		return true;
-	}
-
-	~conmap()
-	{
-		delete[] buckets;
 	}
 };
 
