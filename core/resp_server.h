@@ -9,7 +9,7 @@ template <typename KeyT, typename ValueT>
 class RespServer
 {
 public:
-    typename CacheTable<KeyT, ValueT> CacheTableT;
+    typedef CacheTable<KeyT, ValueT> CacheTableT;
     CacheTableT & cache_table;
     std::thread main_thread;
 

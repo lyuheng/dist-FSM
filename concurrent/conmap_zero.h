@@ -38,16 +38,6 @@
 #define hash_set __gnu_cxx::hash_set
 using namespace std;
 
-namespace __gnu_cxx {
-template <>
-struct hash<long long> {
-    size_t operator()(long long val) const
-    {
-        return (size_t) val;
-    }
-};
-}
-
 template <typename K, typename V> 
 struct conmap_bucket_zero
 {
@@ -112,7 +102,7 @@ public:
 	{
 		buckets = new bucket[CONMAP_BUCKET_NUM];
 	}
-	
+
 	~conmap_zero()
 	{
 		delete[] buckets;
