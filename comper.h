@@ -1658,6 +1658,7 @@ public:
                     bool need_req = false;
                     if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
                     {
+                        assert(GET_WORKER_ID(tc_new->parent_qid) != _my_rank);
                         tc_new->pattern->parent_prog = new PatternProgress;
                         // check if it's in local cache_table 
                         vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
