@@ -22,6 +22,8 @@ public:
             m >> value;
             // cache_table.insert(value.qid, value.candidates);
             // temporarily don't notify
+
+            cout << &value << endl;
         }
     }
 
