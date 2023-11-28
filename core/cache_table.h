@@ -36,7 +36,7 @@ public:
         return ret;
     }
 
-    bool request(KeyT key, keyT value)
+    bool request(KeyT key, KeyT value)
     {
     	auto & bucket = pcache.get_bucket(key);
 		auto & kvmap = bucket.get_map();
