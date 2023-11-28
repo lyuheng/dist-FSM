@@ -36,7 +36,7 @@ public:
         bool first = true;
     	std::thread t;
 
-        while (global_end_label == false)
+        while (global_end_label.load(memory_order_relaxed) == false)
         {
             int has_msg;
             MPI_Status status;

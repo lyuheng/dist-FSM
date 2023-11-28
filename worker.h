@@ -355,17 +355,16 @@ public:
 
     void run()
     {   
-        // create compers
-
+        RespServer<int, vector<Domain>> server_resp(*cache_table);
         ReqServer server_req;
 
+        // create compers
         compers = new Comper[num_compers];
         for (int i = 0; i < num_compers; i++)
         {
             compers[i].start(i);
         }
-        RespServer<int, vector<Domain>> server_resp(*cache_table);
-        
+
         while (global_end_label == false)
         {   
             bool sth_stealed = steal_planning();

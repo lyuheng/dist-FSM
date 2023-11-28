@@ -43,7 +43,7 @@ public:
     	std::thread t(&ReqQueue::get_msgs, this, 0, ref(*m0)); //assisting thread
     	bool use_m0 = true; //tag for alternating
         clock_t last_tick = clock();
-    	while(global_end_label == false) //otherwise, thread terminates
+    	while(global_end_label.load(memory_order_relaxed) = false) //otherwise, thread terminates
     	{
     		t.join(); //m0 or m1 becomes ready to send
     		int j = i+1;
