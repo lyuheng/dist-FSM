@@ -2,11 +2,15 @@ CC=mpic++
 CFLAGS=-std=c++14 -O3 -march=native -fopenmp -lpthread
 OBJDIR=objs/
 OBJS=$(OBJDIR)intersection.o 
-HEADERS=canonical.h comper.h concurrent/conmap.h concurrent/conque.h concurrent/constack.h decompose.h global.h gmatch.h grami.h \
+
+HEADERS=canonical.h comper.h decompose.h global.h gmatch.h grami.h \
 graph.h leapfrogjoin.h pretty_print.h rwlock.h setting.h systemI.h task.h taskprogmap.h types.h worker.h \
-mpi/serialization.h mpi/mpi_global.h mpi/communication.h
-INCLUDE=-Iconcurrent -Impi
-	
+concurrent/conmap_zero.h concurrent/conmap.h concurrent/conque.h concurrent/constack.h \
+mpi/serialization.h mpi/mpi_global.h mpi/communication.h mpi/timer.h \
+core/cache_table.h core/req_queue.h core/req_server.h core/resp_queue.h core/resp_server.h
+
+INCLUDE=-Iconcurrent -Impi -Icore
+
 all: run
 
 run: $(OBJDIR)run.o $(OBJS)

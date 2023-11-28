@@ -14,8 +14,8 @@
 //## limitations under the License.
 //########################################################################
 
-#ifndef CONMAP_H
-#define CONMAP_H
+#ifndef CONMAP_ZERO_H
+#define CONMAP_ZERO_H
 
 #define CONMAP_BUCKET_NUM 10000 //should be proportional to the number of threads on a machine
 
@@ -32,7 +32,7 @@
 #include <cassert>
 #include <bitset>
 #include <iostream>
-//#include <map>
+#include <unordered_set>
 
 #define hash_map __gnu_cxx::hash_map
 #define hash_set __gnu_cxx::hash_set
@@ -49,12 +49,13 @@ struct hash<long long> {
 }
 
 template <typename K, typename V> 
-struct conmap_bucket
+struct conmap_bucket_zero
 {
 	typedef hash_map<K, V> KVMap;
-//	typedef map<K, V> KVMap;
+	typedef unordered_set<K> KSet;
 	mutex mtx;
 	KVMap bucket;
+    KSet zeros;
 
 	inline void lock()
 	{
@@ -70,6 +71,11 @@ struct conmap_bucket
 	{
 		return bucket;
 	}
+
+    KSet & get_zero_set()
+    {
+        return zeros;
+    }
 
 	//returns true if inserted
 	//false if an entry with this key already exists
@@ -95,10 +101,10 @@ struct conmap_bucket
 };
 
 template <typename K, typename V> 
-struct conmap
+struct conmap_zero
 {
 public:
-	typedef conmap_bucket<K, V> bucket;
+	typedef conmap_bucket_zero<K, V> bucket;
 	typedef hash_map<K, V> bucket_map;
 	bucket* buckets;
 
@@ -152,7 +158,5 @@ public:
 		delete[] buckets;
 	}
 };
-
-
 
 #endif

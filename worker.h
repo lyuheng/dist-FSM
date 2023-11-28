@@ -7,6 +7,8 @@
 #include "communication.h"
 #include "serialization.h"
 
+#include "cache_table.h"
+
 struct steal_plan
 {
 	int id; // steal from/to which server. negative number means receive
@@ -29,11 +31,16 @@ struct steal_plan
 class Worker
 {  
 public:
+    typedef Comper::CacheTableT CacheTableT;
     Comper *compers = nullptr;
     
     DataStack *data_stack;
 
     Qlist *activeQ_list;
+
+    
+    CacheTableT * cache_table;
+
 
     Worker(int comper_num)
     {
@@ -44,6 +51,8 @@ public:
         global_end_label = false;
 
         results_counter.assign(comper_num, 0);
+
+        global_cache_table = cache_table = new CacheTableT;
 
         // fout = new ofstream[32];
         // for(int i=0; i<32; i++)
@@ -63,6 +72,8 @@ public:
         delete data_stack;
 
         delete[] grami.pruned_graph.nlf;
+
+        delete cache_table;
 
         // for(ui i=0; i<32; i++)
         //     fout[i].close();
@@ -343,6 +354,10 @@ public:
     void run()
     {   
         // create compers
+
+        RespServer<int, vector<Domain>> server_resp(*cache_table);
+        ReqServer server_req;
+
         compers = new Comper[num_compers];
         for (int i = 0; i < num_compers; i++)
         {

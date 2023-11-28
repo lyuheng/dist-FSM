@@ -9,6 +9,8 @@
 
 #define MAX_STEAL_PATTERN_NUM 10
 
+#define MAX_BATCH_SIZE 1000; //number of bytes sent in a batch
+
 int _my_rank;
 int _num_workers;
 inline int get_worker_id()

@@ -6,6 +6,7 @@
 #include "decompose.h"
 
 #include "mpi_global.h"
+#include "communication.h"
 
 #include <iostream>
 #include <string>
@@ -34,9 +35,6 @@ enum MATCH_RETURN_RESULTS {
     MATCH_NOT_FOUND = -2,
     TIMEOUT = -3
 };
-
-#define GEN_PATTERN_ID(id) ((_my_rank << 25) + (id))
-#define RET_WORKER_ID(qid) (qid >> 25)
 
 using namespace std;
 using namespace std::chrono;
@@ -326,6 +324,8 @@ struct task_container
 class Comper
 {
 public:
+    typedef CacheTable<int, vector<Domain>> CacheTableT;
+
     GMatchEngine gmatch_engine;
     GMatchEngine exist_engine;
 
@@ -338,6 +338,8 @@ public:
     DataStack & data_stack = *(DataStack *)global_data_stack;
 
     Qlist & activeQ_list = *(Qlist *)global_activeQ_list;
+
+    CacheTableT & cache_table = *(CacheTableT *)global_cache_table;
 
     task_container* tc;
 
@@ -1643,8 +1645,39 @@ public:
                             else cache_mtx.unlock();
                         }
                     }
-                
                     // ====== push down pruning done ==========
+
+                    // ====== request parent domain here =======
+                    /** case 1, # edges = 2, parent_prog = NULL
+                     *  case 2, # edges > 2, parent_prog != NULL, normal case
+                     *  case 3, # edges > 2, parent_prog = NULL, request from other machine.
+                     *      - block here? <-- go this
+                     *      - use KV-table to hold
+                     */
+                    bool need_req = false;
+                    if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
+                    {
+                        
+                        tc_new->pattern->parent_prog = new PatternProgress;
+                        // check if it's in local cache_table 
+                        vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
+                        
+                        if (!parent_domain)
+                        { 
+                            bool found = false;
+                            while (!found)
+                            {
+                                usleep(WAIT_TIME_WHEN_IDLE); // sleep for 0.1s
+                                found = cache_table.find_key(tc_new->parent_qid);
+                            }
+                            parent_domain = cache_table.get(tc_new->parent_qid);
+                        }
+                        need_req = true;
+
+                        tc_new->pattern->parent_prog->candidates = *parent_domain; // FIXME: temporarily copy, fix later
+                    }
+                    
+                    // ====== request parent domain here done =======
 
                     // ============= unique label pruning ====================
 
@@ -1692,34 +1725,23 @@ public:
                     {
                         gmatch_engine.set(&grami.pruned_graph, tc_new->pattern);
 
-                        /** case 1, # edges = 2, parent_prog = NULL
-                         *  case 2, # edges > 2, parent_prog != NULL, normal case
-                         *  case 3, # edges > 2, parent_prog = NULL, request from other machine.
-                         *      - block here? <-- go this
-                         *      - use KV-table to hold
-                         */
-
                         bool keep = gmatch_engine.DPisoFilter(false, grami.nsupport_); // degree-based pruning
 
                         // delete parent pattern
                         PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
                         
                         if(pattern_prog != NULL)
-                        // if(tc_new->pattern->get_nedges() > 2)
                         {
-                            // if (pattern_prog != NULL)
+                            pattern_prog->children_mtx.lock();
+                            pattern_prog->children_cnt--;
+                            if(pattern_prog->children_cnt == 0)
                             {
-                                pattern_prog->children_mtx.lock();
-                                pattern_prog->children_cnt--;
-                                if(pattern_prog->children_cnt == 0)
-                                {
-                                    delete pattern_prog;
-                                    g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
-                                }
-                                else
-                                {
-                                    pattern_prog->children_mtx.unlock();
-                                }
+                                delete pattern_prog;
+                                g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
+                            }
+                            else
+                            {
+                                pattern_prog->children_mtx.unlock();
                             }
                         }
 

@@ -455,6 +455,18 @@ struct Domain
             candidate.shrink_to_fit();
         }
     }
+
+    // add binstream
+    friend obinstream & operator>>(obinstream & m, Domain & d)
+    {
+        m >> d.candidate;
+        return m;
+    }
+    friend ibinstream & operator<<(ibinstream & m, const Domain & d)
+    {
+        m << d.candidate;
+        return m;
+    }
 };
 
 struct PatternProgress

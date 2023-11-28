@@ -6,6 +6,7 @@
 #include <thread>
 #include <stack>
 #include <list>
+#include <vector>
 #include <fstream>
 
 #include "constack.h"
@@ -83,3 +84,46 @@ rwlock cache_mtx;
 // =======================================================
 
 conmap<int, PatternProgress *> g_pattern_prog_map; // global pattern progress map
+
+void * global_cache_table;
+
+#define GEN_PATTERN_ID(id) ((_my_rank << 25) + (id))
+#define GET_WORKER_ID(qid) (qid >> 25)
+#define GET_PATTERN_ID(qid) (qid & 0x01FFFFFF)
+
+struct RequestMsg
+{
+    int qid;
+    int parent_qid;
+    friend obinstream & operator>>(obinstream & m, RequestMsg & msg)
+    {
+        m >> msg.qid;
+        m >> msg.parent_qid;
+        return m;
+    }
+    friend ibinstream & operator<<(ibinstream & m, const RequestMsg & msg)
+    {
+        m << msg.qid;
+        m << msg.parent_qid;
+        return m;
+    }
+};
+
+struct RespondMsg
+{
+    typedef vector<Domain> DomainT;
+    int qid;
+    DomainT * candidates;
+    friend obinstream & operator>>(obinstream & m, RespondMsg & msg)
+    {
+        m >> msg.qid;
+        m >> msg.candidates;
+        return m;
+    }
+    friend ibinstream & operator<<(ibinstream & m, const RespondMsg & msg)
+    {
+        m << msg.qid;
+        m << msg.candidates;
+        return m;
+    }
+};
