@@ -132,9 +132,8 @@ public:
 		bucket & buck = get_bucket(key);
 		buck.lock();
 		bool ret = buck.erase(key);
-		if(!ret)
-			cout << "conflict key = " << key << endl;
-		assert(ret);
+		if (GEN_WORKER_ID(key) == _my_rank)
+			assert(ret);
 		buck.unlock();
 		return ret;
 	}
