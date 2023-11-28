@@ -32,6 +32,8 @@
 #include <cassert>
 #include <bitset>
 #include <iostream>
+#include "mpi_global.h"
+#include "global.h"
 //#include <map>
 
 #define hash_map __gnu_cxx::hash_map
