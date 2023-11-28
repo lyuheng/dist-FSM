@@ -79,6 +79,7 @@ public:
     		if(j == 0)
     		{
     			if(!sth_sent) usleep(WAIT_TIME_WHEN_IDLE);
+				else sth_sent = false;
     		}
     	}
     	t.join();
