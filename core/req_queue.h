@@ -24,8 +24,8 @@ public:
         while (succ)
         {
             m << temp;
-			cout << "(" << temp.qid << ", " << temp.parent_qid << ")" << endl;
             if(m.size() > MAX_BATCH_SIZE) break;
+			succ = buf.dequeue(temp);
         }
     }
 
