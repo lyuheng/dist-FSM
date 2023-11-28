@@ -67,6 +67,8 @@ public:
     {
         if(main_thread.joinable())
             main_thread.join();
+
+        cout << "ReqServer done" << endl;
     }
 };
 

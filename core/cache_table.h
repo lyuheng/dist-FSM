@@ -93,6 +93,7 @@ public:
 			if(new_req)
 			{
                 q_req.add(RequestMsg{value, key});  // this worker needs value of this key
+				cout << "q_req add once" << endl;
 			}
 			ret = NULL;
 		}
