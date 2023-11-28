@@ -4,7 +4,7 @@
 #include <thread>
 
 #include "conque.h"
-#include "serialization"
+#include "serialization.h"
 #include "mpi_global.h"
 
 template <typename T>
