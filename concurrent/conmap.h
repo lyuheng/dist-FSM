@@ -33,8 +33,10 @@
 #include <bitset>
 #include <iostream>
 #include "mpi_global.h"
-#include "global.h"
+
 //#include <map>
+
+#define GET_WORKER_ID(qid) (qid >> 25)
 
 #define hash_map __gnu_cxx::hash_map
 #define hash_set __gnu_cxx::hash_set
