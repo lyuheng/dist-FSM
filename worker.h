@@ -8,6 +8,8 @@
 #include "serialization.h"
 
 #include "cache_table.h"
+#include "resp_server.h"
+#include "req_server.h"
 
 struct steal_plan
 {
