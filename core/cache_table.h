@@ -91,7 +91,10 @@ public:
 		{
 			bool new_req = pcache.request(key, value);
 			if(new_req)
+			{
                 q_req.add(RequestMsg{value, key});  // this worker needs value of this key
+				cout << "q_req add once" << endl;
+			}
 			ret = NULL;
 		}
     	else
