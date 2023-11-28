@@ -21,13 +21,13 @@ public:
 		while(m.end() == false)
 		{
 		    m >> key;
-            auto & bucket = g_pattern_prog_map.get_bucket(key->parent_qid);
+            auto & bucket = g_pattern_prog_map.get_bucket(key.parent_qid);
             bucket.lock();
             auto & kvmap = bucket.get_map();
-            auto it = kvmap.find(pid);
+            auto it = kvmap.find(key.parent_qid);
             assert(it != kvmap.end());
             bucket.unlock();
-            q_resp.add({key->qid, &(it->second->candidates)}, src);
+            q_resp.add({key.qid, &(it->second->candidates)}, src);
 		}
     }
 

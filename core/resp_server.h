@@ -20,7 +20,7 @@ public:
         while (m.end() == false)
         {
             m >> value;
-            cache_table.insert(value->qid, value->candidates);
+            cache_table.insert(value.qid, value.candidates);
             // temporarily don't notify
         }
     }
