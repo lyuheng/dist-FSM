@@ -27,7 +27,7 @@ public:
             assert(it != kvmap.end());
             bucket.unlock();
             cout << "send value of key = " << key.parent_qid << endl;
-            q_resp.add(RespondMsg{key.parent_qid, &(it->second->candidates)}, src);
+            q_resp.add(RespondMsg{key.parent_qid, it->second->candidates}, src);
 		}
     }
 
