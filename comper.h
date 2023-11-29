@@ -1672,25 +1672,25 @@ public:
                         }
                         else 
                         {
-                        //     tc_new->pattern->parent_prog = new PatternProgress;
-                        //     // check if it's in local cache_table 
-                            // vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
+                            tc_new->pattern->parent_prog = new PatternProgress;
+                            // check if it's in local cache_table 
+                            vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
 
-                            cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
+                            // cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
                             
-                        //     if (!parent_domain)
-                        //     { 
-                        //         bool found = false;
-                        //         while (!found)
-                        //         {
-                        //             usleep(WAIT_TIME_WHEN_IDLE); // sleep for 0.1s
-                        //             found = cache_table.find_key(tc_new->parent_qid);
-                        //         }
-                        //         parent_domain = cache_table.get(tc_new->parent_qid);
-                        //     }
-                        //     need_req = true;
+                            if (!parent_domain)
+                            { 
+                                bool found = false;
+                                while (!found)
+                                {
+                                    usleep(WAIT_TIME_WHEN_IDLE); // sleep for 0.1s
+                                    found = cache_table.find_key(tc_new->parent_qid);
+                                }
+                                parent_domain = cache_table.get(tc_new->parent_qid);
+                            }
+                            need_req = true;
 
-                        //     tc_new->pattern->parent_prog->candidates = *parent_domain; // FIXME: temporarily copy, fix later
+                            tc_new->pattern->parent_prog->candidates = *parent_domain; // FIXME: temporarily copy, fix later
                         }
                     }
                     
@@ -1836,7 +1836,7 @@ public:
     void start(int thread_id)
     {
         this->thread_id = thread_id;
-        bind_to_core(thread_id); //@@@@@: only for testing
+        bind_to_core(thread_id);
         main_thread = thread(&Comper::run, this);
     }
 };
