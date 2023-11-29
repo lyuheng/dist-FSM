@@ -475,12 +475,17 @@ struct PatternProgress
     mutex children_mtx;
     // Pattern * pattern; 
 
-	vector<Domain> candidates;
+	vector<Domain> * candidates; // TODO: make this into pointer
 
 	PatternProgress()
 	{
 		children_cnt = 0;
+        candidates = new vector<Domain>;
 	}
+    ~PatternProgress()
+    {
+        delete candidates;
+    }
 };
 
 typedef unordered_set<VertexID> VtxSet;
@@ -548,12 +553,12 @@ public:
 
     vector<Domain> & get_parent_cands()
     {
-        return parent_prog->candidates;
+        return *parent_prog->candidates;
     }
 
     vector<Domain> & get_cands()
     {
-        return prog->candidates;
+        return *prog->candidates;
     }
 
     void init(dfs_code_t &dfscode, Pattern *parent_)
