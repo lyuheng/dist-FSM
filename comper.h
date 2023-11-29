@@ -1827,6 +1827,7 @@ public:
 
                     batch_count++;
                 }
+                succ = succ || (batch_count > 0);
             }
             else
             {
