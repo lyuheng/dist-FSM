@@ -1690,6 +1690,8 @@ public:
                             }
                             need_req = true;
 
+                            cout << "get parent domain key = " << tc_new->parent_qid << endl;
+
                             tc_new->pattern->parent_prog->candidates = *parent_domain; // FIXME: temporarily copy, fix later
                         }
                     }
