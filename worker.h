@@ -322,7 +322,7 @@ public:
         {
             // cout << "Branch B" << endl;
             activeQ_lock.unlock();
-            if (data_stack->empty() && pending_patterns_num.load(memory_order_relaxed) == 0)
+            if (data_stack->empty() && pending_patterns_num.load(memory_order_relaxed) == 0 && ready_patterns->empty())
             {
                 // cout << "Branch C" << endl;
                 if (global_num_idle.load(memory_order_relaxed) == num_compers)
