@@ -52,7 +52,7 @@ public:
         NODE *node = new NODE;
         node->value = value;
         node->next = NULL;
-        lock_guard<mutex> lck(q_t_lock);
+        unique_lock<mutex> lck(q_t_lock);
         tail->next.store(node, memory_order_relaxed); //atomic "store"
         tail = node;
     }
