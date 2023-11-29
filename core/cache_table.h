@@ -129,9 +129,7 @@ public:
 		CandValue<ValueT> cpair;
 		cpair.value = value;
 		cpair.counter = pcache.erase(key);
-		cout << "Insert before..." << endl;
 		bool inserted = bucket.insert(key, cpair);
-		cout << "Insert after..." << endl;
 		assert(inserted);
 		bucket.unlock();
     }
