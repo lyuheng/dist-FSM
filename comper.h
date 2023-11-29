@@ -1836,7 +1836,7 @@ public:
     void start(int thread_id)
     {
         this->thread_id = thread_id;
-        bind_to_core(thread_id);
+        bind_to_core(thread_id + num_compers * _my_rank);
         main_thread = thread(&Comper::run, this);
     }
 };
