@@ -29,9 +29,9 @@ public:
             cout << &value << " Receive value of key = " << value.qid << endl;
 
             // notify those patterns;
-            for (auto it = qid_collector.begin(); it < qid_collector.end(); ++it)
+            for (auto iter = qid_collector.begin(); iter < qid_collector.end(); ++iter)
             {
-                KeyT key = *it;
+                KeyT key = *iter;
                 auto & bucket = pending_patterns.get_bucket(key);
                 bucket.lock();
                 auto & kvmap = bucket.get_map();
