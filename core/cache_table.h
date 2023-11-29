@@ -122,14 +122,16 @@ public:
 		return val;
     }
 
-    ValueT * insert(KeyT key, ValueT * value)
+    void insert(KeyT key, ValueT * value)
     {
         auto & bucket = candcache.get_bucket(key);
 		bucket.lock();
 		CandValue<ValueT> cpair;
 		cpair.value = value;
 		cpair.counter = pcache.erase(key);
+		cout << "Insert before..." << endl;
 		bool inserted = bucket.insert(key, cpair);
+		cout << "Insert after..." << endl;
 		assert(inserted);
 		bucket.unlock();
     }
