@@ -87,6 +87,9 @@ conmap<int, PatternProgress *> g_pattern_prog_map; // global pattern progress ma
 
 void * global_cache_table;
 
+void * global_pending_patterns; 
+void * global_ready_patterns;
+
 #define GEN_PATTERN_ID(id) ((_my_rank << 25) + (id))
 #define GET_WORKER_ID(qid) (qid >> 25)
 #define GET_PATTERN_ID(qid) (qid & 0x01FFFFFF)

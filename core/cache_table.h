@@ -22,7 +22,7 @@ public:
 
     PCache pcache;
 
-    size_t erase(KeyT key)
+    size_t erase(KeyT key, std::vector<KeyT> & qid_collector)
     {
     	auto & bucket = pcache.get_bucket(key);
     	auto & kvmap = bucket.get_map();
@@ -31,7 +31,7 @@ public:
     	PatternIDVec & ids = it->second;
     	size_t ret = ids.size();
 		assert(ret > 0);
-		// pid_collector.swap(ids);
+		qid_collector.swap(ids);
 		kvmap.erase(it);
         return ret;
     }
@@ -122,13 +122,13 @@ public:
 		return val;
     }
 
-    void insert(KeyT key, ValueT * value)
+    void insert(KeyT key, ValueT * value, std::vector<KeyT> & qid_collector)
     {
         auto & bucket = candcache.get_bucket(key);
 		bucket.lock();
 		CandValue<ValueT> cpair;
 		cpair.value = value;
-		cpair.counter = pcache.erase(key);
+		cpair.counter = pcache.erase(key, qid_collector);
 		bool inserted = bucket.insert(key, cpair);
 		assert(inserted);
 		bucket.unlock();

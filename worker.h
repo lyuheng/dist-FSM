@@ -43,6 +43,8 @@ public:
     
     CacheTableT * cache_table;
 
+    PendingMap * pending_patterns; // <parent patternID, pending task containers>
+    PatternQueue * ready_patterns;
 
     Worker(int comper_num)
     {
@@ -55,6 +57,9 @@ public:
         results_counter.assign(comper_num, 0);
 
         global_cache_table = cache_table = new CacheTableT;
+
+        global_pending_patterns = pending_patterns = new PendingMap;
+        global_ready_patterns = ready_patterns = new PatternQueue;
 
         // fout = new ofstream[32];
         // for(int i=0; i<32; i++)
@@ -355,7 +360,7 @@ public:
 
     void run()
     {   
-        RespServer<int, vector<Domain>> server_resp(*cache_table);
+        RespServer<int, vector<Domain>, PendingMap, PatternQueue> server_resp(*cache_table, *pending_patterns, *ready_patterns);
         ReqServer server_req;
 
         // create compers

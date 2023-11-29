@@ -26,6 +26,8 @@ typedef deque<Task *> TaskQ;
 typedef list<TimeOutTask_Container *> TimeOutTaskList;
 typedef list<task_container *> Qlist;
 
+typedef conmap<int, task_container *> PendingMap;
+typedef conque<task_container *> PatternQueue;
 
 typedef conmap<string, VtxSetVec>::bucket bucket;
 typedef conmap<string, VtxSetVec>::bucket_map bucket_map;
@@ -342,7 +344,10 @@ public:
 
     CacheTableT & cache_table = *(CacheTableT *)global_cache_table;
 
-    task_container* tc;
+    PendingMap & pending_patterns = *(PendingMap *)global_pending_patterns;
+    PatternQueue & ready_patterns = *(PatternQueue *)global_ready_patterns;
+
+    task_container * tc;
 
     int cur_qid;
     TaskID cur_tid;
@@ -1334,6 +1339,188 @@ public:
         tc->end_mtx.unlock();
     }
 
+    /**
+     * activate new task_container tc_new and do some simple preprocessing
+     * to determine whether tc_new is promising to be frequent 
+     */
+    void activate_task_container(task_container * tc_new)
+    {
+        tc_new->init();
+
+        // ====== compute automorphisms =======
+        // tc_new->pattern->autos.resize(tc_new->pattern->size());
+        // Graph dataGraphAuto;
+        // dataGraphAuto.toGraph(*(tc_new->pattern));
+        
+        // gmatch_engine.set(&dataGraphAuto, tc_new->pattern);
+        // gmatch_engine.executeAuto(tc_new->pattern->autos);
+        // gmatch_engine.clear_all();
+        // tc_new->pattern->clear_candidate();
+        // ====== compute automorphisms done =======
+
+
+        // ====== push down pruning ==========
+
+        decomposer.decompose(*(tc_new->pattern), tc_new->maps);
+
+        for (ui i = 0; i < tc_new->maps.size(); ++i)
+        {
+            vector<subPattern> &edge_removed = tc_new->maps[i];
+            for (auto it = edge_removed.begin(); it != edge_removed.end(); ++it)
+            {
+                subPattern & key = (*it);
+
+                cache_mtx.rdlock();
+                auto pos = cache.find(key);
+                if (pos != cache.end())
+                {
+                    vector<VertexID> &subgraph_mappings = (*it).mapping;
+                    VtxSetVec &node_non_candidates = pos->second;
+
+                    cache_mtx.unlock();
+
+                    for (ui j = 0; j < subgraph_mappings.size(); ++j)
+                    {
+                        unordered_set<VertexID> &non_cans = tc_new->pattern->non_candidates[subgraph_mappings[j]];
+                        unordered_set<VertexID> &non_cans_check = node_non_candidates[j];
+                        for (auto it2 = non_cans_check.begin(); it2 != non_cans_check.end(); ++it2)
+                        {
+                            non_cans.insert(*it2);
+                        }
+                    }
+                }
+                else cache_mtx.unlock();
+            }
+        }
+        // ====== push down pruning done ==========
+
+        // ====== request parent domain here =======
+        /** case 1, # edges = 2, parent_prog = NULL
+         *  case 2, # edges > 2, parent_prog != NULL, normal case
+         *  case 3, # edges > 2, parent_prog = NULL, request from other machine.
+         *      - block here? <-- go this
+         *      - use KV-table to hold
+         */
+        bool need_req = false;
+
+        
+        if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
+        {
+            if (GET_WORKER_ID(tc_new->parent_qid) == _my_rank)
+            {
+                auto & bucket = g_pattern_prog_map.get_bucket(tc_new->parent_qid);
+                bucket.lock();
+                auto & kvmap = bucket.get_map();
+                auto it = kvmap.find(tc_new->parent_qid);
+                assert(it != kvmap.end());
+                bucket.unlock();
+                tc_new->pattern->parent_prog = it->second;
+            }
+            else 
+            {
+                tc_new->pattern->parent_prog = new PatternProgress;
+                vector<Domain> * parent_domain = cache_table.get(tc_new->parent_qid);
+
+                cout << "get parent domain key = " << tc_new->parent_qid << endl;
+
+                tc_new->pattern->parent_prog->candidates = parent_domain;
+            }
+        }
+        
+        // ====== request parent domain here done =======
+
+        // ============= unique label pruning ====================
+
+        if(tc_new->pattern->distinct_labels() && tc_new->pattern->is_acyclic())
+        {
+            gmatch_engine.set(&grami.pruned_graph, tc_new->pattern);
+            bool is_freq = gmatch_engine.filterToConsistency(grami.nsupport_);
+            gmatch_engine.reset();
+
+            PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
+
+            if(pattern_prog != NULL)
+            {
+                pattern_prog->children_mtx.lock();
+                pattern_prog->children_cnt--;
+                if(pattern_prog->children_cnt == 0) 
+                {
+                    delete pattern_prog;
+                    g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
+                }
+                else
+                {
+                    pattern_prog->children_mtx.unlock();
+                }
+            }
+
+            if(is_freq)
+            {
+                check_freq_and_extend_express(tc_new);
+                delete tc_new;
+            }
+            else
+            {
+                delete tc_new->pattern->prog;
+                g_pattern_prog_map.erase(tc_new->qid);
+                delete tc_new;
+            }
+            activeQ_lock.wrlock();
+            activeQ_num--;
+            activeQ_lock.unlock();
+        }
+        // ============= unique label pruning done ====================
+        else
+        {
+            gmatch_engine.set(&grami.pruned_graph, tc_new->pattern);
+
+            bool keep = gmatch_engine.DPisoFilter(false, grami.nsupport_); // degree-based pruning
+
+            // delete parent pattern
+            PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
+            
+            if(pattern_prog != NULL)
+            {
+                pattern_prog->children_mtx.lock();
+                pattern_prog->children_cnt--;
+                if(pattern_prog->children_cnt == 0)
+                {
+                    delete pattern_prog;
+                    g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
+                }
+                else
+                {
+                    pattern_prog->children_mtx.unlock();
+                }
+            }
+
+            if(keep)
+            {
+                gmatch_engine.buildTable(tc_new->edge_matrix);
+                for (ui i = 0; i < tc_new->pattern->size(); ++i)
+                {
+                    gmatch_engine.generateGQLQueryPlan(i, tc_new->all_matching_order[i]);
+                    gmatch_engine.generateBN(tc_new->all_bn_count[i], tc_new->all_bn[i], tc_new->all_matching_order[i]);
+                }
+                gmatch_engine.reset();
+
+                activeQ_lock.wrlock();
+                activeQ_list.push_back(tc_new);
+                activeQ_lock.unlock();
+            }
+            else // current pattern is not frequent because at least one vertex has domain size < support 
+            {
+                activeQ_lock.wrlock();
+                activeQ_num--;
+                activeQ_lock.unlock();
+
+                delete tc_new->pattern->prog;
+                g_pattern_prog_map.erase(tc_new->qid);
+                delete tc_new;
+            }
+        }
+    }
+
     bool get_and_process_tasks()
     {   
         Task *task = NULL;
@@ -1593,207 +1780,46 @@ public:
                 activeQ_num++;
                 activeQ_lock.unlock();
 
+                // 1. check ready_patterns
                 task_container *tc_new;
-                succ = data_stack.destack(tc_new); // another comper may have taken tc from data_stack
+                succ = ready_patterns.dequeue(tc_new);
 
-                if(succ)
-                {
-                    tc_new->init();
-
-                    // ====== compute automorphisms =======
-                    // tc_new->pattern->autos.resize(tc_new->pattern->size());
-                    // Graph dataGraphAuto;
-                    // dataGraphAuto.toGraph(*(tc_new->pattern));
-                    
-                    // gmatch_engine.set(&dataGraphAuto, tc_new->pattern);
-                    // gmatch_engine.executeAuto(tc_new->pattern->autos);
-                    // gmatch_engine.clear_all();
-                    // tc_new->pattern->clear_candidate();
-                    // ====== compute automorphisms done =======
-
-
-                    // ====== push down pruning ==========
-
-                    
-                    decomposer.decompose(*(tc_new->pattern), tc_new->maps);
-
-                    for (ui i = 0; i < tc_new->maps.size(); ++i)
-                    {
-                        vector<subPattern> &edge_removed = tc_new->maps[i];
-                        for (auto it = edge_removed.begin(); it != edge_removed.end(); ++it)
-                        {
-                            subPattern & key = (*it);
-
-                            cache_mtx.rdlock();
-                            auto pos = cache.find(key);
-                            if (pos != cache.end())
-                            {
-                                vector<VertexID> &subgraph_mappings = (*it).mapping;
-                                VtxSetVec &node_non_candidates = pos->second;
-
-                                cache_mtx.unlock();
-
-                                for (ui j = 0; j < subgraph_mappings.size(); ++j)
-                                {
-                                    unordered_set<VertexID> &non_cans = tc_new->pattern->non_candidates[subgraph_mappings[j]];
-                                    unordered_set<VertexID> &non_cans_check = node_non_candidates[j];
-                                    for (auto it2 = non_cans_check.begin(); it2 != non_cans_check.end(); ++it2)
-                                    {
-                                        non_cans.insert(*it2);
-                                    }
-                                }
-                            }
-                            else cache_mtx.unlock();
-                        }
-                    }
-                    // ====== push down pruning done ==========
-
-                    // ====== request parent domain here =======
-                    /** case 1, # edges = 2, parent_prog = NULL
-                     *  case 2, # edges > 2, parent_prog != NULL, normal case
-                     *  case 3, # edges > 2, parent_prog = NULL, request from other machine.
-                     *      - block here? <-- go this
-                     *      - use KV-table to hold
-                     */
-                    bool need_req = false;
-
-                    
-                    if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
-                    {
-                        if (GET_WORKER_ID(tc_new->parent_qid) == _my_rank)
-                        {
-                            auto & bucket = g_pattern_prog_map.get_bucket(tc_new->parent_qid);
-                            bucket.lock();
-                            auto & kvmap = bucket.get_map();
-                            auto it = kvmap.find(tc_new->parent_qid);
-                            assert(it != kvmap.end());
-                            bucket.unlock();
-                            tc_new->pattern->parent_prog = it->second;
-                        }
-                        // else 
-                        // {
-                        //     tc_new->pattern->parent_prog = new PatternProgress;
-                        //     // check if it's in local cache_table 
-                        //     vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
-
-                        //     // cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
-                            
-                        //     if (!parent_domain)
-                        //     {
-                        //         bool found = false;
-                        //         while (!found)
-                        //         {
-                        //             usleep(WAIT_TIME_WHEN_IDLE); // sleep for 0.1s
-                        //             found = cache_table.find_key(tc_new->parent_qid);
-                        //         }
-                        //         parent_domain = cache_table.get(tc_new->parent_qid);
-                        //     }
-                        //     need_req = true;
-
-                        //     cout << "get parent domain key = " << tc_new->parent_qid << endl;
-
-                        //     tc_new->pattern->parent_prog->candidates = parent_domain;
-                        // }
-                    }
-                    
-                    // ====== request parent domain here done =======
-
-                    // ============= unique label pruning ====================
-
-                    if(tc_new->pattern->distinct_labels() && tc_new->pattern->is_acyclic())
-                    {
-                        gmatch_engine.set(&grami.pruned_graph, tc_new->pattern);
-                        bool is_freq = gmatch_engine.filterToConsistency(grami.nsupport_);
-                        gmatch_engine.reset();
-
-                        PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
-
-                        if(pattern_prog != NULL)
-                        {
-                            pattern_prog->children_mtx.lock();
-                            pattern_prog->children_cnt--;
-                            if(pattern_prog->children_cnt == 0) 
-                            {
-                                delete pattern_prog;
-                                g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
-                            }
-                            else
-                            {
-                                pattern_prog->children_mtx.unlock();
-                            }
-                        }
-
-                        if(is_freq)
-                        {
-                            check_freq_and_extend_express(tc_new);
-                            delete tc_new;
-                        }
-                        else
-                        {
-                            delete tc_new->pattern->prog;
-                            g_pattern_prog_map.erase(tc_new->qid);
-                            delete tc_new;
-                        }
-                        activeQ_lock.wrlock();
-                        activeQ_num--;
-                        activeQ_lock.unlock();
-                    }
-                    // ============= unique label pruning done ====================
-                    else
-                    {
-                        gmatch_engine.set(&grami.pruned_graph, tc_new->pattern);
-
-                        bool keep = gmatch_engine.DPisoFilter(false, grami.nsupport_); // degree-based pruning
-
-                        // delete parent pattern
-                        PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
-                        
-                        if(pattern_prog != NULL)
-                        {
-                            pattern_prog->children_mtx.lock();
-                            pattern_prog->children_cnt--;
-                            if(pattern_prog->children_cnt == 0)
-                            {
-                                delete pattern_prog;
-                                g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
-                            }
-                            else
-                            {
-                                pattern_prog->children_mtx.unlock();
-                            }
-                        }
-
-                        if(keep)
-                        {
-                            gmatch_engine.buildTable(tc_new->edge_matrix);
-                            for (ui i = 0; i < tc_new->pattern->size(); ++i)
-                            {
-                                gmatch_engine.generateGQLQueryPlan(i, tc_new->all_matching_order[i]);
-                                gmatch_engine.generateBN(tc_new->all_bn_count[i], tc_new->all_bn[i], tc_new->all_matching_order[i]);
-                            }
-                            gmatch_engine.reset();
-
-                            activeQ_lock.wrlock();
-                            activeQ_list.push_back(tc_new);
-                            activeQ_lock.unlock();
-                        }
-                        else // current pattern is not frequent because at least one vertex has domain size < support 
-                        {
-                            activeQ_lock.wrlock();
-                            activeQ_num--;
-                            activeQ_lock.unlock();
-
-                            delete tc_new->pattern->prog;
-                            g_pattern_prog_map.erase(tc_new->qid);
-                            delete tc_new;
-                        }
-                    }
-                }
-                else // get nothing from data_stack
+                if (succ) 
+                    activate_task_container(tc_new);
+                else 
                 {
                     activeQ_lock.wrlock();
                     activeQ_num--;
                     activeQ_lock.unlock();
+                }
+
+                while (data_stack.destack(tc_new))
+                {
+                    if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
+                    {
+                        if (GET_WORKER_ID(tc_new->parent_qid) == _my_rank)
+                        {
+                            ready_patterns.enqueue(tc_new);
+                        }
+                        else 
+                        {
+                            /**
+                             * insert into pending pattern in advance to prevent tc_new->qid can't be found 
+                             * in pending_patterns while being notified
+                             */
+                            pending_patterns.insert(tc_new->qid, tc_new);
+                            vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
+                            if (parent_domain)
+                            {
+                                ready_patterns.enqueue(tc_new);
+                                pending_patterns.erase(tc_new->qid);
+                            }
+                            else
+                                break;
+                        }
+                    }
+                    else 
+                        ready_patterns.enqueue(tc_new);
                 }
             }
             else

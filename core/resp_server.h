@@ -6,13 +6,16 @@
 #include "cache_table.h"
 
 
-template <typename KeyT, typename ValueT>
+template <typename KeyT, typename ValueT, typename PendingType, typename ReadyType>
 class RespServer
 {
 public:
     typedef CacheTable<KeyT, ValueT> CacheTableT;
     CacheTableT & cache_table;
     std::thread main_thread;
+
+    PendingType & pending_patterns;
+    ReadyType & ready_patterns;
 
     void thread_func(char * buf, int size, int src)
     {
@@ -21,10 +24,24 @@ public:
         while (m.end() == false)
         {
             m >> value;
-            cache_table.insert(value.qid, value.candidates);
-            // temporarily don't notify
-
+            std::vector<KeyT> qid_collector;
+            cache_table.insert(value.qid, value.candidates, qid_collector);
             cout << &value << " Receive value of key = " << value.qid << endl;
+
+            // notify those patterns;
+            for (auto it = qid_collector.begin(); it < qid_collector.end(); ++it)
+            {
+                KeyT key = *it;
+                auto & bucket = pending_patterns.get_bucket(key);
+                bucket.lock();
+                auto & kvmap = bucket.get_map();
+                auto it = kvmap.find(key);
+                assert(it != kvmap.end());
+                task_container * tc_new = it->second;
+                kvmap.erase(it);
+                bucket.unlock();
+                ready_patterns.enqueue(tc_new);
+            }
         }
     }
 
@@ -54,7 +71,10 @@ public:
     	if(!first) t.join();
     }
 
-    RespServer(CacheTableT & cache_table): cache_table(cache_table)
+    RespServer(CacheTableT & cache_table, PendingType & pending_patterns, ReadyType & ready_patterns): 
+        cache_table(cache_table),
+        pending_patterns(pending_patterns),
+        ready_patterns(ready_patterns)
     {
     	main_thread = std::thread(&RespServer::run, this);
     }
