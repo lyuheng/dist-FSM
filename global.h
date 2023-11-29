@@ -95,6 +95,8 @@ void * global_ready_patterns;
 #define GET_WORKER_ID(qid) (qid >> 25)
 #define GET_PATTERN_ID(qid) (qid & 0x01FFFFFF)
 
+#define MAX_BATCH_COUNT 5
+
 struct RequestMsg
 {
     int qid;

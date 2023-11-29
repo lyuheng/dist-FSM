@@ -1793,7 +1793,9 @@ public:
                     activeQ_lock.unlock();
                 }
 
-                while (data_stack.destack(tc_new))
+                int batch_count = 0;
+
+                while (data_stack.destack(tc_new) && batch_count < MAX_BATCH_COUNT) 
                 {
                     if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
                     {
@@ -1822,6 +1824,8 @@ public:
                     }
                     else 
                         ready_patterns.enqueue(tc_new);
+
+                    batch_count++;
                 }
             }
             else
