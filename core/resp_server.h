@@ -39,6 +39,7 @@ public:
                 assert(it != kvmap.end());
                 task_container * tc_new = it->second;
                 kvmap.erase(it);
+                pending_patterns_num--;
                 bucket.unlock();
                 ready_patterns.enqueue(tc_new);
             }

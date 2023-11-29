@@ -1808,11 +1808,13 @@ public:
                              * in pending_patterns while being notified
                              */
                             pending_patterns.insert(tc_new->qid, tc_new);
+                            pending_patterns_num++;
                             vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
                             if (parent_domain)
                             {
                                 ready_patterns.enqueue(tc_new);
                                 pending_patterns.erase(tc_new->qid);
+                                pending_patterns_num--;
                             }
                             else
                                 break;
