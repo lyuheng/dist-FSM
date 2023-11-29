@@ -28,7 +28,7 @@ public:
             cache_table.insert(value.qid, value.candidates, qid_collector);
             cout << &value << " Receive value of key = " << value.qid << endl;
 
-            // notify those patterns;
+            // notify those patterns
             for (auto iter = qid_collector.begin(); iter < qid_collector.end(); ++iter)
             {
                 KeyT key = *iter;
