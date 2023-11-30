@@ -1809,8 +1809,8 @@ public:
                              * insert into pending pattern in advance to prevent tc_new->qid can't be found 
                              * in pending_patterns while being notified
                              */
-                            pending_patterns.insert(tc_new->qid, tc_new);
                             pending_patterns_num++;
+                            pending_patterns.insert(tc_new->qid, tc_new);
                             vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
                             if (parent_domain)
                             {
