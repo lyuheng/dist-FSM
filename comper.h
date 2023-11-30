@@ -1795,7 +1795,7 @@ public:
 
                 int batch_count = 0;
 
-                while (data_stack.destack(tc_new) && batch_count < MAX_BATCH_COUNT) 
+                while (batch_count < MAX_BATCH_COUNT && data_stack.destack(tc_new)) 
                 {
                     if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
                     {
