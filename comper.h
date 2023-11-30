@@ -1803,7 +1803,7 @@ public:
                         {
                             ready_patterns.enqueue(tc_new);
                         }
-                        else 
+                        else
                         {
                             /**
                              * insert into pending pattern in advance to prevent tc_new->qid can't be found 

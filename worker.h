@@ -81,6 +81,8 @@ public:
         delete[] grami.pruned_graph.nlf;
 
         delete cache_table;
+        delete pending_patterns;
+        delete ready_patterns;
 
         // for(ui i=0; i<32; i++)
         //     fout[i].close();
@@ -324,6 +326,7 @@ public:
             activeQ_lock.unlock();
             if (data_stack->empty() && pending_patterns_num.load(memory_order_relaxed) == 0 && ready_patterns->empty())
             {
+                cout << "worker is here ..." << endl;
                 // cout << "Branch C" << endl;
                 if (global_num_idle.load(memory_order_relaxed) == num_compers)
                 {
