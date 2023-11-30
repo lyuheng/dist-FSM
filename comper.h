@@ -1793,8 +1793,8 @@ public:
                     activeQ_lock.unlock();
                 }
 
+                // 2. check data_stack, add into pending_patterns or ready_patterns
                 int batch_count = 0;
-
                 while (batch_count < MAX_BATCH_COUNT && data_stack.destack(tc_new)) 
                 {
                     if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
