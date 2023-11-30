@@ -326,7 +326,7 @@ public:
             activeQ_lock.unlock();
             if (data_stack->empty() && pending_patterns_num.load(memory_order_relaxed) == 0 && ready_patterns->empty())
             {
-                cout << "worker is here ..." << endl;
+                
                 // cout << "Branch C" << endl;
                 if (global_num_idle.load(memory_order_relaxed) == num_compers)
                 {
@@ -375,7 +375,7 @@ public:
 
         while (global_end_label == false)
         {   
-            bool sth_stealed = steal_planning();
+            bool sth_stealed = false; //steal_planning();
             status_sync(sth_stealed);
             mtx_go.lock();
             ready_go = true;
