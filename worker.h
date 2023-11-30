@@ -314,19 +314,22 @@ public:
     {
         bool worker_idle = false;
 
+        cout << "worker 1 " << endl;
         activeQ_lock.rdlock();
         if (activeQ_num > 0)
         {
             // cout << "Branch A  " << activeQ_num << endl;
+            cout << "worker 2 " << endl;
             activeQ_lock.unlock();
         }
         else
         {
+            cout << "worker 3 " << endl;
             // cout << "Branch B" << endl;
             activeQ_lock.unlock();
             if (data_stack->empty() && pending_patterns_num.load(memory_order_relaxed) == 0 && ready_patterns->empty())
             {
-                
+                cout << "worker 4 " << endl;
                 // cout << "Branch C" << endl;
                 if (global_num_idle.load(memory_order_relaxed) == num_compers)
                 {
