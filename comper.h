@@ -1772,7 +1772,7 @@ public:
         // reaching here means we don't get any task 
 
         succ = false;
-        if(!data_stack.empty() || !ready_patterns.empty())
+        if(!data_stack.empty() || pending_patterns_num.load(memory_order_relaxed) > 0 || !ready_patterns.empty())
         {
             activeQ_lock.wrlock();
             if(activeQ_num < activeQ_list_capacity)
