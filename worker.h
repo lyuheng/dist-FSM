@@ -63,7 +63,7 @@ public:
         global_pending_patterns = pending_patterns = new PendingMap;
         global_ready_patterns = ready_patterns = new PatternQueue;
 
-        global_delete_queue = delete_queue = new ReqQueue<int, DELETE_CHANNEL>;
+        global_delete_queue = delete_queue = new ReqQueue<RequestMsg, DELETE_CHANNEL>;
 
         // fout = new ofstream[32];
         // for(int i=0; i<32; i++)
