@@ -76,9 +76,9 @@ public:
 
     bool empty()
     {
-    	// unique_lock<mutex> lck(q_h_lock);
+    	unique_lock<mutex> lck(q_h_lock);
 		NODE *node = head->next.load(memory_order_relaxed); //atomic "load"
-		// lck.unlock();
+		lck.unlock();
 		if(node == NULL) return true;
 		else return false;
     }
