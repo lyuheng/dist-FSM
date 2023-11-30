@@ -38,14 +38,14 @@ public:
         while(m.end() == false)
 		{
 		    m >> key;
-            auto & bucket = g_pattern_prog_map.get_bucket(key.parent_qid);
+            auto & bucket = g_pattern_prog_map.get_bucket(key);
             bucket.lock();
             auto & kvmap = bucket.get_map();
             auto it = kvmap.find(key.parent_qid);
             assert(it != kvmap.end());
             bucket.unlock();
             // delete its parent pattern progress
-            PatternProgress * parent_prog = it->second;
+            PatternProgress * pattern_prog = it->second;
             pattern_prog->children_mtx.lock();
             pattern_prog->children_cnt--;
             if(pattern_prog->children_cnt == 0) 

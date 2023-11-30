@@ -46,7 +46,7 @@ public:
     PendingMap * pending_patterns; // <parent patternID, pending task containers>
     PatternQueue * ready_patterns;
 
-    ReqQueue<int, DELETE_CHANNEL> delete_queue;
+    ReqQueue<int, DELETE_CHANNEL> * delete_queue;
 
     Worker(int comper_num)
     {
