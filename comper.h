@@ -1772,7 +1772,7 @@ public:
         // reaching here means we don't get any task 
 
         succ = false;
-        if(!data_stack.empty())
+        if(!data_stack.empty() || !ready_patterns.empty())
         {
             activeQ_lock.wrlock();
             if(activeQ_num < activeQ_list_capacity)
@@ -1781,10 +1781,10 @@ public:
                 activeQ_lock.unlock();
 
                 // 1. check ready_patterns
-                task_container *tc_new;
+                task_container * tc_new;
                 succ = ready_patterns.dequeue(tc_new);
 
-                if (succ) 
+                if (succ)
                     activate_task_container(tc_new);
                 else 
                 {
