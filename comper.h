@@ -347,7 +347,7 @@ public:
     PendingMap & pending_patterns = *(PendingMap *)global_pending_patterns;
     PatternQueue & ready_patterns = *(PatternQueue *)global_ready_patterns;
 
-    ReqQueue<RespondMsg, DELETE_CHANNEL> & delete_queue = *(ReqQueue<RespondMsg, DELETE_CHANNEL> *)global_delete_queue;
+    ReqQueue<RequestMsg, DELETE_CHANNEL> & delete_queue = *(ReqQueue<RequestMsg, DELETE_CHANNEL> *)global_delete_queue;
 
     task_container * tc;
 
