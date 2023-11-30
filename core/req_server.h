@@ -44,6 +44,7 @@ public:
             auto it = kvmap.find(key.parent_qid);
             assert(it != kvmap.end());
             bucket.unlock();
+            // delete its parent pattern progress
             PatternProgress * parent_prog = it->second;
             pattern_prog->children_mtx.lock();
             pattern_prog->children_cnt--;
@@ -91,6 +92,8 @@ public:
     			t = std::thread(&ReqServer::thread_func, this, buf, size, status.MPI_SOURCE);
     			first = false;
     		}
+            else 
+                throw std::runtime_error("Unknown MPI tag");
         }
         if(!first && t.joinable())
             t.join();

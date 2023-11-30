@@ -1420,11 +1420,8 @@ public:
             }
             else 
             {
-                tc_new->pattern->parent_prog = new PatternProgress;
+                tc_new->pattern->parent_prog = new PatternProgress; 
                 vector<Domain> * parent_domain = cache_table.get(tc_new->parent_qid);
-
-                cout << "get parent domain key = " << tc_new->parent_qid << endl;
-
                 tc_new->pattern->parent_prog->candidates = parent_domain;
             }
         }

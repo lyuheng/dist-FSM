@@ -9,7 +9,7 @@ concurrent/conmap_zero.h concurrent/conmap.h concurrent/conque.h concurrent/cons
 mpi/serialization.h mpi/mpi_global.h mpi/communication.h mpi/timer.h \
 core/cache_table.h core/req_queue.h core/req_server.h core/resp_queue.h core/resp_server.h
 
-INCLUDE=-Iconcurrent -Impi -Icore
+INCLUDE=-Iconcurrent -Impi -Icore -I.
 
 all: run
 

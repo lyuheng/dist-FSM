@@ -22,41 +22,32 @@ int main(int argc, char *argv[])
 
     init_worker(&argc, &argv);
 
-
     cout << "Rank: " << _my_rank << endl; 
 
     string fileName;
     int support, thread_num = 32;
 
-    //load graph file
+    // load graph file
 	char * argfilename = getCmdOption(argv, argv + argc, "-file");
 	if(argfilename)
-	{
 		fileName = string(argfilename);
-	}
 
     // get user-given support threshold
 	char * argSupport = getCmdOption(argv, argv + argc, "-freq");
 	if(argSupport)
-	{
 		support = atoi(argSupport);
-	}
 
     // parameter to set the maximum subgraph size (in terms of the number of vertices)
 	char * argMaxNodes = getCmdOption(argv, argv + argc, "-maxNodes");
 	if(argMaxNodes)
-	{
 		Settings::maxNumNodes = atoi(argMaxNodes);
-	}
 	else
 		Settings::maxNumNodes = -1;
     
     // get user-given number of threads
     char * argThreads = getCmdOption(argv, argv + argc, "-thread");
 	if(argThreads)
-	{
 		thread_num = atoi(argThreads);
-	}
 
     auto time1 = steady_clock::now();
 
@@ -76,7 +67,7 @@ int main(int argc, char *argv[])
     if (_my_rank == MASTER_RANK)
     {
         ui ttl_result = std::accumulate(results_counter.begin(), results_counter.end(), 0);
-        cout << "Results by each worker: " << ttl_result; 
+        cout << "Results by each worker: {" << ttl_result; 
         for (int i=0; i<_num_workers; ++i)
         {
             if (i != MASTER_RANK)
@@ -86,10 +77,10 @@ int main(int argc, char *argv[])
                 ttl_result += found;
             }
         }
-        cout << "\n";
-        cout << "[TIME] Loading Graph Time: " << (float)duration_cast<milliseconds>(time2 - time1).count()/1000 << " s" << endl;
-        cout << "[TIME] Mining Time: " << (float)duration_cast<milliseconds>(time3 - time2).count()/1000 << " s" << endl;
-        cout << "[TIME] Total Elapsed Time: " << (float)duration_cast<milliseconds>(time3 - time1).count()/1000 << " s" << endl;
+        cout << "}\n";
+        cout << "[TIME] Loading Graph Time: " << (float)duration_cast<milliseconds>(time2 - time1).count() / 1000 << " s" << endl;
+        cout << "[TIME] Mining Time: " << (float)duration_cast<milliseconds>(time3 - time2).count() / 1000 << " s" << endl;
+        cout << "[TIME] Total Elapsed Time: " << (float)duration_cast<milliseconds>(time3 - time1).count() / 1000 << " s" << endl;
         cout << "[INFO] # Frequent Patterns: " << ttl_result << endl;
     }
     else
