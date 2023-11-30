@@ -347,6 +347,8 @@ public:
     PendingMap & pending_patterns = *(PendingMap *)global_pending_patterns;
     PatternQueue & ready_patterns = *(PatternQueue *)global_ready_patterns;
 
+    ReqQueue<int, DELETE_CHANNEL> & delete_queue = *(ReqQueue<int, DELETE_CHANNEL> *)global_delete_queue;
+
     task_container * tc;
 
     int cur_qid;
@@ -1785,7 +1787,10 @@ public:
                 succ = ready_patterns.dequeue(tc_new);
 
                 if (succ)
+                {
                     activate_task_container(tc_new);
+                    delete_queue.add(tc_new->parent_qid);
+                }
                 else 
                 {
                     activeQ_lock.wrlock();

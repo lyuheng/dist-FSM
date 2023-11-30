@@ -6,7 +6,7 @@
 #include "mpi_global.h"
 #include "global.h"
 
-template <typename KeyT>
+template <typename KeyT, MPICHANNEL CHANNEL>
 class ReqQueue
 {
 public:
@@ -56,7 +56,7 @@ public:
 				{
 					sth_sent = true;
 					//send reqs to tgt
-					MPI_Send(m0->get_buf(), m0->size(), MPI_CHAR, i, REQ_CHANNEL, MPI_COMM_WORLD);
+					MPI_Send(m0->get_buf(), m0->size(), MPI_CHAR, i, CHANNEL, MPI_COMM_WORLD);
 					//------
 					delete m0;
 					m0 = new ibinstream;
@@ -71,7 +71,7 @@ public:
 				{
 					sth_sent = true;
 					//send reqs to tgt
-					MPI_Send(m1->get_buf(), m1->size(), MPI_CHAR, i, REQ_CHANNEL, MPI_COMM_WORLD);
+					MPI_Send(m1->get_buf(), m1->size(), MPI_CHAR, i, CHANNEL, MPI_COMM_WORLD);
 					//------
 					delete m1;
 					m1 = new ibinstream;

@@ -46,6 +46,8 @@ public:
     PendingMap * pending_patterns; // <parent patternID, pending task containers>
     PatternQueue * ready_patterns;
 
+    ReqQueue<int, DELETE_CHANNEL> delete_queue;
+
     Worker(int comper_num)
     {
         global_data_stack = data_stack = new DataStack;
@@ -60,6 +62,8 @@ public:
 
         global_pending_patterns = pending_patterns = new PendingMap;
         global_ready_patterns = ready_patterns = new PatternQueue;
+
+        global_delete_queue = delete_queue = new ReqQueue<int, DELETE_CHANNEL>;
 
         // fout = new ofstream[32];
         // for(int i=0; i<32; i++)
@@ -83,6 +87,8 @@ public:
         delete cache_table;
         delete pending_patterns;
         delete ready_patterns;
+
+        delete delete_queue;
 
         // for(ui i=0; i<32; i++)
         //     fout[i].close();
@@ -313,7 +319,7 @@ public:
     void status_sync(bool sth_stealed)
     {
         bool worker_idle = false;
-        
+
         activeQ_lock.rdlock();
         if (activeQ_num > 0)
         {

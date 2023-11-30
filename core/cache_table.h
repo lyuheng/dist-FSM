@@ -61,7 +61,7 @@ class CacheTable
 public:
     typedef conmap_zero<KeyT, CandValue<ValueT>> CandCacheT;
 
-    ReqQueue<RequestMsg> q_req;
+    ReqQueue<RequestMsg, REQ_CHANNEL> q_req;
     CandCacheT candcache;
 	PullCache<KeyT> pcache;
 
