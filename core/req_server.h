@@ -34,11 +34,11 @@ public:
     void thread_func_delete(char *buf, int size, int src)
     {
         obinstream m(buf, size);
-        int key;
+        RequestMsg key;
         while(m.end() == false)
 		{
 		    m >> key;
-            auto & bucket = g_pattern_prog_map.get_bucket(key);
+            auto & bucket = g_pattern_prog_map.get_bucket(key.parent_qid);
             bucket.lock();
             auto & kvmap = bucket.get_map();
             auto it = kvmap.find(key.parent_qid);
@@ -51,7 +51,7 @@ public:
             if(pattern_prog->children_cnt == 0) 
             {
                 delete pattern_prog;
-                g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
+                g_pattern_prog_map.erase(key.parent_qid); // since no its child patterns will be using it
             }
             else
             {
