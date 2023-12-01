@@ -258,8 +258,7 @@ struct task_container
 
     ~task_container()
     {
-        if (has_init)
-        {
+        
             delete[] domain_matches_mtx;
             delete[] non_cand_mtx;
             delete[] vq_stops_refill_mtx;
@@ -298,8 +297,7 @@ struct task_container
             {
                 delete *it; // delete all space inside L_timeout
             }
-        }
-
+        
         delete pattern; // created by extend(.)
     }
 
