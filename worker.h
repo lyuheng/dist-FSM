@@ -402,7 +402,7 @@ public:
         cout << "global map is empty: " << g_pattern_prog_map.empty() << endl;
 
 
-        // for (auto it = end_delete.begin(); it != end_delete.end(); ++it)
-        //     delete *it;
+        for (auto it = end_delete.begin(); it != end_delete.end(); ++it)
+            delete *it;
     }
 };
