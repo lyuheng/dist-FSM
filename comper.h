@@ -1105,6 +1105,8 @@ public:
             new_tc->pattern = child_pattern;
 
             g_pattern_prog_map.insert(new_tc->qid, new_tc->pattern->prog); // add into global map
+
+            cout << "new_tc->pattern->prog->child_cnt = " << new_tc->pattern->prog->children_cnt << endl; 
             
             data_stack.enstack(new_tc);
         }
