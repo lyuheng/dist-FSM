@@ -1426,6 +1426,8 @@ public:
             else 
             {
                 tc_new->pattern->parent_prog = new PatternProgress; 
+                if (tc_new->pattern->parent_prog->children_cnt != 0)
+                    exit(-1);
                 vector<Domain> * parent_domain = cache_table.get(tc_new->parent_qid);
                 tc_new->pattern->parent_prog->candidates = parent_domain;
                 need_new_prog = true;
