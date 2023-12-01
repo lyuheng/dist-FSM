@@ -469,6 +469,8 @@ struct Domain
     }
 };
 
+bool deletion_phase = false;
+
 struct PatternProgress
 {
     int children_cnt;

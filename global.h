@@ -93,8 +93,6 @@ void * global_ready_patterns;
 
 void * global_delete_queue;
 
-bool deletion_phase = false;
-
 #define GEN_PATTERN_ID(id) ((_my_rank << 25) + (id))
 #define GET_WORKER_ID(qid) (qid >> 25)
 #define GET_PATTERN_ID(qid) (qid & 0x01FFFFFF)
