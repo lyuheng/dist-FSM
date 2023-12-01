@@ -42,20 +42,23 @@ public:
             bucket.lock();
             auto & kvmap = bucket.get_map();
             auto it = kvmap.find(key.parent_qid);
-            assert(it != kvmap.end());
+            // assert(it != kvmap.end());
             bucket.unlock();
             // delete its parent pattern progress
-            PatternProgress * pattern_prog = it->second;
-            pattern_prog->children_mtx.lock();
-            pattern_prog->children_cnt--;
-            if(pattern_prog->children_cnt == 0) 
+            if (it != kvmap.end())
             {
-                delete pattern_prog;
-                g_pattern_prog_map.erase(key.parent_qid); // since no its child patterns will be using it
-            }
-            else
-            {
-                pattern_prog->children_mtx.unlock();
+                PatternProgress * pattern_prog = it->second;
+                pattern_prog->children_mtx.lock();
+                pattern_prog->children_cnt--;
+                if(pattern_prog->children_cnt == 0) 
+                {
+                    delete pattern_prog;
+                    g_pattern_prog_map.erase(key.parent_qid); // since no its child patterns will be using it
+                }
+                else
+                {
+                    pattern_prog->children_mtx.unlock();
+                }
             }
 		}
     }
