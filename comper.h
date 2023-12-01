@@ -111,7 +111,7 @@ struct TimeOutTask_Container
 
 struct task_container
 {
-    bool has_init = false;
+    // bool has_init = false;
     int qid, parent_qid; // pattern ID, parent pattern ID
 
     TaskQ Q_domain;
@@ -253,7 +253,7 @@ struct task_container
         all_bn.resize(size, NULL);
         all_bn_count.resize(size, NULL);
 
-        has_init = true;
+        // has_init = true;
     }
 
     ~task_container()
