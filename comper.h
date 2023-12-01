@@ -167,7 +167,6 @@ struct task_container
 
     vector<vector<subPattern> > maps;
 
-
     vector<VertexID *> all_matching_order;
     vector<VertexID **> all_bn;
     vector<ui *> all_bn_count;
@@ -254,12 +253,13 @@ struct task_container
         all_bn.resize(size, NULL);
         all_bn_count.resize(size, NULL);
 
-        // has_init = true;
+        has_init = true;
     }
 
     ~task_container()
     {
-        
+        if (has_init)
+        {
             delete[] domain_matches_mtx;
             delete[] non_cand_mtx;
             delete[] vq_stops_refill_mtx;
@@ -298,8 +298,8 @@ struct task_container
             {
                 delete *it; // delete all space inside L_timeout
             }
-        
-    
+        }
+
         delete pattern; // created by extend(.)
     }
 
