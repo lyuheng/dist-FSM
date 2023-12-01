@@ -1443,7 +1443,7 @@ public:
             {
                 pattern_prog->children_mtx.lock();
                 pattern_prog->children_cnt--;
-                if(pattern_prog->children_cnt == 0) 
+                if(pattern_prog->children_cnt == 0 || need_new_prog) 
                 {
                     delete pattern_prog;
                     g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
@@ -1483,7 +1483,7 @@ public:
             {
                 pattern_prog->children_mtx.lock();
                 pattern_prog->children_cnt--;
-                if(pattern_prog->children_cnt == 0)
+                if(pattern_prog->children_cnt == 0 || need_new_prog)
                 {
                     delete pattern_prog;
                     g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
