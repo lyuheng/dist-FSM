@@ -1,5 +1,5 @@
 CC=mpic++
-CFLAGS=-std=c++14 -g -march=native -fopenmp -lpthread
+CFLAGS=-std=c++14 -g -fopenmp -lpthread
 OBJDIR=objs/
 OBJS=$(OBJDIR)intersection.o 
 
@@ -16,9 +16,9 @@ all: run
 run: $(OBJDIR)run.o $(OBJS)
 	$(CC) $(CFLAGS) $^ -o $@ $(INCLUDE)
 
-$(OBJDIR)intersection.o: intersection/computesetintersection.cpp intersection/computesetintersection.h 
-	$(MKDIR_P) $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE)
+# $(OBJDIR)intersection.o: intersection/computesetintersection.cpp intersection/computesetintersection.h 
+# 	$(MKDIR_P) $(dir $@)
+# 	$(CC) $(CFLAGS) -c $< -o $@ $(INCLUDE)
 
 $(OBJDIR)run.o: run.cpp $(HEADERS)
 	$(MKDIR_P) $(dir $@)
