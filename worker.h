@@ -406,5 +406,16 @@ public:
         }
 
         cout << "global map is empty: " << g_pattern_prog_map.empty() << endl;
+
+        for(int i=0; i<CONMAP_BUCKET_NUM; i++)
+    	{
+    		auto & bucket = g_pattern_prog_map.pos(i);//todo auto
+    		auto & kvmap = bucket.get_map();
+    		
+			for(auto it = kvmap.begin(); it != kvmap.end(); it++)
+			{
+				delete it->second; //release task_prog
+			}
+    	}
     }
 };
