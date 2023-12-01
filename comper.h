@@ -192,13 +192,13 @@ struct task_container
         return m;
     }
 
-    task_container() {}
+    task_container(): has_init(false) {}
 
     // combine _my_rank with qid
-    task_container(int id): qid(GEN_PATTERN_ID(id)), parent_qid(0) {}
+    task_container(int id): qid(GEN_PATTERN_ID(id)), parent_qid(0), has_init(false) {}
 
     // combine _my_rank with qid
-    task_container(int id, int pqid): qid(GEN_PATTERN_ID(id)), parent_qid(pqid) {}
+    task_container(int id, int pqid): qid(GEN_PATTERN_ID(id)), parent_qid(pqid), has_init(false) {}
 
     void init() // called when query is added to activeQ_list
     {   
