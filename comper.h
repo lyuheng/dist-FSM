@@ -229,7 +229,7 @@ struct task_container
         vq_stops_refill = new bool[size];
         memset(vq_stops_refill, false, sizeof(bool)*size);
         
-
+        
         domain_matches.resize(size);
 
         domain_matches_mtx = new mutex[size];
@@ -254,7 +254,7 @@ struct task_container
     }
 
     ~task_container()
-    {   
+    {
         delete[] domain_matches_mtx;
         delete[] non_cand_mtx;
         delete[] vq_stops_refill_mtx;

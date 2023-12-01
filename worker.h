@@ -48,6 +48,10 @@ public:
 
     ReqQueue<RequestMsg, DELETE_CHANNEL> * delete_queue;
 
+
+    //TODO: 
+    vector<task_container *> end_delete;
+
     Worker(int comper_num)
     {
         global_data_stack = data_stack = new DataStack;
@@ -287,8 +291,8 @@ public:
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 // delete every pointer in tc_vec !!!!!!!!!!!!!!!!!
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                // for (auto it = tc_vec.begin(); it != tc_vec.end(); ++it)
-                //     delete *it;
+                for (auto it = tc_vec.begin(); it != tc_vec.end(); ++it)
+                    end_delete.push_back(*it);
             }
         }
         
@@ -313,8 +317,8 @@ public:
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 // delete every pointer in tc_vec !!!!!!!!!!!!!!!!!
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                // for (auto it = tc_vec.begin(); it != tc_vec.end(); ++it)
-                //     delete *it;
+                for (auto it = tc_vec.begin(); it != tc_vec.end(); ++it)
+                    end_delete.push_back(*it);
             }
         }
         return true;
@@ -396,5 +400,9 @@ public:
         }
 
         cout << "global map is empty: " << g_pattern_prog_map.empty() << endl;
+
+
+        for (auto it = end_delete.begin(); it != end_delete.end(); ++it)
+            delete *it;
     }
 };
