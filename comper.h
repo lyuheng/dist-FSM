@@ -1790,7 +1790,8 @@ public:
                 if (succ)
                 {
                     activate_task_container(tc_new);
-                    delete_queue.add(RequestMsg{tc_new->qid, tc_new->parent_qid});
+                    if (tc_new->parent_qid != 0)
+                        delete_queue.add(RequestMsg{tc_new->qid, tc_new->parent_qid});
                 }
                 else 
                 {
