@@ -475,7 +475,7 @@ struct PatternProgress
     mutex children_mtx;
     // Pattern * pattern; 
 
-	vector<Domain> * candidates; // TODO: make this into pointer
+	vector<Domain> * candidates;
 
 	PatternProgress()
 	{
@@ -484,7 +484,9 @@ struct PatternProgress
 	}
     ~PatternProgress()
     {
-        delete candidates;
+        assert(children_cnt == 0 || children_cnt == -1);
+        if (children_cnt == 0)
+            delete candidates;
     }
 };
 

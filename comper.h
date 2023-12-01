@@ -187,6 +187,7 @@ struct task_container
         m << tc.qid;
         m << tc.parent_qid;
         m << tc.pattern;
+        delete tc.pattern.prog;
         return m;
     }
 
@@ -1403,9 +1404,8 @@ public:
          *      - block here? <-- go this
          *      - use KV-table to hold
          */
-        bool need_req = false;
+        bool need_new_prog = false;
 
-        
         if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
         {
             if (GET_WORKER_ID(tc_new->parent_qid) == _my_rank)
@@ -1423,6 +1423,7 @@ public:
                 tc_new->pattern->parent_prog = new PatternProgress; 
                 vector<Domain> * parent_domain = cache_table.get(tc_new->parent_qid);
                 tc_new->pattern->parent_prog->candidates = parent_domain;
+                need_new_prog = true;
             }
         }
         
@@ -1442,7 +1443,7 @@ public:
             {
                 pattern_prog->children_mtx.lock();
                 pattern_prog->children_cnt--;
-                if(pattern_prog->children_cnt == 0) 
+                if(pattern_prog->children_cnt == 0 || pattern_prog->children_cnt == -1) 
                 {
                     delete pattern_prog;
                     g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
@@ -1482,7 +1483,7 @@ public:
             {
                 pattern_prog->children_mtx.lock();
                 pattern_prog->children_cnt--;
-                if(pattern_prog->children_cnt == 0)
+                if(pattern_prog->children_cnt == 0 || pattern_prog->children_cnt == -1)
                 {
                     delete pattern_prog;
                     g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
