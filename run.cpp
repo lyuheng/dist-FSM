@@ -97,18 +97,18 @@ int main(int argc, char *argv[])
 
     deletion_phase = true;
         
-    for(int i=0; i<CONMAP_BUCKET_NUM; i++)
-    {
-        auto & bucket = g_pattern_prog_map.pos(i);
-        bucket.lock();
-        auto & kvmap = bucket.get_map();
+    // for(int i=0; i<CONMAP_BUCKET_NUM; i++)
+    // {
+    //     auto & bucket = g_pattern_prog_map.pos(i);
+    //     bucket.lock();
+    //     auto & kvmap = bucket.get_map();
         
-        for(auto it = kvmap.begin(); it != kvmap.end(); it++)
-        {
-            delete it->second;
-        }
-        bucket.unlock();
-    }
+    //     for(auto it = kvmap.begin(); it != kvmap.end(); it++)
+    //     {
+    //         delete it->second;
+    //     }
+    //     bucket.unlock();
+    // }
 
     worker_finalize();
 
