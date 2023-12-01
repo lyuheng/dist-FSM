@@ -484,7 +484,11 @@ struct PatternProgress
 	}
     ~PatternProgress()
     {
-        assert(children_cnt == 0 || children_cnt == -1);
+        if(children_cnt != 0 && children_cnt != -1)
+        {
+            cout << "children_cnt = " << children_cnt << endl;
+            assert(false);
+        }
         if (children_cnt == 0)
             delete candidates;
     }
