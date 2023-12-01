@@ -1796,7 +1796,7 @@ public:
 
                     if (GET_WORKER_ID(tc_new->parent_qid) != _my_rank)
                     {
-                        cout << tc_new->parent_qid << " " << _my_rank << endl;
+                        cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << endl;
                         assert(false);
                     }
                     if (GET_WORKER_ID(tc_new->parent_qid) != _my_rank && GET_PATTERN_ID(tc_new->parent_qid) != 0)
