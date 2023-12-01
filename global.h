@@ -25,7 +25,7 @@ using namespace std;
 // #define VERBOSE_MODE
 
 // enable optimized version of subgraph matching methods
-#define OPTIMIZED_MATCH
+// #define OPTIMIZED_MATCH
 
 // enable timeout search
 #define TIMEOUT_THRESHOLD 0.1

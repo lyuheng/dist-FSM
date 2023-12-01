@@ -54,7 +54,7 @@ public:
         }
     }
 
-    bool pop_fronts(vector<T> &to_gets, int count, int above) 
+    bool pop_fronts(vector<T> & to_gets, int count, int above) 
     {
         mtx.lock();
         if(s.size() >= count + above)
