@@ -1085,6 +1085,7 @@ public:
         PatternPVec ext_pattern_vec;
         grami.extend((*pattern), ext_pattern_vec);
         pattern->prog->children_cnt = ext_pattern_vec.size();
+        cout << "extend size = " << ext_pattern_vec.size() << endl;
 
         // special case, otherwise memory leak!!
         if(pattern->prog->children_cnt == 0)
@@ -1168,6 +1169,8 @@ public:
             PatternPVec ext_pattern_vec;
             grami.extend((*pattern), ext_pattern_vec);
             pattern->prog->children_cnt = ext_pattern_vec.size();
+
+            cout << "extend size = " << ext_pattern_vec.size() << endl;
 
             // special case, otherwise memory leak!!
             if(pattern->prog->children_cnt == 0)
@@ -1425,9 +1428,7 @@ public:
             }
             else 
             {
-                tc_new->pattern->parent_prog = new PatternProgress; 
-                if (tc_new->pattern->parent_prog->children_cnt != 0)
-                    exit(-1);
+                tc_new->pattern->parent_prog = new PatternProgress;
                 vector<Domain> * parent_domain = cache_table.get(tc_new->parent_qid);
                 tc_new->pattern->parent_prog->candidates = parent_domain;
                 need_new_prog = true;
