@@ -17,7 +17,7 @@
 #ifndef CONMAP_H
 #define CONMAP_H
 
-#define CONMAP_BUCKET_NUM 10000 //should be proportional to the number of threads on a machine
+#define CONMAP_BUCKET_NUM 100 //should be proportional to the number of threads on a machine
 
 //idea: 2-level hashing
 //1. id % CONMAP_BUCKET_NUM -> bucket_index
