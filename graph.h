@@ -483,13 +483,8 @@ struct PatternProgress
         candidates = new vector<Domain>;
 	}
     ~PatternProgress()
-    {
-        if(children_cnt != 0 && children_cnt != -1)
-        {
-            cout << "children_cnt = " << children_cnt << endl;
-            assert(false);
-        }
-        if (children_cnt == 0)
+    { 
+        if (children_cnt == 0 || deletion_phase)
             delete candidates;
     }
 };

@@ -407,6 +407,8 @@ public:
 
         cout << "global map is empty: " << g_pattern_prog_map.empty() << endl;
 
+        deletion_phase = true;
+        
         for(int i=0; i<CONMAP_BUCKET_NUM; i++)
     	{
     		auto & bucket = g_pattern_prog_map.pos(i);//todo auto
