@@ -195,7 +195,7 @@ struct task_container
     task_container(): has_init(false) {}
 
     // combine _my_rank with qid
-    task_container(int id): qid(GEN_PATTERN_ID(id)), parent_qid(0), has_init(false) {}
+    task_container(int id): qid(GEN_PATTERN_ID(id)), parent_qid(GEN_PATTERN_ID(0)), has_init(false) {}
 
     // combine _my_rank with qid
     task_container(int id, int pqid): qid(GEN_PATTERN_ID(id)), parent_qid(pqid), has_init(false) {}
