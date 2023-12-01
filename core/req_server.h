@@ -43,7 +43,6 @@ public:
             auto & kvmap = bucket.get_map();
             auto it = kvmap.find(key.parent_qid);
             // assert(it != kvmap.end());
-            bucket.unlock();
             // delete its parent pattern progress
             if (it != kvmap.end())
             {
@@ -52,7 +51,7 @@ public:
                 pattern_prog->children_cnt--;
                 if(pattern_prog->children_cnt == 0) 
                 {
-                    g_pattern_prog_map.erase(key.parent_qid); // since no its child patterns will be using it
+                    kvmap.erase(it); // since no its child patterns will be using it
                     delete pattern_prog;
                 }
                 else
@@ -60,6 +59,7 @@ public:
                     pattern_prog->children_mtx.unlock();
                 }
             }
+            bucket.unlock();
 		}
     }
 
