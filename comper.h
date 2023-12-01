@@ -111,7 +111,7 @@ struct TimeOutTask_Container
 
 struct task_container
 {
-    bool has_init;
+    bool has_init_xx;
     int qid, parent_qid; // pattern ID, parent pattern ID
 
     TaskQ Q_domain;
@@ -192,13 +192,13 @@ struct task_container
         return m;
     }
 
-    task_container(): has_init(false) {}
+    task_container(): has_init_xx(false) {}
 
     // combine _my_rank with qid
-    task_container(int id): qid(GEN_PATTERN_ID(id)), parent_qid(0), has_init(false) {}
+    task_container(int id): qid(GEN_PATTERN_ID(id)), parent_qid(0), has_init_xx(false) {}
 
     // combine _my_rank with qid
-    task_container(int id, int pqid): qid(GEN_PATTERN_ID(id)), parent_qid(pqid), has_init(false) {}
+    task_container(int id, int pqid): qid(GEN_PATTERN_ID(id)), parent_qid(pqid), has_init_xx(false) {}
 
     void init() // called when query is added to activeQ_list
     {   
