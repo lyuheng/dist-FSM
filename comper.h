@@ -127,7 +127,7 @@ struct task_container
 
     // ============================================
 
-    Pattern *pattern;
+    Pattern * pattern;
 
     // Progress status
     // *** for round-robin refill
