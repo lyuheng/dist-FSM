@@ -75,16 +75,16 @@ public:
     		MPI_Iprobe(MPI_ANY_SOURCE, REQ_CHANNEL, MPI_COMM_WORLD, &has_msg, &status); 
             if(!has_msg) 
                 usleep(WAIT_TIME_WHEN_IDLE);
-            else if (status.MPI_TAG == DELETE_CHANNEL)
-            {
-                int size;
-    			MPI_Get_count(&status, MPI_CHAR, &size); // get size of the msg-batch (# of bytes)
-    			char * buf = new char[size]; //space for receiving this msg-batch, space will be released by obinstream in thread_func(.)
-    			MPI_Recv(buf, size, MPI_CHAR, status.MPI_SOURCE, status.MPI_TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-    			if(!first) t.join(); //wait for previous CPU op to finish; t can be extended to a vector of threads later if necessary
-    			t = std::thread(&ReqServer::thread_func_delete, this, buf, size, status.MPI_SOURCE);
-    			first = false;
-            }
+            // else if (status.MPI_TAG == DELETE_CHANNEL)
+            // {
+            //     int size;
+    		// 	MPI_Get_count(&status, MPI_CHAR, &size); // get size of the msg-batch (# of bytes)
+    		// 	char * buf = new char[size]; //space for receiving this msg-batch, space will be released by obinstream in thread_func(.)
+    		// 	MPI_Recv(buf, size, MPI_CHAR, status.MPI_SOURCE, status.MPI_TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    		// 	if(!first) t.join(); //wait for previous CPU op to finish; t can be extended to a vector of threads later if necessary
+    		// 	t = std::thread(&ReqServer::thread_func_delete, this, buf, size, status.MPI_SOURCE);
+    		// 	first = false;
+            // }
             else if (status.MPI_TAG == REQ_CHANNEL)
     		{
     			int size;
