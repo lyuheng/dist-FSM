@@ -1098,7 +1098,6 @@ public:
             // add into datastack
             task_container *new_tc = new task_container(qid++, tc_->qid);
 
-
             if (new_tc->qid < 0)
                 exit(-1);
 
