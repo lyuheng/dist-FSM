@@ -292,7 +292,10 @@ public:
                 // delete every pointer in tc_vec !!!!!!!!!!!!!!!!!
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 for (auto it = tc_vec.begin(); it != tc_vec.end(); ++it)
+                {
                     delete (*it)->pattern;
+                    delete *it;
+                }
             }
         }
         
@@ -318,7 +321,10 @@ public:
                 // delete every pointer in tc_vec !!!!!!!!!!!!!!!!!
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 for (auto it = tc_vec.begin(); it != tc_vec.end(); ++it)
+                {
                     delete (*it)->pattern;
+                    delete *it;
+                }
             }
         }
         return true;
