@@ -292,7 +292,7 @@ public:
                 // delete every pointer in tc_vec !!!!!!!!!!!!!!!!!
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 for (auto it = tc_vec.begin(); it != tc_vec.end(); ++it)
-                    end_delete.push_back(*it);
+                    delete *it;
             }
         }
         
@@ -318,7 +318,7 @@ public:
                 // delete every pointer in tc_vec !!!!!!!!!!!!!!!!!
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 for (auto it = tc_vec.begin(); it != tc_vec.end(); ++it)
-                    end_delete.push_back(*it);
+                    delete *it;
             }
         }
         return true;
@@ -400,9 +400,5 @@ public:
         }
 
         cout << "global map is empty: " << g_pattern_prog_map.empty() << endl;
-
-
-        for (auto it = end_delete.begin(); it != end_delete.end(); ++it)
-            delete *it;
     }
 };
