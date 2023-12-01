@@ -111,8 +111,6 @@ struct TimeOutTask_Container
 
 struct task_container
 {
-    bool has_init = false;
-
     int qid, parent_qid; // pattern ID, parent pattern ID
 
     TaskQ Q_domain;
@@ -253,54 +251,49 @@ struct task_container
         all_matching_order.resize(size, NULL);
         all_bn.resize(size, NULL);
         all_bn_count.resize(size, NULL);
-
-        has_init = true;
     }
 
     ~task_container()
     {   
-        if (has_init)
+        delete[] domain_matches_mtx;
+        delete[] non_cand_mtx;
+        delete[] vq_stops_refill_mtx;
+
+        delete[] vq_stops_refill;
+
+        for (ui i = 0; i < pattern->size(); ++i) {
+            for (ui j = 0; j < pattern->size(); ++j) {
+                delete edge_matrix[i][j];
+            }
+            delete[] edge_matrix[i];
+        }
+        delete[] edge_matrix;
+
+        for (ui i = 0; i < pattern->size(); ++i)
         {
-            delete[] domain_matches_mtx;
-            delete[] non_cand_mtx;
-            delete[] vq_stops_refill_mtx;
-
-            delete[] vq_stops_refill;
-
-            for (ui i = 0; i < pattern->size(); ++i) {
-                for (ui j = 0; j < pattern->size(); ++j) {
-                    delete edge_matrix[i][j];
-                }
-                delete[] edge_matrix[i];
-            }
-            delete[] edge_matrix;
-
-            for (ui i = 0; i < pattern->size(); ++i)
+            if (all_bn[i] != NULL)
             {
-                if (all_bn[i] != NULL)
+                for (ui j = 0; j < pattern->size(); ++j)
                 {
-                    for (ui j = 0; j < pattern->size(); ++j)
-                    {
-                        delete[] all_bn[i][j]; // FIXME: 
-                    }
+                    delete[] all_bn[i][j]; // FIXME: 
                 }
-                delete[] all_bn[i];
-                delete[] all_bn_count[i];
-                delete[] all_matching_order[i];
             }
-
-            // delete remaining tasks in Q_domain
-            for(auto it = Q_domain.begin(); it != Q_domain.end(); ++it)
-            {
-                delete *it;
-            }
-            // delete remaining timeout tasks in L_timeout
-            for(auto it = L_timeout.begin(); it != L_timeout.end(); ++it)
-            {
-                delete *it; // delete all space inside L_timeout
-            }
+            delete[] all_bn[i];
+            delete[] all_bn_count[i];
+            delete[] all_matching_order[i];
         }
 
+        // delete remaining tasks in Q_domain
+        for(auto it = Q_domain.begin(); it != Q_domain.end(); ++it)
+        {
+            delete *it;
+        }
+        // delete remaining timeout tasks in L_timeout
+        for(auto it = L_timeout.begin(); it != L_timeout.end(); ++it)
+        {
+            delete *it; // delete all space inside L_timeout
+        }
+    
         delete pattern; // created by extend(.)
     }
 
