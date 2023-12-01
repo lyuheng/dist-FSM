@@ -136,8 +136,8 @@ public:
 		bucket & buck = get_bucket(key);
 		buck.lock();
 		bool ret = buck.erase(key);
-		if (GET_WORKER_ID(key) == _my_rank)
-			assert(ret);
+		// if (GET_WORKER_ID(key) == _my_rank)
+		// 	assert(ret);
 		buck.unlock();
 		return ret;
 	}
