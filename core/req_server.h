@@ -93,7 +93,7 @@ public:
     			first = false;
     		}
             else 
-                throw std::runtime_error("Unknown MPI tag");
+                throw std::runtime_error("Unknown MPI Tag");
         }
         if(!first && t.joinable())
             t.join();
@@ -121,7 +121,6 @@ public:
 		// 		delete it->second; //release task_prog
 		// 	}
     	// }
-
     }
 };
 
