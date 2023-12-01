@@ -33,34 +33,34 @@ public:
 
     void thread_func_delete(char *buf, int size, int src)
     {
-        obinstream m(buf, size);
-        RequestMsg key;
-        while(m.end() == false)
-		{
-		    m >> key;
-            auto & bucket = g_pattern_prog_map.get_bucket(key.parent_qid);
-            bucket.lock();
-            auto & kvmap = bucket.get_map();
-            auto it = kvmap.find(key.parent_qid);
-            // assert(it != kvmap.end());
-            bucket.unlock();
-            // delete its parent pattern progress
-            if (it != kvmap.end())
-            {
-                PatternProgress * pattern_prog = it->second;
-                pattern_prog->children_mtx.lock();
-                pattern_prog->children_cnt--;
-                if(pattern_prog->children_cnt == 0) 
-                {
-                    delete pattern_prog;
-                    g_pattern_prog_map.erase(key.parent_qid); // since no its child patterns will be using it
-                }
-                else
-                {
-                    pattern_prog->children_mtx.unlock();
-                }
-            }
-		}
+        // obinstream m(buf, size);
+        // RequestMsg key;
+        // while(m.end() == false)
+		// {
+		//     m >> key;
+        //     auto & bucket = g_pattern_prog_map.get_bucket(key.parent_qid);
+        //     bucket.lock();
+        //     auto & kvmap = bucket.get_map();
+        //     auto it = kvmap.find(key.parent_qid);
+        //     // assert(it != kvmap.end());
+        //     bucket.unlock();
+        //     // delete its parent pattern progress
+        //     if (it != kvmap.end())
+        //     {
+        //         PatternProgress * pattern_prog = it->second;
+        //         pattern_prog->children_mtx.lock();
+        //         pattern_prog->children_cnt--;
+        //         if(pattern_prog->children_cnt == 0) 
+        //         {
+        //             delete pattern_prog;
+        //             g_pattern_prog_map.erase(key.parent_qid); // since no its child patterns will be using it
+        //         }
+        //         else
+        //         {
+        //             pattern_prog->children_mtx.unlock();
+        //         }
+        //     }
+		// }
     }
 
     void run()

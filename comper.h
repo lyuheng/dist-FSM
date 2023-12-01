@@ -1170,7 +1170,6 @@ public:
             grami.extend((*pattern), ext_pattern_vec);
             pattern->prog->children_cnt = ext_pattern_vec.size();
 
-            cout << "extend size = " << ext_pattern_vec.size() << endl;
 
             // special case, otherwise memory leak!!
             if(pattern->prog->children_cnt == 0)
@@ -1796,7 +1795,7 @@ public:
                 {
                     activate_task_container(tc_new);
                     if (GET_PATTERN_ID(tc_new->parent_qid) != 0)
-                        delete_queue.add(RequestMsg{tc_new->qid, tc_new->parent_qid});
+                        // delete_queue.add(RequestMsg{tc_new->qid, tc_new->parent_qid});
                 }
                 else 
                 {
