@@ -171,7 +171,7 @@ struct task_container
     vector<VertexID **> all_bn;
     vector<ui *> all_bn_count;
 
-    bool has_init;
+    // bool has_init;
 
     friend obinstream & operator>>(obinstream & m, task_container & tc)
     {
@@ -192,13 +192,13 @@ struct task_container
         return m;
     }
 
-    task_container(): has_init(false) {}
+    task_container() {}
 
     // combine _my_rank with qid
-    task_container(int id): qid(GEN_PATTERN_ID(id)), parent_qid(GEN_PATTERN_ID(0)), has_init(false) {}
+    task_container(int id): qid(GEN_PATTERN_ID(id)), parent_qid(GEN_PATTERN_ID(0)) {}
 
     // combine _my_rank with qid
-    task_container(int id, int pqid): qid(GEN_PATTERN_ID(id)), parent_qid(pqid), has_init(false) {}
+    task_container(int id, int pqid): qid(GEN_PATTERN_ID(id)), parent_qid(pqid) {}
 
     void init() // called when query is added to activeQ_list
     {   
@@ -253,13 +253,12 @@ struct task_container
         all_bn.resize(size, NULL);
         all_bn_count.resize(size, NULL);
 
-        has_init = true;
+        // has_init = true;
     }
 
     ~task_container()
     {
-        if (has_init)
-        {
+       
             delete[] domain_matches_mtx;
             delete[] non_cand_mtx;
             delete[] vq_stops_refill_mtx;
@@ -300,7 +299,7 @@ struct task_container
             }
             
             delete pattern; // created by extend(.)
-        }
+        
     }
 
     inline bool nothing_to_refill()
