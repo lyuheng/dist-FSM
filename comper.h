@@ -1098,9 +1098,6 @@ public:
             // add into datastack
             task_container *new_tc = new task_container(qid++, tc_->qid);
 
-            if (new_tc->qid < 0)
-                exit(-1);
-
             Pattern * child_pattern = *it;
             child_pattern->parent_prog = pattern->prog;
             child_pattern->non_candidates.resize(child_pattern->size());
@@ -1796,6 +1793,8 @@ public:
                 if (succ)
                 {
                     activate_task_container(tc_new);
+
+                    assert(GET_WORKER_ID(tc_new->parent_qid) == _my_rank);
                     if (GET_WORKER_ID(tc_new->parent_qid) != _my_rank && GET_PATTERN_ID(tc_new->parent_qid) != 0)
                         delete_queue.add(RequestMsg{tc_new->qid, tc_new->parent_qid});
                 }
