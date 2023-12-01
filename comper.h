@@ -1090,8 +1090,8 @@ public:
         // special case, otherwise memory leak!!
         if(pattern->prog->children_cnt == 0)
         {
-            delete pattern->prog;
             g_pattern_prog_map.erase(tc->qid);
+            delete pattern->prog;
         }
 
         for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
@@ -1105,8 +1105,6 @@ public:
             new_tc->pattern = child_pattern;
 
             g_pattern_prog_map.insert(new_tc->qid, new_tc->pattern->prog); // add into global map
-
-            cout << "new_tc->pattern->prog->child_cnt = " << new_tc->pattern->prog->children_cnt << endl; 
             
             data_stack.enstack(new_tc);
         }
@@ -1176,8 +1174,8 @@ public:
             // special case, otherwise memory leak!!
             if(pattern->prog->children_cnt == 0)
             {
-                delete pattern->prog;
                 g_pattern_prog_map.erase(tc->qid);
+                delete pattern->prog;
             }
 
             for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
@@ -1454,8 +1452,8 @@ public:
                 pattern_prog->children_cnt--;
                 if(pattern_prog->children_cnt == 0 || need_new_prog) 
                 {
-                    delete pattern_prog;
                     g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
+                    delete pattern_prog;
                 }
                 else
                 {
@@ -1470,8 +1468,8 @@ public:
             }
             else
             {
-                delete tc_new->pattern->prog;
                 g_pattern_prog_map.erase(tc_new->qid);
+                delete tc_new->pattern->prog;
                 delete tc_new;
             }
             activeQ_lock.wrlock();
@@ -1494,8 +1492,8 @@ public:
                 pattern_prog->children_cnt--;
                 if(pattern_prog->children_cnt == 0 || need_new_prog)
                 {
-                    delete pattern_prog;
                     g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
+                    delete pattern_prog;
                 }
                 else
                 {
@@ -1523,8 +1521,8 @@ public:
                 activeQ_num--;
                 activeQ_lock.unlock();
 
-                delete tc_new->pattern->prog;
                 g_pattern_prog_map.erase(tc_new->qid);
+                delete tc_new->pattern->prog;
                 delete tc_new;
             }
         }
@@ -1753,8 +1751,8 @@ public:
                         if(!task_obtained) activeQ_lock.unlock();
                         // fout[thread_id] << "delete qid = " << tc->qid << "'s prog" << endl;
 
-                        delete tc->pattern->prog;
                         g_pattern_prog_map.erase(tc->qid);
+                        delete tc->pattern->prog;
 
                         // fout[thread_id] << "delete QID: " << tc->qid << " in frequent_tag" << endl;
 
