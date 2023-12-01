@@ -1098,6 +1098,10 @@ public:
             // add into datastack
             task_container *new_tc = new task_container(qid++, tc_->qid);
 
+
+            if (new_tc->qid < 0)
+                exit(-1);
+
             Pattern * child_pattern = *it;
             child_pattern->parent_prog = pattern->prog;
             child_pattern->non_candidates.resize(child_pattern->size());
