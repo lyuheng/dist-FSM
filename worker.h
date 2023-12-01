@@ -288,8 +288,8 @@ public:
                 // delete every pointer in tc_vec !!!!!!!!!!!!!!!!!
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-                // for (auto it = tc_vec.begin(); it != tc_vec.end(); ++it)
-                //     delete *it;
+                for (auto it = tc_vec.begin(); it != tc_vec.end(); ++it)
+                    delete *it;
             }
         }
         
@@ -314,8 +314,8 @@ public:
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 // delete every pointer in tc_vec !!!!!!!!!!!!!!!!!
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                // for (auto it = tc_vec.begin(); it != tc_vec.end(); ++it)
-                //     delete *it;
+                for (auto it = tc_vec.begin(); it != tc_vec.end(); ++it)
+                    delete *it;
             }
         }
         return true;
