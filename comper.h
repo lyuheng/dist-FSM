@@ -1817,6 +1817,11 @@ public:
                              */
                             pending_patterns_num++;
                             pending_patterns.insert(tc_new->qid, tc_new);
+                            if (tc_new->parent_qid == 0)
+                            {
+                                cout << "#edges = " << tc_new->pattern->get_nedges() << endl;
+                                exit(-1);
+                            }
                             vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
                             if (parent_domain)
                             {
