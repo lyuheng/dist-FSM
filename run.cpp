@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
         bucket.lock();
         auto & kvmap = bucket.get_map();
         
-        for(auto it = kvmap.begin(); it != kvmap.end(); it++)
+        for (auto it = kvmap.begin(); it != kvmap.end(); it++)
         {
             cout << "(" << it->first << ", " << it->second->children_cnt << ")"<< endl;
             delete it->second;
