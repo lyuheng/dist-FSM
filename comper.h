@@ -188,7 +188,7 @@ struct task_container
     {
         m << tc.parent_qid;
         m << tc.pattern;
-        delete tc.pattern->prog;
+        // delete tc.pattern->prog;
         return m;
     }
 
