@@ -290,7 +290,6 @@ public:
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 for (auto it = tc_vec.begin(); it != tc_vec.end(); ++it)
                 {
-                    // delete (*it)->pattern;
                     delete (*it);
                 }
             }
@@ -319,7 +318,6 @@ public:
                 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 for (auto it = tc_vec.begin(); it != tc_vec.end(); ++it)
                 {
-                    // delete (*it)->pattern;
                     delete (*it);
                 }
             }
