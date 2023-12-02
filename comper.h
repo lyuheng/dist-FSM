@@ -1097,8 +1097,6 @@ public:
             // add into datastack
             task_container *new_tc = new task_container(qid++, tc_->qid);
 
-            cout << "1. new_tc->qid = " << new_tc->qid << ", pqid = " << new_tc->parent_qid << endl;
-
             Pattern * child_pattern = *it;
             child_pattern->parent_prog = pattern->prog;
             child_pattern->non_candidates.resize(child_pattern->size());
@@ -1182,9 +1180,6 @@ public:
             {
                 // add into datastack
                 task_container *new_tc = new task_container(qid++, tc->qid);
-
-                cout << "2. new_tc->qid = " << new_tc->qid << ", pqid = " << new_tc->parent_qid << endl;
-
 
                 Pattern * child_pattern = *it;
                 child_pattern->parent_prog = tc->pattern->prog;
@@ -1498,7 +1493,7 @@ public:
             bool keep = gmatch_engine.DPisoFilter(false, grami.nsupport_); // degree-based pruning
 
             notify_finish(tc_new);
-            
+
             // delete parent pattern
             PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
             

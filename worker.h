@@ -141,10 +141,6 @@ public:
                     continue; // if this pattern isn't supposed be computed by me, then skip
 
                 task_container * new_tc = new task_container(qid++);
-
-                cout << "0. new_tc->qid = " << new_tc->qid << ", pqid = " << new_tc->parent_qid << endl;
-
-                // cout << "new_tc->qid = " << new_tc->qid << endl;
                 new_tc->pattern = *it2;
                 new_tc->pattern->non_candidates.resize(new_tc->pattern->size());
 
