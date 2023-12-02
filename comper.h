@@ -1088,7 +1088,7 @@ public:
         // special case, otherwise memory leak!!
         if(pattern->prog->children_cnt == 0)
         {
-            g_pattern_prog_map.erase(tc->qid);
+            // g_pattern_prog_map.erase(tc->qid);
             delete pattern->prog;
         }
 
@@ -1172,7 +1172,7 @@ public:
             // special case, otherwise memory leak!!
             if(pattern->prog->children_cnt == 0)
             {
-                g_pattern_prog_map.erase(tc->qid);
+                // g_pattern_prog_map.erase(tc->qid);
                 delete pattern->prog;
             }
 
@@ -1459,7 +1459,7 @@ public:
                 pattern_prog->children_cnt--;
                 if(pattern_prog->children_cnt == 0 || need_new_prog) 
                 {
-                    g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
+                    // g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
                     delete pattern_prog;
                 }
                 else
@@ -1475,7 +1475,7 @@ public:
             }
             else
             {
-                g_pattern_prog_map.erase(tc_new->qid);
+                // g_pattern_prog_map.erase(tc_new->qid);
                 delete tc_new->pattern->prog;
                 delete tc_new;
             }
@@ -1503,7 +1503,7 @@ public:
                 pattern_prog->children_cnt--;
                 if(pattern_prog->children_cnt == 0 || need_new_prog)
                 {
-                    g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
+                    // g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
                     delete pattern_prog;
                 }
                 else
@@ -1534,7 +1534,7 @@ public:
                 activeQ_num--;
                 activeQ_lock.unlock();
 
-                g_pattern_prog_map.erase(tc_new->qid);
+                // g_pattern_prog_map.erase(tc_new->qid);
                 delete tc_new->pattern->prog;
                 delete tc_new;
 
@@ -1766,7 +1766,7 @@ public:
                         if(!task_obtained) activeQ_lock.unlock();
                         // fout[thread_id] << "delete qid = " << tc->qid << "'s prog" << endl;
 
-                        g_pattern_prog_map.erase(tc->qid);
+                        // g_pattern_prog_map.erase(tc->qid);
                         delete tc->pattern->prog;
 
                         // fout[thread_id] << "delete QID: " << tc->qid << " in frequent_tag" << endl;
