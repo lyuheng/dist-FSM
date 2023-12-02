@@ -171,7 +171,7 @@ struct task_container
     vector<VertexID **> all_bn;
     vector<ui *> all_bn_count;
 
-    bool has_init;
+    bool has_init = false;
 
     friend obinstream & operator>>(obinstream & m, task_container & tc)
     {
