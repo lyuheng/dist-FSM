@@ -1486,12 +1486,17 @@ public:
         // ============= unique label pruning done ====================
         else
         {
+            cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " zzzz1" << endl;
             gmatch_engine.set(&grami.pruned_graph, tc_new->pattern);
 
             bool keep = gmatch_engine.DPisoFilter(false, grami.nsupport_); // degree-based pruning
 
+            cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " zzzz2" << endl;
+
             // delete parent pattern
             PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
+
+            cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " zzzz3" << endl;
             
             if(pattern_prog != NULL)
             {
@@ -1507,6 +1512,7 @@ public:
                     pattern_prog->children_mtx.unlock();
                 }
             }
+            cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " zzzz4" << endl;
 
             if(keep)
             {
@@ -1532,6 +1538,7 @@ public:
                 delete tc_new->pattern->prog;
                 delete tc_new;
             }
+            cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " zzzz5" << endl;
         }
         cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " zzzz" << endl;
     }
