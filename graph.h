@@ -469,24 +469,24 @@ struct Domain
     }
 };
 
-bool deletion_phase = false;
 
 struct PatternProgress
 {
+    bool to_delete;
     int children_cnt;
     mutex children_mtx;
     // Pattern * pattern; 
 
 	vector<Domain> * candidates;
 
-	PatternProgress()
+	PatternProgress(): to_delete(true)
 	{
 		children_cnt = 0;
         candidates = new vector<Domain>;
 	}
     ~PatternProgress()
-    { 
-        if (children_cnt == 0 || deletion_phase)
+    {
+        if (to_delete)
             delete candidates;
     }
 };

@@ -181,6 +181,7 @@ struct task_container
         tc.qid = GEN_PATTERN_ID(global_qid++); // reassign a new qid
         // TODO: add into global g_pattern_prog_map???
         tc.pattern->prog = new PatternProgress;
+        g_pattern_prog_map.insert(tc.qid, tc.pattern->prog);
         tc.pattern->parent_prog = NULL;
         tc.pattern->non_candidates.resize(tc.pattern->size());
         return m;
@@ -189,8 +190,9 @@ struct task_container
     {
         m << tc.parent_qid;
         m << tc.pattern;
-        // delete tc.pattern->prog;
+        delete tc.pattern->prog;
         // TODO: remove from g_pattern_prog_map???
+        g_pattern_prog_map.erase(tc.qid);
         return m;
     }
 
@@ -1090,8 +1092,8 @@ public:
         // special case, otherwise memory leak!!
         if(pattern->prog->children_cnt == 0)
         {
-            // g_pattern_prog_map.erase(tc->qid);
-            // delete pattern->prog;
+            g_pattern_prog_map.erase(tc->qid);
+            delete pattern->prog;
         }
 
         for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
@@ -1174,8 +1176,8 @@ public:
             // special case, otherwise memory leak!!
             if(pattern->prog->children_cnt == 0)
             {
-                // g_pattern_prog_map.erase(tc->qid);
-                // delete pattern->prog;
+                g_pattern_prog_map.erase(tc->qid);
+                delete pattern->prog;
             }
 
             for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
@@ -1436,6 +1438,12 @@ public:
             else 
             {
                 tc_new->pattern->parent_prog = new PatternProgress;
+                /**
+                 * set to_delete = false
+                 * will not delete parent_domain since it's borrowed from elsewhere
+                 * parent_domain will be eventually deleted by cache_table
+                 */
+                tc_new->pattern->parent_prog.to_delete = false;
                 vector<Domain> * parent_domain = cache_table.get(tc_new->parent_qid);
                 tc_new->pattern->parent_prog->candidates = parent_domain;
                 need_new_prog = true;
@@ -1461,8 +1469,8 @@ public:
                 pattern_prog->children_cnt--;
                 if(pattern_prog->children_cnt == 0 || need_new_prog) 
                 {
-                    // g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
-                    // delete pattern_prog;
+                    g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
+                    delete pattern_prog;
                 }
                 else
                 {
@@ -1477,8 +1485,8 @@ public:
             }
             else
             {
-                // g_pattern_prog_map.erase(tc_new->qid);
-                // delete tc_new->pattern->prog;
+                g_pattern_prog_map.erase(tc_new->qid);
+                delete tc_new->pattern->prog;
                 delete tc_new;
             }
             activeQ_lock.wrlock();
@@ -1505,8 +1513,8 @@ public:
                 pattern_prog->children_cnt--;
                 if(pattern_prog->children_cnt == 0 || need_new_prog)
                 {
-                    // g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
-                    // delete pattern_prog;
+                    g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
+                    delete pattern_prog;
                 }
                 else
                 {
@@ -1536,8 +1544,8 @@ public:
                 activeQ_num--;
                 activeQ_lock.unlock();
 
-                // g_pattern_prog_map.erase(tc_new->qid);
-                // delete tc_new->pattern->prog;
+                g_pattern_prog_map.erase(tc_new->qid);
+                delete tc_new->pattern->prog;
                 delete tc_new;
 
                 return false;
@@ -1768,8 +1776,8 @@ public:
                         if(!task_obtained) activeQ_lock.unlock();
                         // fout[thread_id] << "delete qid = " << tc->qid << "'s prog" << endl;
 
-                        // g_pattern_prog_map.erase(tc->qid);
-                        // delete tc->pattern->prog;
+                        g_pattern_prog_map.erase(tc->qid);
+                        delete tc->pattern->prog;
 
                         // fout[thread_id] << "delete QID: " << tc->qid << " in frequent_tag" << endl;
 

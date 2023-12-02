@@ -51,8 +51,8 @@ public:
                 pattern_prog->children_cnt--;
                 if(pattern_prog->children_cnt == 0) 
                 {
-                    // kvmap.erase(it); // since no its child patterns will be using it
-                    // delete pattern_prog;
+                    kvmap.erase(it); // since no its child patterns will be using it
+                    delete pattern_prog;
                 }
                 else
                 {

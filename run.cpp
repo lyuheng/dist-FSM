@@ -94,8 +94,6 @@ int main(int argc, char *argv[])
     // global_end_label_mem = false;
     // t.join();
 	// foutPeakMem.close();
-
-    deletion_phase = true;
         
     for(int i=0; i<CONMAP_BUCKET_NUM; i++)
     {
@@ -105,8 +103,7 @@ int main(int argc, char *argv[])
         
         for(auto it = kvmap.begin(); it != kvmap.end(); it++)
         {
-            if (it->second->children_cnt != 0)
-                cout << "(" << it->first << ", " << it->second->children_cnt << ")"<< endl;
+            cout << "(" << it->first << ", " << it->second->children_cnt << ")"<< endl;
         }
         bucket.unlock();
     }
