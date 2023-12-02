@@ -178,7 +178,7 @@ struct task_container
         m >> tc.parent_qid;
         m >> tc.pattern;
 
-        tc.qid = GEN_PATTERN_ID(qid++); // reassign a new qid
+        tc.qid = GEN_PATTERN_ID(global_qid++); // reassign a new qid
         tc.pattern->prog = new PatternProgress;
         tc.pattern->parent_prog = NULL;
         tc.pattern->non_candidates.resize(tc.pattern->size());
@@ -1095,7 +1095,7 @@ public:
         for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
         {
             // add into datastack
-            task_container *new_tc = new task_container(qid++, tc_->qid);
+            task_container *new_tc = new task_container(global_qid++, tc_->qid);
 
             Pattern * child_pattern = *it;
             child_pattern->parent_prog = pattern->prog;
@@ -1179,7 +1179,7 @@ public:
             for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
             {
                 // add into datastack
-                task_container *new_tc = new task_container(qid++, tc->qid);
+                task_container *new_tc = new task_container(global_qid++, tc->qid);
 
                 Pattern * child_pattern = *it;
                 child_pattern->parent_prog = tc->pattern->prog;
