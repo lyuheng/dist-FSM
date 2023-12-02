@@ -1089,7 +1089,7 @@ public:
         if(pattern->prog->children_cnt == 0)
         {
             // g_pattern_prog_map.erase(tc->qid);
-            delete pattern->prog;
+            // delete pattern->prog;
         }
 
         for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
@@ -1173,7 +1173,7 @@ public:
             if(pattern->prog->children_cnt == 0)
             {
                 // g_pattern_prog_map.erase(tc->qid);
-                delete pattern->prog;
+                // delete pattern->prog;
             }
 
             for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
@@ -1460,7 +1460,7 @@ public:
                 if(pattern_prog->children_cnt == 0 || need_new_prog) 
                 {
                     // g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
-                    delete pattern_prog;
+                    // delete pattern_prog;
                 }
                 else
                 {
@@ -1476,7 +1476,7 @@ public:
             else
             {
                 // g_pattern_prog_map.erase(tc_new->qid);
-                delete tc_new->pattern->prog;
+                // delete tc_new->pattern->prog;
                 delete tc_new;
             }
             activeQ_lock.wrlock();
@@ -1504,7 +1504,7 @@ public:
                 if(pattern_prog->children_cnt == 0 || need_new_prog)
                 {
                     // g_pattern_prog_map.erase(tc_new->parent_qid); // since no its child patterns will be using it
-                    delete pattern_prog;
+                    // delete pattern_prog;
                 }
                 else
                 {
@@ -1535,7 +1535,7 @@ public:
                 activeQ_lock.unlock();
 
                 // g_pattern_prog_map.erase(tc_new->qid);
-                delete tc_new->pattern->prog;
+                // delete tc_new->pattern->prog;
                 delete tc_new;
 
                 return false;
@@ -1767,7 +1767,7 @@ public:
                         // fout[thread_id] << "delete qid = " << tc->qid << "'s prog" << endl;
 
                         // g_pattern_prog_map.erase(tc->qid);
-                        delete tc->pattern->prog;
+                        // delete tc->pattern->prog;
 
                         // fout[thread_id] << "delete QID: " << tc->qid << " in frequent_tag" << endl;
 
