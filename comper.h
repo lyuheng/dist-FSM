@@ -171,7 +171,7 @@ struct task_container
     vector<VertexID **> all_bn;
     vector<ui *> all_bn_count;
 
-    // bool has_init;
+    bool has_init;
 
     friend obinstream & operator>>(obinstream & m, task_container & tc)
     {
@@ -257,12 +257,13 @@ struct task_container
         all_bn.resize(size, NULL);
         all_bn_count.resize(size, NULL);
 
-        // has_init = true;
+        has_init = true;
     }
 
     ~task_container()
     {
-       
+        if (has_init)
+        {
             delete[] domain_matches_mtx;
             delete[] non_cand_mtx;
             delete[] vq_stops_refill_mtx;
@@ -301,9 +302,9 @@ struct task_container
             {
                 delete *it; // delete all space inside L_timeout
             }
-            
-            delete pattern; // created by extend(.)
+        }
         
+        delete pattern; // created by extend(.)
     }
 
     inline bool nothing_to_refill()
