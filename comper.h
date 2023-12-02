@@ -1796,6 +1796,7 @@ public:
 
                 if (succ)
                 {
+                    cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << endl;
                     activate_task_container(tc_new);
 
                     if (GET_WORKER_ID(tc_new->parent_qid) != _my_rank)
