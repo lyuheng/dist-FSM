@@ -1349,8 +1349,8 @@ public:
 
     void notify_finish(task_container * tc_new)
     {
-        if (GET_WORKER_ID(tc_new->parent_qid) != _my_rank && GET_PATTERN_ID(tc_new->parent_qid) != 0)
-            delete_queue.add(RequestMsg{tc_new->qid, tc_new->parent_qid});
+        // if (GET_WORKER_ID(tc_new->parent_qid) != _my_rank && GET_PATTERN_ID(tc_new->parent_qid) != 0)
+            // delete_queue.add(RequestMsg{tc_new->qid, tc_new->parent_qid});
     }
 
     /**
