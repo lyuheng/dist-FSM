@@ -1097,6 +1097,8 @@ public:
             // add into datastack
             task_container *new_tc = new task_container(qid++, tc_->qid);
 
+            cout << "1. new_tc->qid = " << new_tc->qid << endl;
+
             Pattern * child_pattern = *it;
             child_pattern->parent_prog = pattern->prog;
             child_pattern->non_candidates.resize(child_pattern->size());
@@ -1180,6 +1182,9 @@ public:
             {
                 // add into datastack
                 task_container *new_tc = new task_container(qid++, tc->qid);
+
+                cout << "2. new_tc->qid = " << new_tc->qid << endl;
+
 
                 Pattern * child_pattern = *it;
                 child_pattern->parent_prog = tc->pattern->prog;
