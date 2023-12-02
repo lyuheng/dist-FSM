@@ -125,7 +125,7 @@ struct task_container
 
     // ============================================
 
-    Pattern * pattern;
+    Pattern * pattern = NULL;
 
     // Progress status
     // *** for round-robin refill
@@ -137,10 +137,10 @@ struct task_container
     ui domain_done; // counter for candidate-finished v_q's 
 
     VtxSetVec domain_matches; // domain_matches[v_q] = matched domain elements, could be set by v_q'
-    mutex * domain_matches_mtx; // domain_matches_mtx[v_q] protects domain_matches[v_q]
+    mutex * domain_matches_mtx = NULL; // domain_matches_mtx[v_q] protects domain_matches[v_q]
 
 
-    Edges ***edge_matrix; // matching index, shared by all tasks
+    Edges ***edge_matrix = NULL; // matching index, shared by all tasks
                           // initialized when query is added to activeQ_list
 
     mutex refill_mtx;  // only 1 comper performs refill at a time
@@ -150,14 +150,14 @@ struct task_container
 
     mutex domain_done_mtx; // protects domain_done
 
-    mutex * non_cand_mtx;
+    mutex * non_cand_mtx = NULL;
 
     atomic<bool> frequent_tag;
     
-    bool * vq_stops_refill; // vq_stops_refill[v_q] = false, if domain_matches[vq] < support
+    bool * vq_stops_refill = NULL; // vq_stops_refill[v_q] = false, if domain_matches[vq] < support
                                   // vq_stops_refill[v_q] = true, if domain_matches[vq] >= support
 
-    rwlock * vq_stops_refill_mtx; // mutexes protect vq_stops_refill
+    rwlock * vq_stops_refill_mtx = NULL; // mutexes protect vq_stops_refill
 
 
     ui comper_counter;
