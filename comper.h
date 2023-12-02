@@ -1416,7 +1416,7 @@ public:
          */
         bool need_new_prog = false;
 
-        cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << endl;
+        cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " xxxx" << endl;
 
         if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
         {
@@ -1439,7 +1439,7 @@ public:
             }
         }
 
-        cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << endl;
+        cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " yyyy" << endl;
         
         // ====== request parent domain here done =======
 
@@ -1533,7 +1533,7 @@ public:
                 delete tc_new;
             }
         }
-        cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << endl;
+        cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " zzzz" << endl;
     }
 
     bool get_and_process_tasks()
