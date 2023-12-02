@@ -1,7 +1,7 @@
 CC=mpic++
 CFLAGS=-std=c++14 -g -fopenmp -lpthread
 OBJDIR=objs/
-OBJS=$(OBJDIR)intersection.o 
+# OBJS=$(OBJDIR)intersection.o 
 
 HEADERS=canonical.h comper.h decompose.h global.h gmatch.h grami.h \
 graph.h leapfrogjoin.h pretty_print.h rwlock.h setting.h systemI.h task.h taskprogmap.h types.h worker.h \
