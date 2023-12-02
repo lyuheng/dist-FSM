@@ -175,9 +175,10 @@ struct task_container
 
     friend obinstream & operator>>(obinstream & m, task_container & tc)
     {
-        m >> tc.qid;
         m >> tc.parent_qid;
         m >> tc.pattern;
+
+        tc.qid = GEN_PATTERN_ID(qid++); // reassign a new qid
         tc.pattern->prog = new PatternProgress;
         tc.pattern->parent_prog = NULL;
         tc.pattern->non_candidates.resize(tc.pattern->size());
@@ -185,7 +186,6 @@ struct task_container
     }
     friend ibinstream & operator<<(ibinstream & m, const task_container & tc)
     {
-        m << tc.qid;
         m << tc.parent_qid;
         m << tc.pattern;
         delete tc.pattern->prog;
