@@ -1416,6 +1416,8 @@ public:
          */
         bool need_new_prog = false;
 
+        cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << endl;
+
         if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
         {
             if (GET_WORKER_ID(tc_new->parent_qid) == _my_rank)
@@ -1436,6 +1438,8 @@ public:
                 need_new_prog = true;
             }
         }
+
+        cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << endl;
         
         // ====== request parent domain here done =======
 
@@ -1529,6 +1533,7 @@ public:
                 delete tc_new;
             }
         }
+        cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << endl;
     }
 
     bool get_and_process_tasks()
@@ -1796,7 +1801,7 @@ public:
 
                 if (succ)
                 {
-                    cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << endl;
+
                     activate_task_container(tc_new);
 
                     if (GET_WORKER_ID(tc_new->parent_qid) != _my_rank)
