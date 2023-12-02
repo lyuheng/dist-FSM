@@ -391,7 +391,7 @@ public:
 
         while (global_end_label == false)
         {
-            bool sth_stealed = steal_planning();
+            bool sth_stealed = false; //steal_planning();
             status_sync(sth_stealed);
             mtx_go.lock();
             ready_go = true;
