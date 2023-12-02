@@ -179,7 +179,7 @@ struct task_container
         m >> tc.pattern;
 
         tc.qid = GEN_PATTERN_ID(global_qid++); // reassign a new qid
-        // TODO: add into global g_pattern_prog_map???
+        // add into global g_pattern_prog_map
         tc.pattern->prog = new PatternProgress;
         g_pattern_prog_map.insert(tc.qid, tc.pattern->prog);
         tc.pattern->parent_prog = NULL;
@@ -191,7 +191,7 @@ struct task_container
         m << tc.parent_qid;
         m << tc.pattern;
         delete tc.pattern->prog;
-        // TODO: remove from g_pattern_prog_map???
+        // remove from g_pattern_prog_map
         g_pattern_prog_map.erase(tc.qid);
         return m;
     }
