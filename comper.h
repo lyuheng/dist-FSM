@@ -1352,11 +1352,19 @@ public:
         tc->end_mtx.unlock();
     }
 
+    void notify_finish(task_container * tc_new)
+    {
+        if (GET_WORKER_ID(tc_new->parent_qid) != _my_rank && GET_PATTERN_ID(tc_new->parent_qid) != 0)
+            delete_queue.add(RequestMsg{tc_new->qid, tc_new->parent_qid});
+    }
+
     /**
      * activate new task_container tc_new and do some simple preprocessing
-     * to determine whether tc_new is promising to be frequent 
+     * to determine whether tc_new is promising to be frequent,
+     * @return true if tc_new is still promising
+     * @return false means tc_new is pruned during preprocessing
      */
-    void activate_task_container(task_container * tc_new)
+    bool activate_task_container(task_container * tc_new)
     {
         tc_new->init();
 
@@ -1416,8 +1424,6 @@ public:
          */
         bool need_new_prog = false;
 
-        cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " xxxx" << endl;
-
         if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
         {
             if (GET_WORKER_ID(tc_new->parent_qid) == _my_rank)
@@ -1437,10 +1443,7 @@ public:
                 tc_new->pattern->parent_prog->candidates = parent_domain;
                 need_new_prog = true;
             }
-        }
-
-        cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " yyyy" << endl;
-        
+        }        
         // ====== request parent domain here done =======
 
         // ============= unique label pruning ====================
@@ -1450,6 +1453,8 @@ public:
             gmatch_engine.set(&grami.pruned_graph, tc_new->pattern);
             bool is_freq = gmatch_engine.filterToConsistency(grami.nsupport_);
             gmatch_engine.reset();
+
+            notify_finish(tc_new);
 
             PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
 
@@ -1482,21 +1487,20 @@ public:
             activeQ_lock.wrlock();
             activeQ_num--;
             activeQ_lock.unlock();
+
+            return false;
         }
         // ============= unique label pruning done ====================
         else
         {
-            cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " zzzz1" << endl;
             gmatch_engine.set(&grami.pruned_graph, tc_new->pattern);
-
+            
             bool keep = gmatch_engine.DPisoFilter(false, grami.nsupport_); // degree-based pruning
 
-            cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " zzzz2" << endl;
-
+            notify_finish(tc_new);
+            
             // delete parent pattern
             PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
-
-            cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " zzzz3" << endl;
             
             if(pattern_prog != NULL)
             {
@@ -1512,7 +1516,6 @@ public:
                     pattern_prog->children_mtx.unlock();
                 }
             }
-            cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " zzzz4" << endl;
 
             if(keep)
             {
@@ -1527,6 +1530,8 @@ public:
                 activeQ_lock.wrlock();
                 activeQ_list.push_back(tc_new);
                 activeQ_lock.unlock();
+
+                return true;
             }
             else // current pattern is not frequent because at least one vertex has domain size < support 
             {
@@ -1537,10 +1542,10 @@ public:
                 g_pattern_prog_map.erase(tc_new->qid);
                 delete tc_new->pattern->prog;
                 delete tc_new;
+
+                return false;
             }
-            cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " zzzz5" << endl;
         }
-        cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << " zzzz" << endl;
     }
 
     bool get_and_process_tasks()
@@ -1808,16 +1813,7 @@ public:
 
                 if (succ)
                 {
-
                     activate_task_container(tc_new);
-
-                    if (GET_WORKER_ID(tc_new->parent_qid) != _my_rank)
-                    {
-                        cout << tc_new->parent_qid << " " << tc_new->qid << " " << _my_rank << endl;
-                        assert(false);
-                    }
-                    // if (GET_WORKER_ID(tc_new->parent_qid) != _my_rank && GET_PATTERN_ID(tc_new->parent_qid) != 0)
-                    //     delete_queue.add(RequestMsg{tc_new->qid, tc_new->parent_qid});
                 }
                 else 
                 {
