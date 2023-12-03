@@ -177,8 +177,8 @@ public:
                 delete it->second;
             }
             bucket.unlock();
-            cout << endl;
         }
+        cout << endl;
     }
 
     bool steal_planning()
