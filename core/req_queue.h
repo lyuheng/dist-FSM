@@ -28,7 +28,7 @@ public:
             if(m.size() > MAX_BATCH_SIZE) {
 				cout << "m.size() = " << m.size() << endl;
 			}
-			cout << "send key = " << temp.parent_qid << " from " << temp.qid << " via Channel " << CHANNEL << endl;
+			// cout << "send key = " << temp.parent_qid << " from " << temp.qid << " via Channel " << CHANNEL << endl;
 			succ = buf.dequeue(temp);
         }
     }
@@ -96,7 +96,7 @@ public:
     	int tgt = GET_WORKER_ID(key.parent_qid);
     	Buffer & buf = q[tgt];
     	buf.enqueue(key);
-		cout << "enqueue once key.pqid = " << key.parent_qid << ", key.qid = " << key.qid << endl;
+		// cout << "enqueue once key.pqid = " << key.parent_qid << ", key.qid = " << key.qid << endl;
     }
     
     ReqQueue()
