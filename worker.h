@@ -178,7 +178,7 @@ public:
             }
             bucket.unlock();
         }
-        cout << endl;
+        cout << "\n";
     }
 
     bool steal_planning()
