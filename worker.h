@@ -417,7 +417,5 @@ public:
             // Avoid busy-checking
             usleep(WAIT_TIME_WHEN_IDLE);
         }
-
-        cout << "global map is empty: " << g_pattern_prog_map.empty() << endl;
     }
 };
