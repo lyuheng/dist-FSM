@@ -163,6 +163,24 @@ public:
         cout << "In Initialization, size of data_stack: " << sep_results.size() << endl;
     }
 
+    void release_pattern_prog_map();
+    {
+        for (int i=0; i<CONMAP_BUCKET_NUM; i++)
+        {
+            auto & bucket = g_pattern_prog_map.pos(i);
+            bucket.lock();
+            auto & kvmap = bucket.get_map();
+            
+            for (auto it = kvmap.begin(); it != kvmap.end(); it++)
+            {
+                cout << "(" << it->first << ", " << it->second->children_cnt << ")"<< " ";
+                delete it->second;
+            }
+            bucket.unlock();
+            cout << endl;
+        }
+    }
+
     bool steal_planning()
     {
         vector<steal_plan> my_single_steal_list; // if my_single_steal_list[i] = 3, I need to steal a tasks from Worker 3's global queue
