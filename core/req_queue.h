@@ -28,7 +28,7 @@ public:
             if(m.size() > MAX_BATCH_SIZE) {
 				cout << "m.size() = " << m.size() << endl;
 			}
-			cout << "send key = " << temp.parent_qid << endl;
+			cout << "send key = " << temp.parent_qid << " from " << temp.qid << endl;
 			succ = buf.dequeue(temp);
         }
     }
