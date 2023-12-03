@@ -163,7 +163,7 @@ public:
         cout << "In Initialization, size of data_stack: " << sep_results.size() << endl;
     }
 
-    void release_pattern_prog_map();
+    void release_pattern_prog_map()
     {
         for (int i=0; i<CONMAP_BUCKET_NUM; i++)
         {
