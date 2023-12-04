@@ -479,6 +479,14 @@ struct PatternProgress
 
 	vector<Domain> * candidates;
 
+    int get_domain_size()
+    {
+        int ret = 0;
+        for (int i=0; i<candidates->size(); ++i)
+            ret += candidates->at(i).size();
+        return ret;
+    }
+
 	PatternProgress(): to_delete(true)
 	{
 		children_cnt = 0;

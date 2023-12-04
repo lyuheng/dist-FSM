@@ -25,9 +25,29 @@ public:
             auto & kvmap = bucket.get_map();
             auto it = kvmap.find(key.parent_qid);
             assert(it != kvmap.end());
+            int VD_size = it->second->get_domain_size();
             bucket.unlock();
             // cout << "send value of key = " << key.parent_qid << endl;
-            q_resp.add(RespondMsg{key.parent_qid, it->second->candidates}, src);
+
+            int IVD_size = 0;
+            
+            auto & bucket2 = global_non_cand_map.get_bucket(key.parent_qid);
+            bucket2.lock();
+            auto & kvmap2 = bucket2.get_map();
+            auto it2 = kvmap2.find(key.parent_qid);
+            if (it2 != kvmap2.end())
+            {
+                for(int i = 0; i < it2->second.size(); ++i)
+                    IVD_size += it2->second[i].size();
+            }
+            bucket2.unlock();
+
+            if (IVD_size == 0)
+                q_resp.add(RespondMsg{key.parent_qid, it->second->candidates}, src);
+            else if (float(IVD_size)/VD_size < COEFFICIENT_INVALID_TO_VALID)
+                q_resp.add(RespondMsg{key.parent_qid, &it2->second}, src);
+            else
+                q_resp.add(RespondMsg{key.parent_qid, it->second->candidates}, src);
 		}
     }
 

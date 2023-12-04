@@ -77,7 +77,7 @@ struct conmap_bucket
 
 	//returns true if inserted
 	//false if an entry with this key already exists
-	bool insert(K key, V val)
+	bool insert(K key, V & val)
 	{
 		auto ret = bucket.insert(
 			std::pair<K, V>(key, val)
@@ -121,7 +121,7 @@ public:
 		return buckets[pos];
 	}
 
-	bool insert(K key, V value)
+	bool insert(K key, V & value)
 	{
 		bucket & buck = get_bucket(key);
 		buck.lock();

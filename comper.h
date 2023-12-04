@@ -1091,6 +1091,24 @@ public:
         cache[key].swap(pattern->non_candidates);
         cache_mtx.unlock();
 
+        
+        // insert into global_non_cand_map
+        {
+            VtxSetVec * parent_non_cands = NULL;
+            auto & bucket = global_non_cand_map.get_bucket(pattern->parent_qid);
+            bucket.lock();
+            auto & kvmap = bucket.get_map();
+            auto it = kvmap.find(pattern->parent_qid)
+            if (it != kvmap.end())
+            {
+                parent_non_cands = &(it->second);
+            }
+            bucket.unlock();
+
+            if (parent_non_cands) global_non_cand_map.insert(pattern->qid, *parent_non_cands);
+        }
+            
+
         PatternPVec ext_pattern_vec;
         grami.extend((*pattern), ext_pattern_vec);
         pattern->prog->children_cnt = ext_pattern_vec.size();
@@ -1118,6 +1136,19 @@ public:
         }
         return true;
     }   
+
+    /**
+     * @return true if invalid domain is better to be sent
+     * @return false if valid domain is better to be sent
+     */
+    bool compare_IVD_and_VD()
+    {
+        int VD_size = tc->get_cands().get_domain_size();
+        int IVD_size = 0;
+        for (int i = 0; i < tc->pattern->non_candidates.size(); ++i)
+            IVD_size += tc->pattern->non_candidates[i].size();
+        return IVD_size < VD_size * COEFFICIENT_INVALID_TO_VALID
+    }
 
     // will remove non-candidates from domain
     bool check_freq_and_extend()  // called when q is finished normally (not early termination)
@@ -1160,6 +1191,8 @@ public:
 
             remove_non_cands();
 
+            bool is_IVD_less = compare_IVD_and_VD();
+
             // ===== push down pruning ======
 
             // string code = pattern->toString();
@@ -1169,15 +1202,37 @@ public:
             key.pattern.vertices_ = pattern->vertices_;
             key.pattern.edge2vertex = pattern->edge2vertex;
             cache_mtx.wrlock();
-            cache[key].swap(pattern->non_candidates);
+            if (!is_IVD_less)
+                cache[key].swap(pattern->non_candidates); // O(1) move
+            else
+                cache[key] = pattern->non_candidates;     // O(n) deep copy
             cache_mtx.unlock();
+
+            if (is_IVD_less)
+            {
+                // insert into global_non_cand_map
+                auto & bucket = global_non_cand_map.get_bucket(pattern->parent_qid);
+                bucket.lock();
+                auto & kvmap = bucket.get_map();
+                auto it = kvmap.find(pattern->parent_qid)
+                if (it != kvmap.end())
+                {
+                    auto & parent_non_cands = it->second;
+                    for (int i = 0; i < pattern->size(); ++i)
+                    {
+                        if (i > parent_non_cands.size()) break;
+                        pattern->non_candidates[i].insert(parent_non_cands[i].begin(), parent_non_cands[i].end());
+                    }
+                }
+                bucket.unlock();
+                global_non_cand_map.insert(pattern->qid, pattern->non_candidates);
+            }
 
             // ===== push down pruning done ======
 
             PatternPVec ext_pattern_vec;
             grami.extend((*pattern), ext_pattern_vec);
             pattern->prog->children_cnt = ext_pattern_vec.size();
-
 
             // special case, otherwise memory leak!!
             if(pattern->prog->children_cnt == 0)
@@ -1443,21 +1498,30 @@ public:
             }
             else 
             {
-                tc_new->pattern->parent_prog = new PatternProgress;
-                /**
-                 * set to_delete = false
-                 * will not delete parent_domain since it's borrowed from elsewhere
-                 * parent_domain will be eventually deleted by cache_table
-                 */
-                delete tc_new->pattern->parent_prog->candidates;
-                tc_new->pattern->parent_prog->to_delete = false;
 
                 CacheEntryT parent_domain = cache_table.get(tc_new->parent_qid);
+                
                 if (parent_domain.index() == 0)
-                    tc_new->pattern->parent_prog->candidates = std::get<VDEntryT>(parent_domain);
-                else 
                 {
-                    assert(false); // temproraily
+                    tc_new->pattern->parent_prog = new PatternProgress;
+                    /**
+                     * set to_delete = false
+                     * will not delete parent_domain since it's borrowed from elsewhere
+                     * parent_domain will be eventually deleted by cache_table
+                     */
+                    delete tc_new->pattern->parent_prog->candidates;
+                    tc_new->pattern->parent_prog->to_delete = false;
+                    tc_new->pattern->parent_prog->candidates = std::get<VDEntryT>(parent_domain);
+                }
+                else // parent_domain.index() == 1
+                {
+                    IVDEntryT & parent_non_cand = *std::get<IVDEntryT>(parent_domain);
+                    for (ui j = 0; j < parent_non_cand.size(); ++j)
+                    {
+                        auto & non_cans = tc_new->pattern->non_candidates[j];
+                        auto & non_cans_check = parent_non_cand[j];
+                        non_cans.insert(non_cans_check.begin(), non_cans_check.end());
+                    }
                 }
                 need_new_prog = true;
             }
