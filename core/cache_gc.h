@@ -20,7 +20,7 @@ public:
         {
             int oversize = global_cache_size - CACHE_LIMIT;
     		if(oversize > 0) cache_table.shrink(oversize, counter);
-    		usleep(WAIT_TIME_WHEN_IDLE); //polling frequency
+    		usleep(WAIT_TIME_WHEN_IDLE);
         }
     }
 
