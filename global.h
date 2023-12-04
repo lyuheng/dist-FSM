@@ -139,9 +139,9 @@ struct RespondMsg
         int index;
         m >> index;
         if (index == 0)
-            m >> std::get<DomainT *>(msg.candidates);
+            m >> std::get<0>(msg.candidates);
         else // index == 1
-            m >> std::get<VtxSetVec *>(msg.candidates);
+            m >> std::get<1>(msg.candidates);
         return m;
     }
     friend ibinstream & operator<<(ibinstream & m, const RespondMsg & msg)
@@ -150,9 +150,9 @@ struct RespondMsg
         int index = msg.candidates.index();
         m << index;
         if (index == 0)
-            m << std::get<DomainT *>(msg.candidates);
+            m << std::get<0>(msg.candidates);
         else
-            m << std::get<VtxSetVec *>(msg.candidates);
+            m << std::get<1>(msg.candidates);
         return m;
     }
 };
