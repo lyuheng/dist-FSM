@@ -176,7 +176,7 @@ public:
 	int shrink(int num_to_delete, thread_counter & counter)
 	{
 		int start_pos = pos;
-		while (num_to_deleted > 0)
+		while (num_to_delete > 0)
 		{
 			auto & bucket = candcache.pos(pos);
 			bucket.lock();
@@ -194,8 +194,8 @@ public:
 					delete cpair.value;
 					kvmap.erase(it);
 					bucket.zeros.erase(iter); //update it
-					num_to_deleted--;
-					if(num_to_deleted == 0) //there's no need to look at more candidates
+					num_to_delete--;
+					if(num_to_delete == 0) //there's no need to look at more candidates
 					{
 						bucket.unlock();
 						pos++; //current bucket has been checked, next time, start from next bucket
@@ -208,6 +208,6 @@ public:
 			if(pos >= CONMAP_BUCKET_NUM) pos -= CONMAP_BUCKET_NUM;
 			if(pos == start_pos) break;
 		}
-		return num_to_deleted;
+		return num_to_delete;
 	}
 };
