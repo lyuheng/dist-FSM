@@ -2,8 +2,8 @@
 
 namespace Settings
 {
-static int maxNumNodes;
-static bool useLB;
+static int maxNumNodes = -1; // No constraint on maxNodes
+static bool useLB = true;    // enable Load Balancing 
 
 } // namespace Settings
 

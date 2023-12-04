@@ -39,8 +39,6 @@ int main(int argc, char *argv[])
 	char * argMaxNodes = getCmdOption(argv, argv + argc, "-maxNodes");
 	if(argMaxNodes)
 		Settings::maxNumNodes = atoi(argMaxNodes);
-	else
-		Settings::maxNumNodes = -1;
     
     // get user-given number of threads
     char * argThreads = getCmdOption(argv, argv + argc, "-thread");
@@ -50,6 +48,7 @@ int main(int argc, char *argv[])
     char * argUseLB = getCmdOption(argv, argv + argc, "-lb");
     if(argUseLB)
         Settings::useLB = atoi(argUseLB);
+
 
     auto time1 = steady_clock::now();
 
