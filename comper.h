@@ -1515,7 +1515,7 @@ public:
                      */
                     delete tc_new->pattern->parent_prog->candidates;
                     tc_new->pattern->parent_prog->to_delete = false;
-                    cout << "std::get<VDEntryT>" << endl;
+                    cout << "std::get<VDEntryT>: " << std::get<VDEntryT>(parent_domain) << endl;
                     tc_new->pattern->parent_prog->candidates = std::get<VDEntryT>(parent_domain);
                 }
                 else // parent_domain.index() == 1
