@@ -1095,17 +1095,17 @@ public:
         // insert into global_non_cand_map
         {
             VtxSetVec * parent_non_cands = NULL;
-            auto & bucket = global_non_cand_map.get_bucket(pattern->parent_qid);
+            auto & bucket = global_non_cand_map.get_bucket(tc_->parent_qid);
             bucket.lock();
             auto & kvmap = bucket.get_map();
-            auto it = kvmap.find(pattern->parent_qid)
+            auto it = kvmap.find(tc_->parent_qid);
             if (it != kvmap.end())
             {
                 parent_non_cands = &(it->second);
             }
             bucket.unlock();
 
-            if (parent_non_cands) global_non_cand_map.insert(pattern->qid, *parent_non_cands);
+            if (parent_non_cands) global_non_cand_map.insert(tc_->qid, *parent_non_cands);
         }
             
 
@@ -1143,11 +1143,11 @@ public:
      */
     bool compare_IVD_and_VD()
     {
-        int VD_size = tc->get_cands().get_domain_size();
+        int VD_size = tc->pattern->get_cands().get_domain_size();
         int IVD_size = 0;
         for (int i = 0; i < tc->pattern->non_candidates.size(); ++i)
             IVD_size += tc->pattern->non_candidates[i].size();
-        return IVD_size < VD_size * COEFFICIENT_INVALID_TO_VALID
+        return IVD_size < VD_size * COEFFICIENT_INVALID_TO_VALID;
     }
 
     // will remove non-candidates from domain
@@ -1225,7 +1225,7 @@ public:
                     }
                 }
                 bucket.unlock();
-                global_non_cand_map.insert(pattern->qid, pattern->non_candidates);
+                global_non_cand_map.insert(tc->qid, pattern->non_candidates);
             }
 
             // ===== push down pruning done ======
