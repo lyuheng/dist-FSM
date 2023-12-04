@@ -337,10 +337,10 @@ struct task_container
 class Comper
 {
 public:
-    typedef CacheTable<int, vector<Domain>> CacheTableT;
     typedef vector<Domain> * VDEntryT;
     typedef VtxSetVec * IVDEntryT;
     typedef variant<VDEntryT, IVDEntryT> CacheEntryT;
+    typedef CacheTable<int, CacheEntryT> CacheTableT;
 
     GMatchEngine gmatch_engine;
     GMatchEngine exist_engine;
