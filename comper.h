@@ -1105,7 +1105,6 @@ public:
             }
             bucket.unlock();
 
-
             if (parent_non_cands.size() > 0)
             {
                 parent_non_cands.resize(pattern->size());
