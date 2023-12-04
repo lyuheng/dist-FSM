@@ -173,7 +173,7 @@ public:
 		return ret;
 	}
 
-	int shrink(int num_to_deleted, thread_counter & counter)
+	int shrink(int num_to_delete, thread_counter & counter)
 	{
 		int start_pos = pos;
 		while (num_to_deleted > 0)
@@ -194,8 +194,8 @@ public:
 					delete cpair.value;
 					kvmap.erase(it);
 					bucket.zeros.erase(iter); //update it
-					num_to_delete--;
-					if(num_to_delete == 0) //there's no need to look at more candidates
+					num_to_deleted--;
+					if(num_to_deleted == 0) //there's no need to look at more candidates
 					{
 						bucket.unlock();
 						pos++; //current bucket has been checked, next time, start from next bucket
