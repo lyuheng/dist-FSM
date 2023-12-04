@@ -1519,7 +1519,9 @@ public:
                 }
                 else // parent_domain.index() == 1
                 {
+                    cout << "here1111" << endl;
                     IVDEntryT parent_non_cand = std::get<IVDEntryT>(parent_domain);
+                    cout << "here2222" << endl;
                     for (ui j = 0; j < parent_non_cand->size(); ++j)
                     {
                         auto & non_cans = tc_new->pattern->non_candidates[j];
