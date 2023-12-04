@@ -1143,7 +1143,7 @@ public:
      */
     bool compare_IVD_and_VD()
     {
-        int VD_size = tc->pattern->get_cands().get_domain_size();
+        int VD_size = tc->pattern->prog->get_domain_size();
         int IVD_size = 0;
         for (int i = 0; i < tc->pattern->non_candidates.size(); ++i)
             IVD_size += tc->pattern->non_candidates[i].size();
@@ -1211,10 +1211,10 @@ public:
             if (is_IVD_less)
             {
                 // insert into global_non_cand_map
-                auto & bucket = global_non_cand_map.get_bucket(pattern->parent_qid);
+                auto & bucket = global_non_cand_map.get_bucket(tc->parent_qid);
                 bucket.lock();
                 auto & kvmap = bucket.get_map();
-                auto it = kvmap.find(pattern->parent_qid)
+                auto it = kvmap.find(tc->parent_qid);
                 if (it != kvmap.end())
                 {
                     auto & parent_non_cands = it->second;
@@ -1515,11 +1515,11 @@ public:
                 }
                 else // parent_domain.index() == 1
                 {
-                    IVDEntryT & parent_non_cand = *std::get<IVDEntryT>(parent_domain);
-                    for (ui j = 0; j < parent_non_cand.size(); ++j)
+                    IVDEntryT parent_non_cand = std::get<IVDEntryT>(parent_domain);
+                    for (ui j = 0; j < parent_non_cand->size(); ++j)
                     {
                         auto & non_cans = tc_new->pattern->non_candidates[j];
-                        auto & non_cans_check = parent_non_cand[j];
+                        auto & non_cans_check = parent_non_cand->at(j);
                         non_cans.insert(non_cans_check.begin(), non_cans_check.end());
                     }
                 }
