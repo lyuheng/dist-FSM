@@ -1094,18 +1094,23 @@ public:
         
         // insert into global_non_cand_map
         {
-            VtxSetVec * parent_non_cands = NULL;
+            VtxSetVec parent_non_cands;
             auto & bucket = global_non_cand_map.get_bucket(tc_->parent_qid);
             bucket.lock();
             auto & kvmap = bucket.get_map();
             auto it = kvmap.find(tc_->parent_qid);
             if (it != kvmap.end())
             {
-                parent_non_cands = &(it->second);
+                parent_non_cands = it->second;
             }
             bucket.unlock();
 
-            if (parent_non_cands) global_non_cand_map.insert(tc_->qid, *parent_non_cands);
+
+            if (parent_non_cands.size() > 0)
+            {
+                parent_non_cands.resize(pattern->size());
+                global_non_cand_map.insert(tc_->qid, parent_non_cands);
+            }
         }
             
 
