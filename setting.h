@@ -2,8 +2,9 @@
 
 namespace Settings
 {
+// Default settings
 static int maxNumNodes = -1; // No constraint on maxNodes
-static bool useLB = true;    // enable Load Balancing 
+static bool useLB = true;    // Enable load balancing between workers
 
 } // namespace Settings
 
