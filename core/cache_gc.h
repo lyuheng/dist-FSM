@@ -24,7 +24,7 @@ public:
         }
     }
 
-    CacheGC(CandCacheT & cache_table): cache_table(cache_table)
+    CacheGC(CacheTable & cache_table): cache_table(cache_table)
     {
         main_thread = std::thread(&CacheGC::run, this);
     }
