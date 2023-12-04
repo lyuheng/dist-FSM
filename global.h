@@ -144,8 +144,9 @@ struct RespondMsg
     friend ibinstream & operator<<(ibinstream & m, const RespondMsg & msg)
     {
         m << msg.qid;
-        m << msg.candidates.index();
-        if (std::holds_alternative<DomainT *>(candidates))
+        int index = msg.candidates.index();
+        m << index;
+        if (index == 0)
             m << std::get<DomainT *>(msg.candidates);
         else
             m << std::get<VtxSetVec *>(msg.candidates);
