@@ -79,9 +79,9 @@ unordered_map<subPattern, VtxSetVec, subPatternHashCode> cache;
 rwlock cache_mtx;
 
 
-// =======================================================
+// ===========================================================================
 // Below are needed to support distributed environment
-// =======================================================
+// ===========================================================================
 
 conmap<int, PatternProgress *> g_pattern_prog_map; // global pattern progress map
 

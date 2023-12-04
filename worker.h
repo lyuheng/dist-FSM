@@ -12,6 +12,8 @@
 #include "resp_server.h"
 #include "req_server.h"
 
+#include "setting.h"
+
 struct steal_plan
 {
     int id;  // steal from/to which server. negative number means receive
@@ -409,7 +411,11 @@ public:
 
         while (global_end_label == false)
         {
-            bool sth_stealed = steal_planning();
+            bool sth_stealed;
+            if (Settings::useLB)
+                sth_stealed = steal_planning();
+            else
+                sth_stealed = false;
             status_sync(sth_stealed);
             mtx_go.lock();
             ready_go = true;

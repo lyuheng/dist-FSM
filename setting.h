@@ -4,6 +4,7 @@ class Settings
 {
 public:
     static int maxNumNodes;
+    static bool useLB;
 };
 
 char* getCmdOption(char ** begin, char ** end, const std::string & option)

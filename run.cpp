@@ -8,8 +8,6 @@
 
 using namespace std::chrono;
 
-int Settings::maxNumNodes;
-
 int main(int argc, char *argv[])
 {   
     // launch a thread to record memory
@@ -48,6 +46,10 @@ int main(int argc, char *argv[])
     char * argThreads = getCmdOption(argv, argv + argc, "-thread");
 	if(argThreads)
 		thread_num = atoi(argThreads);
+
+    char * argUseLB = getCmdOption(argv, argv + argc, "-lb");
+    if(argUseLB)
+        Settings::useLB = atoi(argUseLB);
 
     auto time1 = steady_clock::now();
 
