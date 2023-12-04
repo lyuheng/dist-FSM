@@ -14,7 +14,7 @@ struct thread_counter
     void increment()
     {
         count++;
-        if(count >= COMMIT_FREQ)
+        if(count >= CACHE_COMMIT_FREQ)
         {
             global_cache_size += count;
             count = 0; //clear local counter
@@ -24,7 +24,7 @@ struct thread_counter
     void decrement()
     {
         count--;
-        if(count <= -COMMIT_FREQ)
+        if(count <= -CACHE_COMMIT_FREQ)
         {
             global_cache_size += count;
             count = 0;
