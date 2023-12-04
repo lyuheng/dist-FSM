@@ -3,8 +3,34 @@
 #include "req_queue.h"
 #include "conmap_zero.h"
 #include "conmap.h"
+#include "global.h"
 #include <memory>
 #include <vector>
+
+struct thread_counter
+{
+    int count;
+    thread_counter(): count(0) {}
+    void increment()
+    {
+        count++;
+        if(count >= COMMIT_FREQ)
+        {
+            global_cache_size += count;
+            count = 0; //clear local counter
+        }
+    }
+
+    void decrement()
+    {
+        count--;
+        if(count <= -COMMIT_FREQ)
+        {
+            global_cache_size += count;
+            count = 0;
+        }
+    }
+};
 
 template <typename ValueT>
 struct CandValue
@@ -36,7 +62,7 @@ public:
         return ret;
     }
 
-    bool request(KeyT key, KeyT value)
+    bool request(KeyT key, KeyT value, thread_counter & counter)
     {
     	auto & bucket = pcache.get_bucket(key);
 		auto & kvmap = bucket.get_map();
@@ -49,6 +75,7 @@ public:
     	}
     	else
     	{
+			counter.increment();
     		kvmap[key].push_back(value);
     		return true;
     	}
@@ -64,6 +91,7 @@ public:
     ReqQueue<RequestMsg, REQ_CHANNEL> q_req;
     CandCacheT candcache;
 	PullCache<KeyT> pcache;
+	int pos = 0;
 
     ~CacheTable()
     {
@@ -80,7 +108,7 @@ public:
     	}
     }
 
-    ValueT * lock_and_get(KeyT key, KeyT value)
+    ValueT * lock_and_get(KeyT key, KeyT value, thread_counter & counter)
     {
     	ValueT * ret;
     	auto & bucket = candcache.get_bucket(key);
@@ -89,7 +117,7 @@ public:
     	auto it = kvmap.find(key);
     	if(it == kvmap.end())
 		{
-			bool new_req = pcache.request(key, value);
+			bool new_req = pcache.request(key, value, counter);
 			if(new_req)
 			{
                 q_req.add(RequestMsg{value, key});  // this worker needs value of this key
@@ -143,5 +171,43 @@ public:
     	bool ret = (it != kvmap.end());
 		bucket.unlock();
 		return ret;
+	}
+
+	int shrink(int num_to_deleted, thread_count & counter)
+	{
+		int start_pos = pos;
+		while (num_to_deleted > 0)
+		{
+			auto & bucket = candcache.pos(pos);
+			bucket.lock();
+			auto iter = bucket.zeros.begin();
+			while (iter != bucket.zeros.end())
+			{
+				KeyT key = *iter;
+				auto & kvmap = bucket.get_map();
+				auto it = kvmap.find(key);
+				assert(it != kvmap.end());
+				CandValue<ValueT> & cpair = it->second;
+				if (cpair.counter == 0) //to make sure item is not locked
+				{
+					counter.decrement();
+					delete cpair.value;
+					kvmap.erase(it);
+					bucket.zeros.erase(iter); //update it
+					num_to_delete--;
+					if(num_to_delete == 0) //there's no need to look at more candidates
+					{
+						bucket.unlock();
+						pos++; //current bucket has been checked, next time, start from next bucket
+						return 0;
+					}
+				}
+			}
+			bucket.unlock();
+			pos++;
+			if(pos >= CONMAP_BUCKET_NUM) pos -= CONMAP_BUCKET_NUM;
+			if(pos == start_pos) break;
+		}
+		return num_to_delete;
 	}
 };

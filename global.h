@@ -99,6 +99,11 @@ void * global_delete_queue;
 
 #define MAX_BATCH_COUNT 5
 
+#define CACHE_COMMIT_FREQ 10
+atomic<int> global_cache_size{0};
+#define CACHE_LIMIT 100
+
+
 struct RequestMsg
 {
     int qid;

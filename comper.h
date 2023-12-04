@@ -359,6 +359,8 @@ public:
 
     ReqQueue<RequestMsg, DELETE_CHANNEL> & delete_queue = *(ReqQueue<RequestMsg, DELETE_CHANNEL> *)global_delete_queue;
 
+    thread_counter cache_counter;
+
     task_container * tc;
 
     int cur_qid;
@@ -1848,7 +1850,7 @@ public:
                              */
                             pending_patterns_num++;
                             pending_patterns.insert(tc_new->qid, tc_new);
-                            vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid);
+                            vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid, cache_counter);
                             if (parent_domain)
                             {
                                 ready_patterns.enqueue(tc_new);
