@@ -10,11 +10,9 @@ template <typename CacheTable>
 class CacheGC 
 {
 public:
-    typedef typename CacheTable::CandCacheT CandCacheT;
     std::thread main_thread;
     thread_counter counter;
-
-    CandCacheT & cache_table;
+    CacheTable & cache_table;
 
     void run()
     {
@@ -36,4 +34,4 @@ public:
         if (main_thread.joinable())
             main_thread.join();
     }
-}
+};

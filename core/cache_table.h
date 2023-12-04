@@ -173,7 +173,7 @@ public:
 		return ret;
 	}
 
-	int shrink(int num_to_deleted, thread_count & counter)
+	int shrink(int num_to_deleted, thread_counter & counter)
 	{
 		int start_pos = pos;
 		while (num_to_deleted > 0)
@@ -208,6 +208,6 @@ public:
 			if(pos >= CONMAP_BUCKET_NUM) pos -= CONMAP_BUCKET_NUM;
 			if(pos == start_pos) break;
 		}
-		return num_to_delete;
+		return num_to_deleted;
 	}
 };
