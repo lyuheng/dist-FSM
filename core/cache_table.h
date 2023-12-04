@@ -102,7 +102,10 @@ public:
     		auto & kvmap = bucket.get_map();
     		for(auto it = kvmap.begin(); it != kvmap.end(); it++)
     		{
-    			delete it->second.value; // release cached vertices
+				if (it->second.value.index() == 0)
+    				delete std::get<0>(it->second.value); // release cached vertices
+				else 
+					delete std::get<1>(it->second.value);
     		}
     		bucket.unlock();
     	}
