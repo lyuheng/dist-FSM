@@ -411,11 +411,7 @@ public:
 
         while (global_end_label == false)
         {
-            bool sth_stealed;
-            if (Settings::useLB)
-                sth_stealed = steal_planning();
-            else
-                sth_stealed = false;
+            bool sth_stealed = Settings::useLB ? steal_planning() : false;
             status_sync(sth_stealed);
             mtx_go.lock();
             ready_go = true;
