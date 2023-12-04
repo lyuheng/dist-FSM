@@ -108,9 +108,9 @@ public:
     	}
     }
 
-    ValueT * lock_and_get(KeyT key, KeyT value, thread_counter & counter)
+    std::optional<ValueT> lock_and_get(KeyT key, KeyT value, thread_counter & counter)
     {
-    	ValueT * ret;
+    	std::optional<ValueT> ret;
     	auto & bucket = candcache.get_bucket(key);
     	bucket.lock();
     	auto & kvmap = bucket.get_map();
@@ -122,12 +122,12 @@ public:
 			{
                 q_req.add(RequestMsg{value, key});  // this worker needs value of this key
 			}
-			ret = NULL;
+			ret = std::nullopt;
 		}
     	else
     	{
         	CandValue<ValueT> & cpair = it->second;
-        	if(cpair.counter == 0)
+        	if (cpair.counter == 0)
 			{
                 bucket.zeros.erase(key); //zero-cache.remove
 			}
@@ -138,14 +138,14 @@ public:
     	return ret;
     }
 
-    ValueT * get(KeyT key)
+    ValueT get(KeyT key)
     {
         auto & bucket = candcache.get_bucket(key);
 		bucket.lock();
 		auto & kvmap = bucket.get_map();
 		auto it = kvmap.find(key);
 		assert(it != kvmap.end());
-		ValueT * val = it->second.value;
+		ValueT val = it->second.value;
 		bucket.unlock();
 		return val;
     }

@@ -9,6 +9,7 @@
 #include <vector>
 #include <fstream>
 #include <variant> // testing for now
+#include <optional> // testing for now
 
 #include "constack.h"
 #include "conque.h"

@@ -26,7 +26,6 @@ public:
         {
             m << temp;
             if(m.size() > MAX_BATCH_SIZE) break;
-			// cout << "send key = " << temp.parent_qid << " from " << temp.qid << " via Channel " << CHANNEL << endl;
 			succ = buf.dequeue(temp);
         }
     }

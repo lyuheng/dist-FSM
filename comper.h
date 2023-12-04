@@ -1858,7 +1858,7 @@ public:
                              */
                             pending_patterns_num++;
                             pending_patterns.insert(tc_new->qid, tc_new);
-                            vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid, cache_counter);
+                            std::optional<CacheEntryT> parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid, cache_counter);
                             if (parent_domain)
                             {
                                 ready_patterns.enqueue(tc_new);
