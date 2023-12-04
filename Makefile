@@ -1,5 +1,5 @@
 CC=mpic++
-CFLAGS=-std=c++17 -O3 -march=native -fopenmp -lpthread
+CFLAGS=-std=c++17 -g -march=native -fopenmp -lpthread
 OBJDIR=objs/
 OBJS=$(OBJDIR)intersection.o 
 
