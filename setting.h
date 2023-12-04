@@ -1,11 +1,11 @@
 #pragma once
 
-class Settings
+namespace Settings
 {
-public:
-    static int maxNumNodes;
-    static bool useLB;
-};
+static int maxNumNodes;
+static bool useLB;
+
+} // namespace Settings
 
 char* getCmdOption(char ** begin, char ** end, const std::string & option)
 {
