@@ -338,6 +338,9 @@ class Comper
 {
 public:
     typedef CacheTable<int, vector<Domain>> CacheTableT;
+    typedef vector<Domain> * VDEntryT;
+    typedef VtxSetVec * IVDEntryT;
+    typedef variant<VDEntryT, IVDEntryT> CacheEntryT;
 
     GMatchEngine gmatch_engine;
     GMatchEngine exist_engine;
@@ -1449,8 +1452,13 @@ public:
                 delete tc_new->pattern->parent_prog->candidates;
                 tc_new->pattern->parent_prog->to_delete = false;
 
-                vector<Domain> * parent_domain = cache_table.get(tc_new->parent_qid);
-                tc_new->pattern->parent_prog->candidates = parent_domain;
+                CacheEntryT parent_domain = cache_table.get(tc_new->parent_qid);
+                if (parent_domain.index() == 0)
+                    tc_new->pattern->parent_prog->candidates = std::get<VDEntryT>(parent_domain);
+                else 
+                {
+                    assert(false); // temproraily
+                }
                 need_new_prog = true;
             }
         }        

@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
 	if(argThreads)
 		thread_num = atoi(argThreads);
 
+    // enable load balancing or not
     char * argUseLB = getCmdOption(argv, argv + argc, "-lb");
     if(argUseLB)
         Settings::useLB = atoi(argUseLB);

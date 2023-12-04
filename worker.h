@@ -35,7 +35,11 @@ struct steal_plan
 class Worker
 {
 public:
-    typedef Comper::CacheTableT CacheTableT;
+    typedef typename Comper::CacheTableT    CacheTableT;
+    typedef typename Comper::VDEntryT       VDEntryT;
+    typedef typename Comper::IVDEntryT      IVDEntryT;
+    typedef typename Comper::CacheEntryT    CacheEntryT;
+
     Comper *compers = nullptr;
 
     DataStack *data_stack;
@@ -398,7 +402,8 @@ public:
 
     void run()
     {
-        RespServer<int, vector<Domain>, PendingMap, PatternQueue> server_resp(*cache_table, *pending_patterns, *ready_patterns);
+        // accommodate valid domain and invalid domain
+        RespServer<int, CacheEntryT, PendingMap, PatternQueue> server_resp(*cache_table, *pending_patterns, *ready_patterns);
         ReqServer server_req;
         CacheGC<CacheTableT> gc(*cache_table);
 

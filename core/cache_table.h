@@ -35,7 +35,7 @@ struct thread_counter
 template <typename ValueT>
 struct CandValue
 {
-    ValueT * value; //note that it is a pointer !!!
+    ValueT value; //note that it is a pointer !!!
     int counter; //lock-counter, bounded by the number of active tasks in a machine
 };
 
@@ -150,7 +150,7 @@ public:
 		return val;
     }
 
-    void insert(KeyT key, ValueT * value, std::vector<KeyT> & qid_collector)
+    void insert(KeyT key, ValueT value, std::vector<KeyT> & qid_collector)
     {
         auto & bucket = candcache.get_bucket(key);
 		bucket.lock();
