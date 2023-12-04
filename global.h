@@ -8,6 +8,7 @@
 #include <list>
 #include <vector>
 #include <fstream>
+#include <variant> // testing for now
 
 #include "constack.h"
 #include "conque.h"
@@ -37,7 +38,6 @@ using namespace std;
 #define MAX_PATTERN_SIZE 32
 
 
-
 #define SEQNO_LIMIT 9223372036854775807
 
 GraMi grami;
@@ -45,14 +45,14 @@ GraMi grami;
 int activeQ_num(0);
 rwlock activeQ_lock;
 void *global_activeQ_list;
-int activeQ_list_capacity = 40;
+constexpr int activeQ_list_capacity = 40;
 
 
-void *global_data_stack;
+void * global_data_stack;
 
-size_t MINI_BATCH_NUM = 800;
+constexpr size_t MINI_BATCH_NUM = 800;
 
-int RT_THRESHOLD_FOR_REFILL = 800;
+constexpr int RT_THRESHOLD_FOR_REFILL = 800;
 
 atomic<int> global_qid{1}; // 0 is occupied by a void pattern
 
@@ -63,8 +63,8 @@ mutex mtx_go;
 // Protected by mtx_go above
 bool ready_go = true;
 
-atomic<int> global_num_idle(0);
-atomic<bool> global_end_label(false);
+atomic<int> global_num_idle{0};
+atomic<bool> global_end_label{false};
 
 // results counter
 vector<ui> results_counter;
@@ -103,6 +103,9 @@ void * global_delete_queue;
 atomic<int> global_cache_size{0};
 #define CACHE_LIMIT 100
 
+// means if #invalid/#valid > 10%, stop recording invalid
+#define COEFFICIENT_INVALID_TO_VALID 0.1 
+
 
 struct RequestMsg
 {
@@ -126,17 +129,26 @@ struct RespondMsg
 {
     typedef vector<Domain> DomainT;
     int qid;
-    DomainT * candidates;
+    std::variant<DomainT *, VtxSetVec *> candidates; // accomodate valid domain and invalid domain
     friend obinstream & operator>>(obinstream & m, RespondMsg & msg)
     {
         m >> msg.qid;
-        m >> msg.candidates;
+        int index;
+        m >> index;
+        if (index == 0)
+            m >> std::get<DomainT *>(msg.candidates);
+        else // index == 1
+            m >> std::get<VtxSetVec *>(msg.candidates);
         return m;
     }
     friend ibinstream & operator<<(ibinstream & m, const RespondMsg & msg)
     {
         m << msg.qid;
-        m << msg.candidates;
+        m << msg.candidates.index();
+        if (std::holds_alternative<DomainT *>(candidates))
+            m << std::get<DomainT *>(msg.candidates);
+        else
+            m << std::get<VtxSetVec *>(msg.candidates);
         return m;
     }
 };
