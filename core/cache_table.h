@@ -194,7 +194,10 @@ public:
 				if (cpair.counter == 0) //to make sure item is not locked
 				{
 					counter.decrement();
-					delete cpair.value;
+					if (cpair.value.index() == 0)
+						delete std::get<0>(cpair.value);
+					else
+						delete std::get<1>(cpair.value);
 					kvmap.erase(it);
 					bucket.zeros.erase(iter); //update it
 					num_to_delete--;
