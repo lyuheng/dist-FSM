@@ -1216,23 +1216,23 @@ public:
             if (is_IVD_less)
             {
                 // insert into global_non_cand_map
-                shared_ptr<VtxSetVec> my_non_cands = nullptr;
-                auto & bucket = global_non_cand_map.get_bucket(tc->parent_qid);
-                bucket.lock();
-                auto & kvmap = bucket.get_map();
-                auto it = kvmap.find(tc->parent_qid);
-                if (it != kvmap.end())
-                {
-                    shared_ptr<VtxSetVec> parent_non_cands = it->second;
-                    my_non_cands = make_shared<VtxSetVec>(pattern->non_candidates);
-                    for (int i = 0; i < pattern->size(); ++i)
-                    {
-                        if (i > parent_non_cands->size()) break;
-                        my_non_cands->at(i).insert(parent_non_cands->at(i).begin(), parent_non_cands->at(i).end());
-                    }
-                }
-                bucket.unlock();
-                if (my_non_cands) global_non_cand_map.insert(tc->qid, my_non_cands);
+                // shared_ptr<VtxSetVec> my_non_cands = nullptr;
+                // auto & bucket = global_non_cand_map.get_bucket(tc->parent_qid);
+                // bucket.lock();
+                // auto & kvmap = bucket.get_map();
+                // auto it = kvmap.find(tc->parent_qid);
+                // if (it != kvmap.end())
+                // {
+                //     shared_ptr<VtxSetVec> parent_non_cands = it->second;
+                //     my_non_cands = make_shared<VtxSetVec>(pattern->non_candidates);
+                //     for (int i = 0; i < pattern->size(); ++i)
+                //     {
+                //         if (i > parent_non_cands->size()) break;
+                //         my_non_cands->at(i).insert(parent_non_cands->at(i).begin(), parent_non_cands->at(i).end());
+                //     }
+                // }
+                // bucket.unlock();
+                // if (my_non_cands) global_non_cand_map.insert(tc->qid, my_non_cands);
             }
 
             // ===== push down pruning done ======
