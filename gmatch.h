@@ -678,7 +678,7 @@ void GMatchEngine::compactCandidates() // TODO erase?
                 new_candidate.push_back(*it);
             }
         }
-        query_graph->get_cands()[query_vertex].candidate.swap(new_candidate);
+        query_graph->get_cands()[query_vertex].candidate = std::move(new_candidate);
     }
 }
 
