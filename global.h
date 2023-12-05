@@ -99,14 +99,14 @@ void * global_delete_queue;
 #define GET_WORKER_ID(qid) (qid >> 25)
 #define GET_PATTERN_ID(qid) (qid & 0x01FFFFFF)
 
-#define MAX_BATCH_COUNT 1
+#define MAX_BATCH_COUNT 5
 
 #define CACHE_COMMIT_FREQ 10
 atomic<int> global_cache_size{0};
 #define CACHE_LIMIT 100
 
 // means if #invalid/#valid > 10%, stop recording invalid
-#define COEFFICIENT_INVALID_TO_VALID 0.4
+#define COEFFICIENT_INVALID_TO_VALID 0.1
 
 conmap<int, shared_ptr<VtxSetVec>> global_non_cand_map;
 
@@ -140,17 +140,16 @@ struct RespondMsg
         m >> index;
         if (index == 0)
         {
-            cout << "@@@@@111111111" << " index = " << index << endl;
+            // cout << "@@@@@111111111" << " index = " << index << endl;
             DomainT * ptr;
             m >> ptr;
             msg.candidates = ptr;
         }
         else // index == 1
         {
-            cout << "@@@@@222222222" << " index = " << index << endl;
+            // cout << "@@@@@222222222" << " index = " << index << endl;
             VtxSetVec * ptr;
             m >> ptr;
-            
             msg.candidates = ptr;
         }
         // cout << "translate variant back" << endl;
@@ -163,12 +162,12 @@ struct RespondMsg
         m << index;
         if (index == 0)
         {
-            cout << "@@@@@33333333" << " index = " << index << endl;
+            // cout << "@@@@@33333333" << " index = " << index << endl;
             m << std::get<0>(msg.candidates);
         }
         else
         {
-            cout << "@@@@@4444444" << " index = " << index << endl;
+            // cout << "@@@@@4444444" << " index = " << index << endl;
             m << std::get<1>(msg.candidates);
         }
         return m;

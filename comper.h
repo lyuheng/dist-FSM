@@ -1517,12 +1517,12 @@ public:
                      */
                     delete tc_new->pattern->parent_prog->candidates;
                     tc_new->pattern->parent_prog->to_delete = false;
-                    cout << "std::get<VDEntryT>: " << std::get<VDEntryT>(parent_domain) << endl;
+                    // cout << "std::get<VDEntryT>: " << std::get<VDEntryT>(parent_domain) << endl;
                     tc_new->pattern->parent_prog->candidates = std::get<0>(parent_domain);
                 }
                 else // parent_domain.index() == 1
                 {
-                    cout << "std::get<IVDEntryT>" << endl;
+                    // cout << "std::get<IVDEntryT>" << endl;
                     // cout << "here1111" << endl;
                     cout << "Via non_cand" << endl;
                     IVDEntryT parent_non_cand = std::get<1>(parent_domain);
