@@ -106,7 +106,7 @@ atomic<int> global_cache_size{0};
 #define CACHE_LIMIT 100
 
 // means if #invalid/#valid > 10%, stop recording invalid
-#define COEFFICIENT_INVALID_TO_VALID 0.01
+#define COEFFICIENT_INVALID_TO_VALID 0
 
 conmap<int, shared_ptr<VtxSetVec>> global_non_cand_map;
 
