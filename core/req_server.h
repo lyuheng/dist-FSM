@@ -40,7 +40,7 @@ public:
                     IVD_size += it2->second->at(i).size();
             }
 
-            cout << "float(IVD_size)/VD_size = " << float(IVD_size)/VD_size << endl;
+            cout << "IVD_size = " << IVD_size << ", VD_size = " << VD_size << ", IVD_size/VD_size = " << float(IVD_size)/VD_size << endl;
 
             if (IVD_size == 0)
                 q_resp.add(RespondMsg{key.parent_qid, it->second->candidates}, src);
