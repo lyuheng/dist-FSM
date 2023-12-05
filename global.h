@@ -142,7 +142,7 @@ struct RespondMsg
             m >> std::get<0>(msg.candidates);
         else // index == 1
             m >> std::get<1>(msg.candidates);
-        cout << "translate variant back" << endl;
+        // cout << "translate variant back" << endl;
         return m;
     }
     friend ibinstream & operator<<(ibinstream & m, const RespondMsg & msg)

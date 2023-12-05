@@ -1518,15 +1518,15 @@ public:
                      */
                     delete tc_new->pattern->parent_prog->candidates;
                     tc_new->pattern->parent_prog->to_delete = false;
-                    cout << "std::get<VDEntryT>: " << std::get<VDEntryT>(parent_domain) << endl;
+                    // cout << "std::get<VDEntryT>: " << std::get<VDEntryT>(parent_domain) << endl;
                     tc_new->pattern->parent_prog->candidates = std::get<0>(parent_domain);
                 }
                 else // parent_domain.index() == 1
                 {
-                    cout << "std::get<IVDEntryT>" << endl;
-                    cout << "here1111" << endl;
+                    // cout << "std::get<IVDEntryT>" << endl;
+                    // cout << "here1111" << endl;
                     IVDEntryT parent_non_cand = std::get<1>(parent_domain);
-                    cout << "here2222" << endl;
+                    // cout << "here2222" << endl;
                     for (ui j = 0; j < parent_non_cand->size(); ++j)
                     {
                         auto & non_cans = tc_new->pattern->non_candidates[j];
