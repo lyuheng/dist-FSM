@@ -329,11 +329,11 @@ bool GMatchEngine::LDF_pruning(bool automorphism)
                         }
                         if(pass_nlf) 
                         {
-                            if(query_graph->non_candidates[i].find(data_vertex) == query_graph->non_candidates[i].end()) 
-                            {   
+                            // if(query_graph->non_candidates[i].find(data_vertex) == query_graph->non_candidates[i].end()) 
+                            // {
                                 // push-down pruning
                                 query_graph->get_cands()[i].candidate.push_back(data_vertex);
-                            }
+                            // }
                         }
                     }
                 }
