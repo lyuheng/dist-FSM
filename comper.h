@@ -1094,23 +1094,23 @@ public:
         
         // insert into global_non_cand_map
         {
-            shared_ptr<VtxSetVec> parent_non_cands = nullptr;
-            auto & bucket = global_non_cand_map.get_bucket(tc_->parent_qid);
-            bucket.lock();
-            auto & kvmap = bucket.get_map();
-            auto it = kvmap.find(tc_->parent_qid);
-            if (it != kvmap.end())
-            {
-                parent_non_cands = it->second;
-            }
-            bucket.unlock();
+            // shared_ptr<VtxSetVec> parent_non_cands = nullptr;
+            // auto & bucket = global_non_cand_map.get_bucket(tc_->parent_qid);
+            // bucket.lock();
+            // auto & kvmap = bucket.get_map();
+            // auto it = kvmap.find(tc_->parent_qid);
+            // if (it != kvmap.end())
+            // {
+            //     parent_non_cands = it->second;
+            // }
+            // bucket.unlock();
 
-            if (parent_non_cands->size() > 0)
-            {
-                shared_ptr<VtxSetVec> my_non_cands = make_shared<VtxSetVec>(*parent_non_cands);
-                my_non_cands->resize(pattern->size());
-                global_non_cand_map.insert(tc_->qid, my_non_cands);
-            }
+            // if (parent_non_cands->size() > 0)
+            // {
+            //     shared_ptr<VtxSetVec> my_non_cands = make_shared<VtxSetVec>(*parent_non_cands);
+            //     my_non_cands->resize(pattern->size());
+            //     global_non_cand_map.insert(tc_->qid, my_non_cands);
+            // }
         }
             
 
@@ -1213,27 +1213,27 @@ public:
                 cache[key] = pattern->non_candidates;     // O(n) deep copy
             cache_mtx.unlock();
 
-            if (is_IVD_less)
-            {
-                // insert into global_non_cand_map
-                shared_ptr<VtxSetVec> my_non_cands = nullptr;
-                auto & bucket = global_non_cand_map.get_bucket(tc->parent_qid);
-                bucket.lock();
-                auto & kvmap = bucket.get_map();
-                auto it = kvmap.find(tc->parent_qid);
-                if (it != kvmap.end())
-                {
-                    shared_ptr<VtxSetVec> parent_non_cands = it->second;
-                    shared_ptr<VtxSetVec> my_non_cands = make_shared<VtxSetVec>(pattern->non_candidates);
-                    for (int i = 0; i < pattern->size(); ++i)
-                    {
-                        if (i > parent_non_cands->size()) break;
-                        my_non_cands->at(i).insert(parent_non_cands->at(i).begin(), parent_non_cands->at(i).end());
-                    }
-                }
-                bucket.unlock();
-                if (my_non_cands) global_non_cand_map.insert(tc->qid, my_non_cands);
-            }
+            // if (is_IVD_less)
+            // {
+            //     // insert into global_non_cand_map
+            //     shared_ptr<VtxSetVec> my_non_cands = nullptr;
+            //     auto & bucket = global_non_cand_map.get_bucket(tc->parent_qid);
+            //     bucket.lock();
+            //     auto & kvmap = bucket.get_map();
+            //     auto it = kvmap.find(tc->parent_qid);
+            //     if (it != kvmap.end())
+            //     {
+            //         shared_ptr<VtxSetVec> parent_non_cands = it->second;
+            //         shared_ptr<VtxSetVec> my_non_cands = make_shared<VtxSetVec>(pattern->non_candidates);
+            //         for (int i = 0; i < pattern->size(); ++i)
+            //         {
+            //             if (i > parent_non_cands->size()) break;
+            //             my_non_cands->at(i).insert(parent_non_cands->at(i).begin(), parent_non_cands->at(i).end());
+            //         }
+            //     }
+            //     bucket.unlock();
+            //     if (my_non_cands) global_non_cand_map.insert(tc->qid, my_non_cands);
+            // }
 
             // ===== push down pruning done ======
 
