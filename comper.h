@@ -1525,6 +1525,7 @@ public:
                 {
                     // cout << "std::get<IVDEntryT>" << endl;
                     // cout << "here1111" << endl;
+                    cout << "Via non_cand" << endl;
                     IVDEntryT parent_non_cand = std::get<1>(parent_domain);
                     // cout << "here2222" << endl;
                     for (ui j = 0; j < parent_non_cand->size(); ++j)
