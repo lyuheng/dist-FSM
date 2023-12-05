@@ -143,14 +143,15 @@ struct RespondMsg
             cout << "@@@@@111111111" << " index = " << index << endl;
             DomainT * ptr;
             m >> ptr;
-            std::get<0>(msg.candidates) = ptr;
+            msg.candidates = ptr;
         }
         else // index == 1
         {
             cout << "@@@@@222222222" << " index = " << index << endl;
             VtxSetVec * ptr;
             m >> ptr;
-            std::get<1>(msg.candidates) = ptr;
+            
+            msg.candidates = ptr;
         }
         // cout << "translate variant back" << endl;
         return m;
