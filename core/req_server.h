@@ -38,7 +38,6 @@ public:
             if (it2 != kvmap2.end())
                 ptr = it2->second;
             bucket2.unlock();
-
             if (ptr)
             {
                 for(int i = 0; i < it2->second->size(); ++i)
