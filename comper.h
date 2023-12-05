@@ -1105,7 +1105,7 @@ public:
             }
             bucket.unlock();
 
-            if (parent_non_cands->size() > 0)
+            if (parent_non_cands)
             {
                 shared_ptr<VtxSetVec> my_non_cands = make_shared<VtxSetVec>(*parent_non_cands);
                 my_non_cands->resize(pattern->size());
