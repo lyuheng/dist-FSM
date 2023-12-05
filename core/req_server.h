@@ -30,7 +30,7 @@ public:
             int VD_size = prog->get_domain_size();
 
             int IVD_size = 0;
-            shared_ptr<VtxSetVec> ptr;
+            shared_ptr<VtxSetVec> ptr = nullptr;
             auto & bucket2 = global_non_cand_map.get_bucket(key.parent_qid);
             bucket2.lock();
             auto & kvmap2 = bucket2.get_map();
@@ -39,9 +39,11 @@ public:
                 ptr = it2->second;
             bucket2.unlock();
 
-            for(int i = 0; i < it2->second->size(); ++i)
-                IVD_size += ptr->at(i).size();
-
+            if (ptr)
+            {
+                for(int i = 0; i < it2->second->size(); ++i)
+                    IVD_size += ptr->at(i).size();
+            }
             cout << "IVD_size = " << IVD_size << ", VD_size = " << VD_size << ", IVD_size/VD_size = " << float(IVD_size)/VD_size << endl;
 
             if (IVD_size == 0)
