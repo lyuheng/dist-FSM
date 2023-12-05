@@ -25,32 +25,32 @@ public:
             auto & kvmap = bucket.get_map();
             auto it = kvmap.find(key.parent_qid);
             assert(it != kvmap.end());
-            int VD_size = it->second->get_domain_size();
-            // cout << "send value of key = " << key.parent_qid << endl;
+            auto prog = it->second;
+            bucket.unlock();
+            int VD_size = prog->get_domain_size();
 
             int IVD_size = 0;
-            
+            shared_ptr<VtxSetVec> ptr;
             auto & bucket2 = global_non_cand_map.get_bucket(key.parent_qid);
             bucket2.lock();
             auto & kvmap2 = bucket2.get_map();
             auto it2 = kvmap2.find(key.parent_qid);
             if (it2 != kvmap2.end())
-            {
-                for(int i = 0; i < it2->second->size(); ++i)
-                    IVD_size += it2->second->at(i).size();
-            }
+                ptr = it2->second;
+            bucket2.unlock();
+
+            for(int i = 0; i < it2->second->size(); ++i)
+                IVD_size += ptr->at(i).size();
 
             cout << "IVD_size = " << IVD_size << ", VD_size = " << VD_size << ", IVD_size/VD_size = " << float(IVD_size)/VD_size << endl;
 
             if (IVD_size == 0)
-                q_resp.add(RespondMsg{key.parent_qid, it->second->candidates}, src);
+                q_resp.add(RespondMsg{key.parent_qid, prog->candidates}, src);
             else if (float(IVD_size)/VD_size < COEFFICIENT_INVALID_TO_VALID)
-                q_resp.add(RespondMsg{key.parent_qid, it2->second.get()}, src);
+                q_resp.add(RespondMsg{key.parent_qid, ptr.get()}, src);
             else
-                q_resp.add(RespondMsg{key.parent_qid, it->second->candidates}, src);
-            
-            bucket2.unlock();
-            bucket.unlock();
+                q_resp.add(RespondMsg{key.parent_qid, prog->candidates}, src);
+        
 		}
     }
 
