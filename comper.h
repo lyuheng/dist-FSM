@@ -1216,6 +1216,7 @@ public:
             if (is_IVD_less)
             {
                 // insert into global_non_cand_map
+                shared_ptr<VtxSetVec> my_non_cands = nullptr;
                 auto & bucket = global_non_cand_map.get_bucket(tc->parent_qid);
                 bucket.lock();
                 auto & kvmap = bucket.get_map();
@@ -1231,7 +1232,7 @@ public:
                     }
                 }
                 bucket.unlock();
-                global_non_cand_map.insert(tc->qid, my_non_cands);
+                if (my_non_cands) global_non_cand_map.insert(tc->qid, my_non_cands);
             }
 
             // ===== push down pruning done ======
