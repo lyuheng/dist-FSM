@@ -1107,7 +1107,7 @@ public:
 
             if (parent_non_cands)
             {
-                shared_ptr<VtxSetVec> my_non_cands = make_shared<VtxSetVec>(*parent_non_cands);
+                shared_ptr<VtxSetVec> my_non_cands = std::make_shared<VtxSetVec>(*parent_non_cands);
                 my_non_cands->resize(pattern->size());
                 global_non_cand_map.insert(tc_->qid, my_non_cands);
             }
@@ -1216,7 +1216,7 @@ public:
             if (is_IVD_less)
             {
                 // insert into global_non_cand_map
-                shared_ptr<VtxSetVec> my_non_cands = make_shared<VtxSetVec>(pattern->non_candidates);
+                shared_ptr<VtxSetVec> my_non_cands = std::make_shared<VtxSetVec>(pattern->non_candidates);
                 auto & bucket = global_non_cand_map.get_bucket(tc->parent_qid);
                 bucket.lock();
                 auto & kvmap = bucket.get_map();
