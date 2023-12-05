@@ -327,7 +327,14 @@ bool GMatchEngine::LDF_pruning(bool automorphism)
                                 if(data_graph->nlf[data_vertex][iter->first] < iter->second) pass_nlf = false;
                             }
                         }
-                        if(pass_nlf) query_graph->get_cands()[i].candidate.push_back(data_vertex);
+                        if(pass_nlf) 
+                        {
+                            if(query_graph->non_candidates[i].find(data_vertex) == query_graph->non_candidates[i].end()) 
+                            {   
+                                // push-down pruning
+                                query_graph->get_cands()[i].candidate.push_back(data_vertex);
+                            }
+                        }
                     }
                 }
             }
