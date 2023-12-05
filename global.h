@@ -105,8 +105,8 @@ void * global_delete_queue;
 atomic<int> global_cache_size{0};
 #define CACHE_LIMIT 100
 
-// means if #invalid/#valid > 10%, stop recording invalid
-#define COEFFICIENT_INVALID_TO_VALID 0.001
+// means if #invalid/#valid > 0.1%, stop recording invalid
+#define COEFFICIENT_INVALID_TO_VALID 0
 
 conmap<int, shared_ptr<VtxSetVec>> global_non_cand_map;
 
