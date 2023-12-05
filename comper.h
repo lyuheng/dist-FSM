@@ -1196,7 +1196,30 @@ public:
 
             remove_non_cands();
 
-            bool is_IVD_less = compare_IVD_and_VD();
+            if (compare_IVD_and_VD();)
+            {
+                // insert into global_non_cand_map
+                shared_ptr<VtxSetVec> my_non_cands = std::make_shared<VtxSetVec>(pattern->non_candidates);
+                shared_ptr<VtxSetVec> parent_non_cands = nullptr;
+                auto & bucket = global_non_cand_map.get_bucket(tc->parent_qid);
+                bucket.lock();
+                auto & kvmap = bucket.get_map();
+                auto it = kvmap.find(tc->parent_qid);
+                if (it != kvmap.end())
+                {
+                    parent_non_cands = it->second;
+                }
+                bucket.unlock();
+                if (parent_non_cands)
+                {
+                    for (int i = 0; i < pattern->size(); ++i)
+                    {
+                        if (i == parent_non_cands->size()) break;
+                        my_non_cands->at(i).insert(parent_non_cands->at(i).begin(), parent_non_cands->at(i).end());
+                    }
+                }
+                global_non_cand_map.insert(tc->qid, my_non_cands);
+            }
 
             // ===== push down pruning ======
 
@@ -1207,32 +1230,8 @@ public:
             key.pattern.vertices_ = pattern->vertices_;
             key.pattern.edge2vertex = pattern->edge2vertex;
             cache_mtx.wrlock();
-            if (!is_IVD_less)
-                cache[key].swap(pattern->non_candidates); // O(1) move
-            else
-                cache[key] = pattern->non_candidates;     // O(n) deep copy
+            cache[key].swap(pattern->non_candidates);
             cache_mtx.unlock();
-
-            if (is_IVD_less)
-            {
-                // insert into global_non_cand_map
-                shared_ptr<VtxSetVec> my_non_cands = std::make_shared<VtxSetVec>(pattern->non_candidates);
-                auto & bucket = global_non_cand_map.get_bucket(tc->parent_qid);
-                bucket.lock();
-                auto & kvmap = bucket.get_map();
-                auto it = kvmap.find(tc->parent_qid);
-                if (it != kvmap.end())
-                {
-                    shared_ptr<VtxSetVec> parent_non_cands = it->second;
-                    for (int i = 0; i < pattern->size(); ++i)
-                    {
-                        if (i == parent_non_cands->size()) break;
-                        my_non_cands->at(i).insert(parent_non_cands->at(i).begin(), parent_non_cands->at(i).end());
-                    }
-                }
-                bucket.unlock();
-                global_non_cand_map.insert(tc->qid, my_non_cands);
-            }
 
             // ===== push down pruning done ======
 
