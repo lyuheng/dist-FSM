@@ -662,14 +662,16 @@ void GMatchEngine::compactCandidates() // TODO erase?
     for(ui i = 0; i < query_graph->size(); ++i) {
         VertexID query_vertex = i;
 
+        vector<VertexID> new_candidate;
+
         for(auto it = query_graph->get_cands()[query_vertex].candidate.begin(); 
-                    it != query_graph->get_cands()[query_vertex].candidate.end(); ) {
+                    it != query_graph->get_cands()[query_vertex].candidate.end(); it++) {
             if (*it == INVALID_VERTEX_ID) {
-                it = query_graph->get_cands()[query_vertex].candidate.erase(it);  
-            } else {
-                ++it;
+                // it = query_graph->get_cands()[query_vertex].candidate.erase(it);  
+                new_candidate.push_back(*it);
             }
         }
+        query_graph->get_cands()[query_vertex].candidate.swap(new_candidate);
     }
 }
 
