@@ -1094,7 +1094,7 @@ public:
         
         // insert into global_non_cand_map
         {
-            VtxSetVec parent_non_cands;
+            shared_ptr<VtxSetVec> parent_non_cands = nullptr;
             auto & bucket = global_non_cand_map.get_bucket(tc_->parent_qid);
             bucket.lock();
             auto & kvmap = bucket.get_map();
@@ -1105,10 +1105,11 @@ public:
             }
             bucket.unlock();
 
-            if (parent_non_cands.size() > 0)
+            if (parent_non_cands->size() > 0)
             {
-                parent_non_cands.resize(pattern->size());
-                global_non_cand_map.insert(tc_->qid, parent_non_cands);
+                shared_ptr<VtxSetVec> my_non_cands = make_shared<VtxSetVec>(*parent_non_cands);
+                my_non_cands->resize(pattern->size());
+                global_non_cand_map.insert(tc_->qid, my_non_cands);
             }
         }
             
@@ -1221,15 +1222,16 @@ public:
                 auto it = kvmap.find(tc->parent_qid);
                 if (it != kvmap.end())
                 {
-                    auto & parent_non_cands = it->second;
+                    shared_ptr<VtxSetVec> parent_non_cands = it->second;
+                    shared_ptr<VtxSetVec> my_non_cands = make_shared<VtxSetVec>(pattern->non_candidates);
                     for (int i = 0; i < pattern->size(); ++i)
                     {
-                        if (i > parent_non_cands.size()) break;
-                        pattern->non_candidates[i].insert(parent_non_cands[i].begin(), parent_non_cands[i].end());
+                        if (i > parent_non_cands->size()) break;
+                        my_non_cands->at(i).insert(parent_non_cands->at(i).begin(), parent_non_cands->at(i).end());
                     }
                 }
                 bucket.unlock();
-                global_non_cand_map.insert(tc->qid, pattern->non_candidates);
+                global_non_cand_map.insert(tc->qid, my_non_cands);
             }
 
             // ===== push down pruning done ======

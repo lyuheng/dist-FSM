@@ -10,6 +10,7 @@
 #include <fstream>
 #include <variant> // testing for now
 #include <optional> // testing for now
+#include <memory> // testing for now
 
 #include "constack.h"
 #include "conque.h"
@@ -107,8 +108,7 @@ atomic<int> global_cache_size{0};
 // means if #invalid/#valid > 10%, stop recording invalid
 #define COEFFICIENT_INVALID_TO_VALID 0.1 
 
-conmap<int, VtxSetVec> global_non_cand_map;
-
+conmap<int, shared_ptr<VtxSetVec>> global_non_cand_map;
 
 struct RequestMsg
 {
