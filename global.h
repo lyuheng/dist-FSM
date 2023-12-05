@@ -139,9 +139,15 @@ struct RespondMsg
         int index;
         m >> index;
         if (index == 0)
+        {
+            cout << "@@@@@111111111" << endl;
             m >> std::get<0>(msg.candidates);
+        }
         else // index == 1
+        {
+            cout << "@@@@@222222222" << endl;
             m >> std::get<1>(msg.candidates);
+        }
         // cout << "translate variant back" << endl;
         return m;
     }
@@ -151,9 +157,15 @@ struct RespondMsg
         int index = msg.candidates.index();
         m << index;
         if (index == 0)
+        {
+            cout << "@@@@@33333333" << endl;
             m << std::get<0>(msg.candidates);
+        }
         else
+        {
+            cout << "@@@@@4444444" << endl;
             m << std::get<1>(msg.candidates);
+        }
         return m;
     }
 };
