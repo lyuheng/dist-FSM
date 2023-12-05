@@ -40,11 +40,11 @@ public:
                     IVD_size += it2->second->at(i).size();
             }
 
-            // if (IVD_size == 0)
-            //     q_resp.add(RespondMsg{key.parent_qid, it->second->candidates}, src);
-            // else if (float(IVD_size)/VD_size < COEFFICIENT_INVALID_TO_VALID)
-            //     q_resp.add(RespondMsg{key.parent_qid, it2->second.get()}, src);
-            // else
+            if (IVD_size == 0)
+                q_resp.add(RespondMsg{key.parent_qid, it->second->candidates}, src);
+            else if (float(IVD_size)/VD_size < COEFFICIENT_INVALID_TO_VALID)
+                q_resp.add(RespondMsg{key.parent_qid, it2->second.get()}, src);
+            else
                 q_resp.add(RespondMsg{key.parent_qid, it->second->candidates}, src);
             
             bucket2.unlock();
