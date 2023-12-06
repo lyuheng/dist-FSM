@@ -1072,7 +1072,7 @@ public:
     {
 
         cout << "before check_freq_and_extend_express" << endl;
-        Pattern *pattern = tc_->pattern;
+        Pattern * pattern = tc_->pattern;
 
         results_counter[thread_id]++;
         // cout << "##### " << pattern->size() << " ########" << endl;
