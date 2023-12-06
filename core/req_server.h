@@ -28,7 +28,7 @@ public:
             auto prog = it->second;
             bucket.unlock();
 
-            if (prog->candidate.size() == 3)
+            if (prog->candidates->size() == 3)
             {
                 q_resp.add(RespondMsg{key.parent_qid, prog->candidates}, src);
                 continue;
