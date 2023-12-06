@@ -1197,7 +1197,7 @@ public:
 
             remove_non_cands();
 
-            if (pattern->size() == 3 && compare_IVD_and_VD())
+            if (pattern->size() == 3)
             {
                 // insert into global_non_cand_map
                 shared_ptr<VtxSetVec> my_non_cands = std::make_shared<VtxSetVec>(pattern->non_candidates);

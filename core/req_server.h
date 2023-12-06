@@ -28,9 +28,7 @@ public:
             auto prog = it->second;
             bucket.unlock();
 
-            int VD_size = prog->get_domain_size();
-
-            int IVD_size = 0;
+            
             shared_ptr<VtxSetVec> ptr = nullptr;
             auto & bucket2 = global_non_cand_map.get_bucket(key.parent_qid);
             bucket2.lock();
@@ -44,7 +42,7 @@ public:
                 for(int i = 0; i < it2->second->size(); ++i)
                     IVD_size += ptr->at(i).size();
             }
-            cout << "IVD_size = " << IVD_size << ", VD_size = " << VD_size << ", IVD_size/VD_size = " << float(IVD_size)/VD_size << endl;
+            
 
             if (IVD_size == 0)
                 q_resp.add(RespondMsg{key.parent_qid, prog->candidates}, src);
