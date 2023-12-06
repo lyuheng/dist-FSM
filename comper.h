@@ -1070,6 +1070,8 @@ public:
 
     bool check_freq_and_extend_express(task_container * tc_)
     {
+
+        cout << "before check_freq_and_extend_express" << endl;
         Pattern *pattern = tc_->pattern;
 
         results_counter[thread_id]++;
@@ -1140,6 +1142,9 @@ public:
             
             data_stack.enstack(new_tc);
         }
+
+         cout << "after check_freq_and_extend_express" << endl;
+
         return true;
     }   
 
