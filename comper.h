@@ -1093,7 +1093,7 @@ public:
 
         
         // insert into global_non_cand_map
-        if (pattern->size() > 3)
+        if (pattern->size() == 3)
         {
             shared_ptr<VtxSetVec> parent_non_cands = nullptr;
             auto & bucket = global_non_cand_map.get_bucket(tc_->parent_qid);
@@ -1197,7 +1197,7 @@ public:
 
             remove_non_cands();
 
-            if (pattern->size() > 3 && compare_IVD_and_VD())
+            if (pattern->size() == 3 && compare_IVD_and_VD())
             {
                 // insert into global_non_cand_map
                 shared_ptr<VtxSetVec> my_non_cands = std::make_shared<VtxSetVec>(pattern->non_candidates);
