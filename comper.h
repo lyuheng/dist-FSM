@@ -1128,6 +1128,8 @@ public:
             delete pattern->prog;
         }
 
+        cout << "after check_freq_and_extend_express xxxx" << endl;
+
         for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
         {
             // add into datastack
@@ -1269,7 +1271,7 @@ public:
             }
 
             cout << "after check_freq_and_extend" << endl;
-            
+
             return true;
 
         } // the last child will delete tc->pattern->prog, otherwise
