@@ -1147,14 +1147,14 @@ public:
      * @return true if invalid domain is better to be sent
      * @return false if valid domain is better to be sent
      */
-    bool compare_IVD_and_VD()
-    {
-        int VD_size = tc->pattern->prog->get_domain_size();
-        int IVD_size = 0;
-        for (int i = 0; i < tc->pattern->non_candidates.size(); ++i)
-            IVD_size += tc->pattern->non_candidates[i].size();
-        return IVD_size < VD_size * COEFFICIENT_INVALID_TO_VALID;
-    }
+    // bool compare_IVD_and_VD()
+    // {
+    //     int VD_size = tc->pattern->prog->get_domain_size();
+    //     int IVD_size = 0;
+    //     for (int i = 0; i < tc->pattern->non_candidates.size(); ++i)
+    //         IVD_size += tc->pattern->non_candidates[i].size();
+    //     return IVD_size < VD_size * COEFFICIENT_INVALID_TO_VALID;
+    // }
 
     // will remove non-candidates from domain
     bool check_freq_and_extend()  // called when q is finished normally (not early termination)
