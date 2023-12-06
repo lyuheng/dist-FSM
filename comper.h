@@ -1123,7 +1123,7 @@ public:
         if(pattern->prog->children_cnt == 0)
         {
             g_pattern_prog_map.erase(tc->qid);
-            // delete pattern->prog;
+            delete pattern->prog;
         }
 
         for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
@@ -1244,7 +1244,7 @@ public:
             if(pattern->prog->children_cnt == 0)
             {
                 g_pattern_prog_map.erase(tc->qid);
-                // delete pattern->prog;
+                delete pattern->prog;
             }
 
             for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
