@@ -171,7 +171,6 @@ int GraMi::initialize()
 
 void GraMi::extend(Pattern &pattern, PatternPVec &ext_pattern_vec)
 {
-    cout << "before extend " << endl;
     VertexID last_id = pattern.size() - 1;
     vertex_t *last_vertex = pattern.get_p_vertex(last_id);
     vLabel min_label = pattern.dfscodes[0].from_label;
@@ -292,7 +291,6 @@ void GraMi::extend(Pattern &pattern, PatternPVec &ext_pattern_vec)
             }
         }
     }
-    cout << "out extend " << endl;
 }
 
 

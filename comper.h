@@ -1070,8 +1070,6 @@ public:
 
     bool check_freq_and_extend_express(task_container * tc_)
     {
-
-        cout << "before check_freq_and_extend_express" << endl;
         Pattern * pattern = tc_->pattern;
 
         results_counter[thread_id]++;
@@ -1121,16 +1119,12 @@ public:
         grami.extend((*pattern), ext_pattern_vec);
         pattern->prog->children_cnt = ext_pattern_vec.size();
 
-        cout << "after check_freq_and_extend_express xxxx" << endl;
-
         // special case, otherwise memory leak!!
         if(pattern->prog->children_cnt == 0)
         {
             g_pattern_prog_map.erase(tc_->qid);
             delete pattern->prog;
         }
-
-        cout << "after check_freq_and_extend_express yyyy" << endl;
 
         for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
         {
@@ -1146,8 +1140,6 @@ public:
             
             data_stack.enstack(new_tc);
         }
-
-        cout << "after check_freq_and_extend_express" << endl;
 
         return true;
     }   
@@ -1168,7 +1160,6 @@ public:
     // will remove non-candidates from domain
     bool check_freq_and_extend()  // called when q is finished normally (not early termination)
     {   
-        cout << "before check_freq_and_extend" << endl;
         Pattern *pattern = tc->pattern;
 
         // get min frequency among v_q's
@@ -1271,8 +1262,6 @@ public:
                 
                 data_stack.enstack(new_tc);
             }
-
-            cout << "after check_freq_and_extend" << endl;
 
             return true;
 
