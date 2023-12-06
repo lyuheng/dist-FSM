@@ -27,6 +27,7 @@ public:
             assert(it != kvmap.end());
             auto prog = it->second;
             bucket.unlock();
+
             int VD_size = prog->get_domain_size();
 
             int IVD_size = 0;
