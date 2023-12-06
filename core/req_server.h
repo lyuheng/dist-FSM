@@ -28,7 +28,12 @@ public:
             auto prog = it->second;
             bucket.unlock();
 
-            
+            if (prog->candidate.size() == 3)
+            {
+                q_resp.add(RespondMsg{key.parent_qid, prog->candidates}, src);
+                continue;
+            }
+
             shared_ptr<VtxSetVec> ptr = nullptr;
             auto & bucket2 = global_non_cand_map.get_bucket(key.parent_qid);
             bucket2.lock();
@@ -37,20 +42,11 @@ public:
             if (it2 != kvmap2.end())
                 ptr = it2->second;
             bucket2.unlock();
-            if (ptr)
-            {
-                for(int i = 0; i < it2->second->size(); ++i)
-                    IVD_size += ptr->at(i).size();
-            }
-            
 
-            if (IVD_size == 0)
-                q_resp.add(RespondMsg{key.parent_qid, prog->candidates}, src);
-            else if (float(IVD_size)/VD_size < COEFFICIENT_INVALID_TO_VALID)
+            if (ptr)
                 q_resp.add(RespondMsg{key.parent_qid, ptr.get()}, src);
-            else
+            else 
                 q_resp.add(RespondMsg{key.parent_qid, prog->candidates}, src);
-        
 		}
     }
 
