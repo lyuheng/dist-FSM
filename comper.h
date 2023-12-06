@@ -1159,6 +1159,7 @@ public:
     // will remove non-candidates from domain
     bool check_freq_and_extend()  // called when q is finished normally (not early termination)
     {   
+        cout << "before check_freq_and_extend" << endl;
         Pattern *pattern = tc->pattern;
 
         // get min frequency among v_q's
@@ -1268,6 +1269,8 @@ public:
         // {
         //     return false;
         // }
+
+        cout << "after check_freq_and_extend" << endl;
     }
 
     bool refill_Q_adjust(bool unlock)
