@@ -1124,11 +1124,13 @@ public:
         cout << "after check_freq_and_extend_express xxxx" << endl;
 
         // special case, otherwise memory leak!!
-        if(pattern->prog->children_cnt == 0)
-        {
-            g_pattern_prog_map.erase(tc->qid);
-            // delete pattern->prog;
-        }
+
+        cout << pattern->prog->children_cnt << endl;
+        // if(pattern->prog->children_cnt == 0)
+        // {
+        //     // g_pattern_prog_map.erase(tc->qid);
+        //     // delete pattern->prog;
+        // }
 
         cout << "after check_freq_and_extend_express yyyy" << endl;
 
