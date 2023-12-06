@@ -1093,26 +1093,26 @@ public:
 
         
         // insert into global_non_cand_map
-        if (pattern->size() == 3)
-        {
-            shared_ptr<VtxSetVec> parent_non_cands = nullptr;
-            auto & bucket = global_non_cand_map.get_bucket(tc_->parent_qid);
-            bucket.lock();
-            auto & kvmap = bucket.get_map();
-            auto it = kvmap.find(tc_->parent_qid);
-            if (it != kvmap.end())
-            {
-                parent_non_cands = it->second;
-            }
-            bucket.unlock();
+        // if (pattern->size() == 3)
+        // {
+        //     shared_ptr<VtxSetVec> parent_non_cands = nullptr;
+        //     auto & bucket = global_non_cand_map.get_bucket(tc_->parent_qid);
+        //     bucket.lock();
+        //     auto & kvmap = bucket.get_map();
+        //     auto it = kvmap.find(tc_->parent_qid);
+        //     if (it != kvmap.end())
+        //     {
+        //         parent_non_cands = it->second;
+        //     }
+        //     bucket.unlock();
 
-            if (parent_non_cands)
-            {
-                shared_ptr<VtxSetVec> my_non_cands = std::make_shared<VtxSetVec>(*parent_non_cands);
-                my_non_cands->resize(pattern->size());
-                global_non_cand_map.insert(tc_->qid, my_non_cands);
-            }
-        }
+        //     if (parent_non_cands)
+        //     {
+        //         shared_ptr<VtxSetVec> my_non_cands = std::make_shared<VtxSetVec>(*parent_non_cands);
+        //         my_non_cands->resize(pattern->size());
+        //         global_non_cand_map.insert(tc_->qid, my_non_cands);
+        //     }
+        // }
             
 
         PatternPVec ext_pattern_vec;
