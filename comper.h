@@ -1143,7 +1143,7 @@ public:
             data_stack.enstack(new_tc);
         }
 
-         cout << "after check_freq_and_extend_express" << endl;
+        cout << "after check_freq_and_extend_express" << endl;
 
         return true;
     }   
@@ -1267,6 +1267,9 @@ public:
                 
                 data_stack.enstack(new_tc);
             }
+
+            cout << "after check_freq_and_extend" << endl;
+            
             return true;
 
         } // the last child will delete tc->pattern->prog, otherwise
@@ -1274,8 +1277,6 @@ public:
         // {
         //     return false;
         // }
-
-        cout << "after check_freq_and_extend" << endl;
     }
 
     bool refill_Q_adjust(bool unlock)
