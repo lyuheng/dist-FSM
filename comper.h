@@ -1121,6 +1121,8 @@ public:
         grami.extend((*pattern), ext_pattern_vec);
         pattern->prog->children_cnt = ext_pattern_vec.size();
 
+        cout << "after check_freq_and_extend_express xxxx" << endl;
+
         // special case, otherwise memory leak!!
         if(pattern->prog->children_cnt == 0)
         {
@@ -1128,7 +1130,7 @@ public:
             delete pattern->prog;
         }
 
-        cout << "after check_freq_and_extend_express xxxx" << endl;
+        cout << "after check_freq_and_extend_express yyyy" << endl;
 
         for (auto it = ext_pattern_vec.begin(); it != ext_pattern_vec.end(); ++it)
         {
