@@ -1072,7 +1072,7 @@ public:
         Pattern *pattern = tc_->pattern;
 
         results_counter[thread_id]++;
-        results_maximum_nodes[thread_id] = results_maximum_nodes[thread_id] > pattern->size(): 
+        results_maximum_nodes[thread_id] = results_maximum_nodes[thread_id] >= pattern->size()? 
                                             results_maximum_nodes[thread_id]: 
                                             pattern->size();
         // cout << "##### " << pattern->size() << " ########" << endl;
@@ -1142,7 +1142,7 @@ public:
         
         {
             results_counter[thread_id]++;
-            results_maximum_nodes[thread_id] = results_maximum_nodes[thread_id] > pattern->size(): 
+            results_maximum_nodes[thread_id] = results_maximum_nodes[thread_id] >= pattern->size()?
                                             results_maximum_nodes[thread_id]: 
                                             pattern->size();
 
