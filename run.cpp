@@ -48,7 +48,8 @@ int main(int argc, char *argv[])
 
     if (thread_num > core_bindings.size())
     {
-        throw std::runtime_error("Input number of threads exceeds number of CPU cores!");
+        if (_my_rank == MASTER_RANK)
+            throw std::runtime_error("Input number of threads exceeds number of CPU cores!");
     }
 
     char * argUseLB = getCmdOption(argv, argv + argc, "-lb");
