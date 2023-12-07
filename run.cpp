@@ -47,7 +47,9 @@ int main(int argc, char *argv[])
 		thread_num = atoi(argThreads);
 
     if (thread_num > core_bindings.size())
-        return std::runtime_error("Input number of threads %d exceeds number of CPU cores %d!", thread_num, core_bindings.size());
+    {
+        return std::runtime_error("Input number of threads exceeds number of CPU cores!");
+    }
 
     char * argUseLB = getCmdOption(argv, argv + argc, "-lb");
     if(argUseLB)
