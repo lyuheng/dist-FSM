@@ -74,6 +74,7 @@ int main(int argc, char *argv[])
     if (_my_rank == MASTER_RANK)
     {
         ui ttl_result = std::accumulate(results_counter.begin(), results_counter.end(), 0);
+        ui ttl_maxsize = *std::max_element(results_maximum_nodes.begin(), results_maximum_nodes.end());;
         cout << "Results by each worker: {" << ttl_result; 
         for (int i=0; i<_num_workers; ++i)
         {
@@ -84,18 +85,30 @@ int main(int argc, char *argv[])
                 ttl_result += found;
             }
         }
+        for (int i=0; i<_num_workers; ++i)
+        {
+            if (i != MASTER_RANK)
+            {
+                ui found = recv_data<ui>(i, MAXSIZE_CHANNEL);
+                ttl_maxsize = ttl_maxsize > found ? ttl_maxsize : found;
+            }
+        }
         cout << "}\n";
         cout << "[TIME] Loading Graph Time: " << (float)duration_cast<milliseconds>(time2 - time1).count() / 1000 << " s" << endl;
         cout << "[TIME] Mining Time: " << (float)duration_cast<milliseconds>(time3 - time2).count() / 1000 << " s" << endl;
         cout << "[TIME] Total Elapsed Time: " << (float)duration_cast<milliseconds>(time3 - time1).count() / 1000 << " s" << endl;
         cout << "[INFO] # Frequent Patterns: " << ttl_result << endl;
+        cout << "[INFO] Maximum number of vertices: " << ttl_maxsize << endl;
     }
     else
     {
         for (int i=0; i<_num_workers; ++i)
         {
             if (i != MASTER_RANK)
+            {
                 send_data(std::accumulate(results_counter.begin(), results_counter.end(), 0), MASTER_RANK, RESULT_CHANNEL);
+                send_data(*std::max_element(results_maximum_nodes.begin(), results_maximum_nodes.end()), MASTER_RANK, MAXSIZE_CHANNEL);
+            }
         }
     }
     // global_end_label_mem = false;

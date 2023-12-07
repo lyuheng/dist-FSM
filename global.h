@@ -69,6 +69,7 @@ atomic<bool> global_end_label(false);
 
 // results counter
 vector<ui> results_counter;
+vector<ui> results_maximum_nodes;
 
 TaskProgMap global_prog_map;
 

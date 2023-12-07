@@ -61,6 +61,7 @@ public:
         global_end_label = false;
 
         results_counter.assign(comper_num, 0);
+        results_maximum_nodes.assign(comper_num, 2);
 
         global_cache_table = cache_table = new CacheTableT;
 
