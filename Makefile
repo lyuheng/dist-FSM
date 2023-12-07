@@ -1,5 +1,6 @@
 CC=mpic++
-CFLAGS=-std=c++14 -O3 -march=native -fopenmp -lpthread
+LIBS=-lhwloc
+CFLAGS=-std=c++14 -O3 -march=native -fopenmp -lpthread $(LIBS)
 OBJDIR=objs/
 OBJS=$(OBJDIR)intersection.o 
 
