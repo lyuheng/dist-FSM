@@ -15,6 +15,7 @@
 #include <utility>
 #include <fstream>
 #include <algorithm>
+#include <cstring>
 
 #define LABEL_SIZE 10
 
