@@ -19,7 +19,7 @@ std::unordered_map<int, int> core_bindings; // user-defined core binding
 
 void dump_node_topo(std::vector<std::vector<int>> & topo)
 {
-    std::cout << "TOPO: " << topo.size() << "nodes" << std::endl;
+    std::cout << "TOPO: " << topo.size() << " nodes" << std::endl;
     for (int nid = 0; nid < topo.size(); nid++) {
         std::cout << "node " << nid << " cores: ";
         for (int cid = 0; cid < topo[nid].size(); cid++)
