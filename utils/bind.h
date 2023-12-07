@@ -35,10 +35,6 @@ void load_node_topo(void)
     hwloc_topology_init(&topology);
     hwloc_topology_load(topology);
 
-    // Currently, nnodes may return 0 while the NUMANODEs in cpulist is 1
-    // (hwloc think there is actually no numa-node).
-    // Fortunately, it can detect the number of processing units (PU) correctly
-    // when MT processing is on, the number of PU will be twice as #cores
     int nnodes = hwloc_get_nbobjs_by_type(topology, HWLOC_OBJ_CORE);
     if (nnodes != 0) {
         cpu_topo.resize(nnodes);
@@ -73,8 +69,8 @@ void load_node_topo(void)
 
     num_cores = default_bindings.size();
 
-    if (_my_rank == MASTER_RANK)
-        dump_node_topo(cpu_topo);
+    // if (_my_rank == MASTER_RANK)
+    //     dump_node_topo(cpu_topo);
 }
 
 bool load_core_binding()
@@ -83,11 +79,7 @@ bool load_core_binding()
     int nnodes = cpu_topo.size(), tid = 0;
     for (int i = 0; i < nnodes; ++i)
     {
-        int ncores = cpu_topo[i].size();
-        for (int j = 0; j < ncores; ++j)
-        {
-            core_bindings[tid++] = cpu_topo[i][j];
-        }
+        core_bindings[tid++] = cpu_topo[i][0];
     }
     return true;
 }

@@ -46,10 +46,12 @@ int main(int argc, char *argv[])
 	if(argThreads)
 		thread_num = atoi(argThreads);
 
+    if (thread_num > core_bindings.size())
+        return std::runtime_error("Input number of threads %d exceeds number of CPU cores %d!", thread_num, core_bindings.size());
+
     char * argUseLB = getCmdOption(argv, argv + argc, "-lb");
     if(argUseLB)
         Settings::useLB = atoi(argUseLB);
-
 
     auto time1 = steady_clock::now();
 
