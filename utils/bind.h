@@ -39,11 +39,11 @@ void load_node_topo(void)
     // (hwloc think there is actually no numa-node).
     // Fortunately, it can detect the number of processing units (PU) correctly
     // when MT processing is on, the number of PU will be twice as #cores
-    int nnodes = hwloc_get_nbobjs_by_type(topology, HWLOC_OBJ_NUMANODE);
+    int nnodes = hwloc_get_nbobjs_by_type(topology, HWLOC_OBJ_CORE);
     if (nnodes != 0) {
         cpu_topo.resize(nnodes);
         for (int i = 0; i < nnodes; i++) {
-            hwloc_obj_t obj = hwloc_get_obj_by_type(topology, HWLOC_OBJ_NUMANODE, i);
+            hwloc_obj_t obj = hwloc_get_obj_by_type(topology, HWLOC_OBJ_CORE, i);
             hwloc_cpuset_t cpuset = hwloc_bitmap_dup(obj->cpuset);
 
             unsigned int core = 0;

@@ -1880,11 +1880,7 @@ public:
 
     void run()
     {
-        if (_my_rank >= 10)
-            bind_to_core(core_bindings[thread_id + num_compers]);
-        else
-            bind_to_core(core_bindings[thread_id]);
-
+        bind_to_core(core_bindings[thread_id]);
         while (global_end_label == false) // Otherwise, thread terminates
         {
             // Process task or batch of tasks
