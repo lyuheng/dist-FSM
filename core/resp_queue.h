@@ -20,7 +20,7 @@ public:
 
     void get_msgs(int dst, ibinstream & m)
 	{
-		bind_to_all();
+		// bind_to_all();
     	if(dst == _my_rank) return;
     	Buffer & buf = q[dst];
 		T temp; //for fetching VertexT items
@@ -34,7 +34,7 @@ public:
 
     void thread_func()
     {
-		bind_to_all();
+		// bind_to_all();
         int i = 0; //target worker to send
     	bool sth_sent = false; //if sth is sent in one round, set it as true
     	ibinstream* m0 = new ibinstream;

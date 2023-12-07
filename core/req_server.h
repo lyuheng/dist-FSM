@@ -15,7 +15,7 @@ public:
 
     void thread_func(char *buf, int size, int src)
     {
-        bind_to_all();
+        // bind_to_all();
         obinstream m(buf, size);
 		RequestMsg key;
 		while(m.end() == false)
@@ -34,7 +34,7 @@ public:
 
     void thread_func_delete(char *buf, int size, int src)
     {
-        bind_to_all();
+        // bind_to_all();
         obinstream m(buf, size);
         RequestMsg key;
         while(m.end() == false)
@@ -67,7 +67,7 @@ public:
 
     void run()
     {
-        bind_to_all();
+        // bind_to_all();
         bool first = true;
     	std::thread t;
 

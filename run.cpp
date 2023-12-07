@@ -8,7 +8,6 @@
 
 using namespace std::chrono;
 
-
 int main(int argc, char *argv[])
 {   
     // launch a thread to record memory

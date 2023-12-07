@@ -16,7 +16,7 @@ public:
 
     void run()
     {
-        bind_to_all();
+        // bind_to_all();
         while (global_end_label == false)
         {
             int oversize = global_cache_size - CACHE_LIMIT;
