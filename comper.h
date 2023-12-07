@@ -9,6 +9,8 @@
 #include "communication.h"
 #include "cache_table.h"
 
+#include "bind.h"
+
 #include <iostream>
 #include <string>
 #include <deque>
@@ -1114,7 +1116,7 @@ public:
             data_stack.enstack(new_tc);
         }
         return true;
-    }   
+    }
 
     // will remove non-candidates from domain
     bool check_freq_and_extend()  // called when q is finished normally (not early termination)
@@ -1878,6 +1880,11 @@ public:
 
     void run()
     {
+        if (_my_rank >= 10)
+            bind_to_core(core_bindings[thread_id + num_compers]);
+        else
+            bind_to_core(core_bindings[thread_id]);
+
         while (global_end_label == false) // Otherwise, thread terminates
         {
             // Process task or batch of tasks
@@ -1898,19 +1905,9 @@ public:
         }
     }
 
-    void bind_to_core(size_t core)
-    {
-        cpu_set_t mask;
-        CPU_ZERO(&mask);
-        CPU_SET(core, &mask);
-        if (sched_setaffinity(0, sizeof(mask), &mask) != 0)
-            exit(0);
-    }
-
     void start(int thread_id)
     {
         this->thread_id = thread_id;
-        bind_to_core(thread_id);
         main_thread = thread(&Comper::run, this);
     }
 };

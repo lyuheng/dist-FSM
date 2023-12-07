@@ -11,7 +11,6 @@ using namespace std::chrono;
 int main(int argc, char *argv[])
 {   
     // launch a thread to record memory
-
     // char outputfilePeakMem[1000];
     // sprintf(outputfilePeakMem, "maxmem.txt");
     // ofstream foutPeakMem(outputfilePeakMem);

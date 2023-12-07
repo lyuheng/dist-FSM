@@ -14,6 +14,7 @@
 #include "conmap.h"
 #include "rwlock.h"
 #include "taskprogmap.h"
+#include "bind.h"
 
 #include "grami.h"
 
