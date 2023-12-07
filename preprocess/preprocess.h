@@ -20,7 +20,7 @@
 #define LABEL_SIZE 10
 
 typedef unsigned int uintV;
-typedef size_t uintE;
+typedef unsigned long long uintE;
 typedef unsigned int ui;
 typedef unsigned long long ull;
 
