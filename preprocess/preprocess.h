@@ -407,6 +407,7 @@ void Graph::readSnapFile(const std::string &filename, const std::string &label_f
                 vids[0] -= min_vertex_id;
                 char ch;
                 iss >> ch;
+                if (ch != ',') assert(false);
                 iss >> vids[1];
                 vids[1] -= min_vertex_id;
             }
