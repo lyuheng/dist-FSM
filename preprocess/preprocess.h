@@ -480,6 +480,8 @@ void Graph::readSnapFileComma(const std::string &filename, const std::string &la
         min_vertex_id = std::min(min_vertex_id, vids[1]);
         max_vertex_id = std::max(max_vertex_id, vids[1]);
 
+        std::cout << vids[0] << " " << vids[1] << " ";
+
         edge_count_++;
     }
     file.close();
