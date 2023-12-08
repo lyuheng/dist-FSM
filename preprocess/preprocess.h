@@ -125,7 +125,8 @@ Graph::Graph(const std::string &filename, const std::string &label_filename)
 {
     std::string suffix = filename.substr(filename.rfind(".") + 1);
     if (suffix == "txt")
-        readSnapFile(filename, label_filename);
+        // readSnapFile(filename, label_filename);
+        readSnapFileComma(filename, label_filename);
     else {
         std::cout << "Cannot read graph file based on its suffix ..." << std::endl;
         assert(false);
@@ -497,15 +498,14 @@ void Graph::readSnapFileComma(const std::string &filename, const std::string &la
         std::string line;
         uintV vid;
         labelType label;
-        int nline = 1;
+        int nline = 0;
         while (getline(file, line)) {
             if (line.length() == 0 || !std::isdigit(line[0]))
                 continue;
             std::istringstream iss(line);
             iss >> label;
-            label_map_[nline - min_vertex_id] = label;
+            label_map_[nline++] = label;
             label_set_.insert(label);
-            nline ++;
         }
         file.close();
     }
