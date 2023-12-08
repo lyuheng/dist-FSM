@@ -286,8 +286,15 @@ void Graph::readSnapFile(const std::string &filename)
             std::istringstream iss(line);
             for (int i = 0; i < 2; ++i)
             {
-                iss >> vids[i];
-                vids[i] -= min_vertex_id;
+                // iss >> vids[i];
+                // vids[i] -= min_vertex_id;
+                iss >> vids[0];
+                vids[0] -= min_vertex_id;
+                char ch;
+                iss >> ch;
+                if (ch != ',') assert(false);
+                iss >> vids[1];
+                vids[1] -= min_vertex_id;
             }
             offsets[vids[0]]++;
             offsets[vids[1]]++;
