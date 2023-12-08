@@ -776,7 +776,7 @@ void Graph::Preprocess() {
 
     if (!label_map_.empty())
     {
-        auto new_labels_ = new labelType[max_vertex_id];
+        new_labels_ = new labelType[max_vertex_id];
         for (uintV u = 0; u < vertex_count; ++u)
         {
             if (new_vertex_ids[u] != vertex_count)
