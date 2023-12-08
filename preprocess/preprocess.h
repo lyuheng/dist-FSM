@@ -782,7 +782,7 @@ void Graph::Preprocess() {
             if (new_vertex_ids[u] != vertex_count)
             {
                 new_labels_[new_vertex_ids[u]] = label_map_[u];
-                std::cout << "("<< new_vertex_ids[u] << ", " << label_map_[u] << ") ";
+                std::cout << "("<< new_vertex_ids[u] << ", " << new_labels_[new_vertex_ids[u]] << ") ";
             }
         }
     }
