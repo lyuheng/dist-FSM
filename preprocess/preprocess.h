@@ -379,9 +379,9 @@ void Graph::readSnapFile(const std::string &filename, const std::string &label_f
             if (line.length() == 0 || !std::isdigit(line[0]))
                 continue;
             std::istringstream iss(line);
-            iss >> vid;
-            iss >> ch;
-            if (ch != ',') assert(false);
+            // iss >> vid;
+            // iss >> ch;
+            // if (ch != ',') assert(false);
             iss >> label;
             label_map_[vid - min_vertex_id] = label;
             label_set_.insert(label);
