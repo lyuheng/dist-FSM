@@ -82,6 +82,7 @@ public:
     void readBinFile(const std::string &filename);
     void readGraphFile(const std::string &filename);
     void readSnapFile(const std::string &filename);
+    void readSnapFileComma(const std::string &filename, const std::string &label_filename);
     void readSnapFile(const std::string &filename, const std::string &label_filename);
     void readLVIDFile(const std::string &filename);
 
@@ -331,8 +332,119 @@ void Graph::readSnapFile(const std::string &filename)
     timer.PrintElapsedMicroSeconds("reading CSR Snap file");
 }
 
-
 void Graph::readSnapFile(const std::string &filename, const std::string &label_filename)
+{
+    Timer timer;
+    timer.StartTimer();
+
+    vertex_count_ = 0;
+    edge_count_ = 0;
+    row_ptrs_ = NULL;
+    cols_ = NULL;
+
+    uintV min_vertex_id = std::numeric_limits<uintV>::max();
+    uintV max_vertex_id = std::numeric_limits<uintV>::min();
+    std::ifstream file(filename.c_str(), std::fstream::in);
+    std::string line;
+    uintV vids[2];
+    while (getline(file, line)) {
+        if (line.length() == 0 || !std::isdigit(line[0]))
+            continue;
+        std::istringstream iss(line);
+        for (int i = 0; i < 2; ++i) {
+            iss >> vids[i];
+            min_vertex_id = std::min(min_vertex_id, vids[i]);
+            max_vertex_id = std::max(max_vertex_id, vids[i]);
+        }
+        edge_count_++;
+    }
+    file.close();
+
+    vertex_count_ = max_vertex_id - min_vertex_id + 1;
+    edge_count_ *= 2;
+    std::cout << "vertex_count=" << vertex_count_ << ", edge_count=" << edge_count_ << std::endl;
+
+    row_ptrs_ = new uintE[vertex_count_ + 1];
+    cols_ = new uintV[edge_count_];
+    auto offsets = new uintE[vertex_count_ + 1];
+    memset(offsets, 0, sizeof(uintE) * (vertex_count_ + 1));
+
+    {
+        std::ifstream file(label_filename.c_str(), std::fstream::in);
+        std::string line;
+        uintV vid;
+        labelType label;
+        int nline = 1;
+        while (getline(file, line)) {
+            if (line.length() == 0 || !std::isdigit(line[0]))
+                continue;
+            std::istringstream iss(line);
+            iss >> vid;
+            iss >> label;
+            label_map_[vid - min_vertex_id] = label;
+            label_set_.insert(label);
+            nline ++;
+        }
+        file.close();
+    }
+    
+    {
+        std::ifstream file(filename.c_str(), std::fstream::in);
+        std::string line;
+        uintV vids[2];
+        while (getline(file, line)) {
+            if (line.length() == 0 || !std::isdigit(line[0]))
+                continue;
+            std::istringstream iss(line);
+            for (int i = 0; i < 2; ++i)
+            {
+                iss >> vids[i];
+                vids[i] -= min_vertex_id;
+            }
+            offsets[vids[0]]++;
+            offsets[vids[1]]++;
+        }
+        file.close();
+    }
+    
+    uintE prefix = 0;
+    for (size_t i = 0; i < vertex_count_ + 1; ++i) {
+        row_ptrs_[i] = prefix;
+        prefix += offsets[i];
+        offsets[i] = row_ptrs_[i];
+    }
+
+    {
+        std::ifstream file(filename.c_str(), std::fstream::in);
+        std::string line;
+        uintV vids[2];
+        while (getline(file, line)) {
+            if (line.length() == 0 || !std::isdigit(line[0]))
+                continue;
+            std::istringstream iss(line);
+            for (int i = 0; i < 2; ++i)
+            {
+                iss >> vids[i];
+                vids[i] -= min_vertex_id;
+            }
+            cols_[offsets[vids[0]]++] = vids[1];
+            cols_[offsets[vids[1]]++] = vids[0];
+        }
+        file.close();
+    }
+    delete[] offsets;
+    offsets = NULL;
+
+    for (uintV u = 0; u < vertex_count_; ++u) {
+        std::sort(cols_ + row_ptrs_[u], cols_ + row_ptrs_[u + 1]);
+    }
+
+    timer.EndTimer();
+    timer.PrintElapsedMicroSeconds("reading CSR Snap file");
+}
+
+
+void Graph::readSnapFileComma(const std::string &filename, const std::string &label_filename)
 {
     Timer timer;
     timer.StartTimer();

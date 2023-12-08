@@ -65,14 +65,12 @@ int main(int argc, char* argv[])
 
     if (label_filename == "")
     {
-        std::cout << "1" << std::endl;
         Graph graph(filename);
         graph.Preprocess();
         graph.writeGraphFile(filename);
     }
     else 
     {
-        std::cout << "2" << std::endl;
         Graph graph(filename, label_filename);
         graph.Preprocess();
         graph.writeGraphFile(filename);
