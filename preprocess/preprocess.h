@@ -384,7 +384,7 @@ void Graph::readSnapFile(const std::string &filename, const std::string &label_f
             // if (ch != ',') assert(false);
             iss >> label;
             label_map_[vid - min_vertex_id] = label;
-            std::cout << label << " ";
+            // std::cout << label << " ";
             label_set_.insert(label);
         }
         file.close();
@@ -667,7 +667,7 @@ void Graph::writeGraphFile(const std::string &filename)
     {
         for (uintV i = 0; i < vertex_count_; ++i)
         {
-            // std::cout << i << " ";
+            std::cout << new_labels_[i] << " ";
             file_out << "v " << i << " " << new_labels_[i] << " " << row_ptrs_[i+1]-row_ptrs_[i] << "\n";
         }
     }
@@ -789,7 +789,7 @@ void Graph::Preprocess() {
 
     timer.EndTimer();
     std::cout << "finish preprocess, time=" << timer.GetElapsedMicroSeconds() / 1000.0 << "ms"
-              << ", now vertex_count=" << vertex_count << ",edge_count=" << edge_count 
+              << ", now vertex_count=" << vertex_count << ", edge_count=" << edge_count 
               << ", label_size=" << label_set_.size() << std::endl;
 
     SetVertexCount(vertex_count);
