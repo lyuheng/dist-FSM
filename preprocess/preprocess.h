@@ -375,8 +375,6 @@ void Graph::readSnapFile(const std::string &filename, const std::string &label_f
         uintV vid;
         labelType label;
         int nline = 1;
-
-        std::cout << "HERHER" << std::endl;
         while (getline(file, line)) {
             if (line.length() == 0 || !std::isdigit(line[0]))
                 continue;
@@ -385,8 +383,8 @@ void Graph::readSnapFile(const std::string &filename, const std::string &label_f
             // iss >> ch;
             // if (ch != ',') assert(false);
             iss >> label;
-            label_map_[nline - min_vertex_id] = label;
             std::cout << label << " ";
+            label_map_[nline - min_vertex_id] = label;
             label_set_.insert(label);
             nline ++;
         }
