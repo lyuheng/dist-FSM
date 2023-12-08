@@ -507,8 +507,8 @@ void Graph::readSnapFileComma(const std::string &filename, const std::string &la
                 continue;
             std::istringstream iss(line);
             iss >> label;
-            iss >> ch;
-            if (ch != ',') assert(false);
+            // iss >> ch;
+            // if (ch != ',') assert(false);
             label_map_[nline++] = label;
             label_set_.insert(label);
         }
