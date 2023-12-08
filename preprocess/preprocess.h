@@ -460,6 +460,7 @@ void Graph::readSnapFileComma(const std::string &filename, const std::string &la
     std::ifstream file(filename.c_str(), std::fstream::in);
     std::string line;
     uintV vids[2];
+    std::cout << "BEGIN" << std::endl;
     while (getline(file, line)) {
         if (line.length() == 0 || !std::isdigit(line[0]))
             continue;
