@@ -375,6 +375,8 @@ void Graph::readSnapFile(const std::string &filename, const std::string &label_f
         uintV vid;
         labelType label;
         int nline = 1;
+
+        std::cout << "HERHER" << std::endl;
         while (getline(file, line)) {
             if (line.length() == 0 || !std::isdigit(line[0]))
                 continue;
