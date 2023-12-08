@@ -286,15 +286,8 @@ void Graph::readSnapFile(const std::string &filename)
             std::istringstream iss(line);
             for (int i = 0; i < 2; ++i)
             {
-                // iss >> vids[i];
-                // vids[i] -= min_vertex_id;
-                iss >> vids[0];
-                vids[0] -= min_vertex_id;
-                char ch;
-                iss >> ch;
-                if (ch != ',') assert(false);
-                iss >> vids[1];
-                vids[1] -= min_vertex_id;
+                iss >> vids[i];
+                vids[i] -= min_vertex_id;
             }
             offsets[vids[0]]++;
             offsets[vids[1]]++;
@@ -358,11 +351,22 @@ void Graph::readSnapFile(const std::string &filename, const std::string &label_f
         if (line.length() == 0 || !std::isdigit(line[0]))
             continue;
         std::istringstream iss(line);
-        for (int i = 0; i < 2; ++i) {
-            iss >> vids[i];
-            min_vertex_id = std::min(min_vertex_id, vids[i]);
-            max_vertex_id = std::max(max_vertex_id, vids[i]);
-        }
+        // for (int i = 0; i < 2; ++i) {
+        //     iss >> vids[i];
+        //     min_vertex_id = std::min(min_vertex_id, vids[i]);
+        //     max_vertex_id = std::max(max_vertex_id, vids[i]);
+        // }
+
+        iss >> vids[0];
+        min_vertex_id = std::min(min_vertex_id, vids[0]);
+        max_vertex_id = std::max(max_vertex_id, vids[0]);
+        char ch;
+        iss >> ch;
+        if (ch != ',') assert(false);
+        iss >> vids[1];
+        min_vertex_id = std::min(min_vertex_id, vids[1]);
+        max_vertex_id = std::max(max_vertex_id, vids[1]);
+
         edge_count_++;
     }
     file.close();
@@ -386,11 +390,7 @@ void Graph::readSnapFile(const std::string &filename, const std::string &label_f
             if (line.length() == 0 || !std::isdigit(line[0]))
                 continue;
             std::istringstream iss(line);
-            // iss >> vid;
-            // iss >> ch;
-            // if (ch != ',') assert(false);
             iss >> label;
-            // std::cout << label << " ";
             label_map_[nline - min_vertex_id] = label;
             label_set_.insert(label);
             nline ++;
@@ -408,7 +408,6 @@ void Graph::readSnapFile(const std::string &filename, const std::string &label_f
             std::istringstream iss(line);
             // for (int i = 0; i < 2; ++i)
             {
-                
                 iss >> vids[0];
                 vids[0] -= min_vertex_id;
                 char ch;
@@ -438,10 +437,18 @@ void Graph::readSnapFile(const std::string &filename, const std::string &label_f
             if (line.length() == 0 || !std::isdigit(line[0]))
                 continue;
             std::istringstream iss(line);
-            for (int i = 0; i < 2; ++i)
+            // for (int i = 0; i < 2; ++i)
             {
-                iss >> vids[i];
-                vids[i] -= min_vertex_id;
+                // iss >> vids[i];
+                // vids[i] -= min_vertex_id;
+
+                iss >> vids[0];
+                vids[0] -= min_vertex_id;
+                char ch;
+                iss >> ch;
+                if (ch != ',') assert(false);
+                iss >> vids[1];
+                vids[1] -= min_vertex_id;
             }
             cols_[offsets[vids[0]]++] = vids[1];
             cols_[offsets[vids[1]]++] = vids[0];
@@ -696,7 +703,7 @@ void Graph::writeGraphFile(const std::string &filename)
     {
         for (uintE j = row_ptrs_[i]; j < row_ptrs_[i+1]; ++j)
         {
-            if (i<cols_[j])
+            if (i < cols_[j])
             {
                 file_out << "e " << i << " " << cols_[j] << " 1\n"; 
             }
