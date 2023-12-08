@@ -670,7 +670,7 @@ void Graph::writeGraphFile(const std::string &filename)
         for (uintV i = 0; i < vertex_count_; ++i)
         {
             std::cout << new_labels_[i] << " ";
-            file_out << "v " << i << " " << new_labels_[i] << " " << row_ptrs_[i+1]-row_ptrs_[i] << "\n";
+            // file_out << "v " << i << " " << new_labels_[i] << " " << row_ptrs_[i+1]-row_ptrs_[i] << "\n";
         }
     }
     else 
@@ -782,7 +782,7 @@ void Graph::Preprocess() {
             if (new_vertex_ids[u] != vertex_count)
             {
                 new_labels_[new_vertex_ids[u]] = label_map_[u];
-                std::cout << "("<< new_vertex_ids[u] << ", " << new_labels_[new_vertex_ids[u]] << ") ";
+                // std::cout << "("<< new_vertex_ids[u] << ", " << new_labels_[new_vertex_ids[u]] << ") ";
             }
         }
     }
