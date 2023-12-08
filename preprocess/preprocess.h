@@ -100,7 +100,7 @@ private:
 
     std::unordered_map<uintV, labelType> label_map_;
     std::unordered_set<labelType> label_set_;
-    labelType * new_labels_;
+    labelType * new_labels_ = nullptr;
 };
 
 Graph::Graph(const std::string &filename)
@@ -670,7 +670,7 @@ void Graph::writeGraphFile(const std::string &filename)
         for (uintV i = 0; i < vertex_count_; ++i)
         {
             std::cout << new_labels_[i] << " ";
-            file_out << "v " << i << " " << new_labels_[i] << " " << row_ptrs_[i+1]-row_ptrs_[i] << "\n";
+            // file_out << "v " << i << " " << new_labels_[i] << " " << row_ptrs_[i+1]-row_ptrs_[i] << "\n";
         }
     }
     else 
