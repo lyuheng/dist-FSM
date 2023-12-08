@@ -460,10 +460,9 @@ void Graph::readSnapFileComma(const std::string &filename, const std::string &la
     std::ifstream file(filename.c_str(), std::fstream::in);
     std::string line;
     uintV vids[2];
-    std::cout << "BEGIN" << std::endl;
     while (getline(file, line)) {
-        if (line.length() == 0 || !std::isdigit(line[0]))
-            continue;
+        // if (line.length() == 0 || !std::isdigit(line[0]))
+            // continue;
         std::istringstream iss(line);
         // for (int i = 0; i < 2; ++i) {
         //     iss >> vids[i];
@@ -481,7 +480,7 @@ void Graph::readSnapFileComma(const std::string &filename, const std::string &la
         min_vertex_id = std::min(min_vertex_id, vids[1]);
         max_vertex_id = std::max(max_vertex_id, vids[1]);
 
-        std::cout << vids[0] << " " << vids[1] << " ";
+        // std::cout << vids[0] << " " << vids[1] << " ";
 
         edge_count_++;
     }
