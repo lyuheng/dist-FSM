@@ -384,7 +384,7 @@ void Graph::readSnapFile(const std::string &filename, const std::string &label_f
             // if (ch != ',') assert(false);
             iss >> label;
             label_map_[nline - min_vertex_id] = label;
-            // std::cout << label << " ";
+            std::cout << label << " ";
             label_set_.insert(label);
             nline ++;
         }
