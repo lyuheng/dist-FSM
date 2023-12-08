@@ -61,8 +61,18 @@ int main(int argc, char* argv[])
 {
     CommandLine cmd(argc, argv);
     std::string filename = cmd.GetOptionValue("-f", "./data/com-dblp.ungraph.txt");
-    Graph graph(filename);
-    
-    graph.Preprocess();
-    graph.writeGraphFile(filename);
+    std::string label_filename = cmd.GetOptionValue("-l", "");
+
+    if (label_filename == "")
+    {
+        Graph graph(filename);
+        graph.Preprocess();
+        graph.writeGraphFile(filename);
+    }
+    else 
+    {
+        Graph graph(filename, label_filename);
+        graph.Preprocess();
+        graph.writeGraphFile(filename);
+    }
 }

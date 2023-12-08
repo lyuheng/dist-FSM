@@ -24,6 +24,7 @@ typedef unsigned int uintV;
 typedef unsigned long long uintE;
 typedef unsigned int ui;
 typedef unsigned long long ull;
+typedef int labelType;
 
 class Timer {
  public:
@@ -61,6 +62,7 @@ class Graph
 public:
     Graph() {}
     Graph(const std::string &filename);
+    Graph(const std::string &filename, const std::string & label_filename);
 
     virtual ~Graph() {}
 
@@ -80,6 +82,7 @@ public:
     void readBinFile(const std::string &filename);
     void readGraphFile(const std::string &filename);
     void readSnapFile(const std::string &filename);
+    void readSnapFile(const std::string &filename, const std::string &label_filename);
     void readLVIDFile(const std::string &filename);
 
     void writeBinFile(const std::string &filename);
@@ -94,6 +97,10 @@ private:
     uintV *cols_;
     size_t vertex_count_;
     size_t edge_count_;
+
+    std::unordered_map<uintV, labelType> label_map_;
+    std::unordered_set<labelType> label_set_;
+    labelType * new_labels_;
 };
 
 Graph::Graph(const std::string &filename)
@@ -112,6 +119,18 @@ Graph::Graph(const std::string &filename)
         assert(false);
     }
 }
+
+Graph::Graph(const std::string &filename, const std::string &label_filename)
+{
+    std::string suffix = filename.substr(filename.rfind(".") + 1);
+    if (suffix == "txt")
+        readSnapFile(filename, label_filename);
+    else {
+        std::cout << "Cannot read graph file based on its suffix ..." << std::endl;
+        assert(false);
+    }
+}
+
 
 void Graph::GetMaxDegree()
 {
@@ -256,6 +275,119 @@ void Graph::readSnapFile(const std::string &filename)
     cols_ = new uintV[edge_count_];
     auto offsets = new uintE[vertex_count_ + 1];
     memset(offsets, 0, sizeof(uintE) * (vertex_count_ + 1));
+    
+    {
+        std::ifstream file(filename.c_str(), std::fstream::in);
+        std::string line;
+        uintV vids[2];
+        while (getline(file, line)) {
+            if (line.length() == 0 || !std::isdigit(line[0]))
+                continue;
+            std::istringstream iss(line);
+            for (int i = 0; i < 2; ++i)
+            {
+                iss >> vids[i];
+                vids[i] -= min_vertex_id;
+            }
+            offsets[vids[0]]++;
+            offsets[vids[1]]++;
+        }
+        file.close();
+    }
+    
+    uintE prefix = 0;
+    for (size_t i = 0; i < vertex_count_ + 1; ++i) {
+        row_ptrs_[i] = prefix;
+        prefix += offsets[i];
+        offsets[i] = row_ptrs_[i];
+    }
+
+    {
+        std::ifstream file(filename.c_str(), std::fstream::in);
+        std::string line;
+        uintV vids[2];
+        while (getline(file, line)) {
+            if (line.length() == 0 || !std::isdigit(line[0]))
+                continue;
+            std::istringstream iss(line);
+            for (int i = 0; i < 2; ++i)
+            {
+                iss >> vids[i];
+                vids[i] -= min_vertex_id;
+            }
+            cols_[offsets[vids[0]]++] = vids[1];
+            cols_[offsets[vids[1]]++] = vids[0];
+        }
+        file.close();
+    }
+    delete[] offsets;
+    offsets = NULL;
+
+    for (uintV u = 0; u < vertex_count_; ++u) {
+        std::sort(cols_ + row_ptrs_[u], cols_ + row_ptrs_[u + 1]);
+    }
+
+    timer.EndTimer();
+    timer.PrintElapsedMicroSeconds("reading CSR Snap file");
+}
+
+
+void Graph::readSnapFile(const std::string &filename, const std::string &label_filename)
+{
+    Timer timer;
+    timer.StartTimer();
+
+    vertex_count_ = 0;
+    edge_count_ = 0;
+    row_ptrs_ = NULL;
+    cols_ = NULL;
+
+    uintV min_vertex_id = std::numeric_limits<uintV>::max();
+    uintV max_vertex_id = std::numeric_limits<uintV>::min();
+    std::ifstream file(filename.c_str(), std::fstream::in);
+    std::string line;
+    uintV vids[2];
+    while (getline(file, line)) {
+        if (line.length() == 0 || !std::isdigit(line[0]))
+            continue;
+        std::istringstream iss(line);
+        for (int i = 0; i < 2; ++i) {
+            iss >> vids[i];
+            min_vertex_id = std::min(min_vertex_id, vids[i]);
+            max_vertex_id = std::max(max_vertex_id, vids[i]);
+        }
+        edge_count_++;
+    }
+    file.close();
+
+    vertex_count_ = max_vertex_id - min_vertex_id + 1;
+    edge_count_ *= 2;
+    std::cout << "vertex_count=" << vertex_count_ << ", edge_count=" << edge_count_ << std::endl;
+
+    row_ptrs_ = new uintE[vertex_count_ + 1];
+    cols_ = new uintV[edge_count_];
+    auto offsets = new uintE[vertex_count_ + 1];
+    memset(offsets, 0, sizeof(uintE) * (vertex_count_ + 1));
+
+    {
+        std::ifstream file(label_filename.c_str(), std::fstream::in);
+        std::string line;
+        uintV vid;
+        char ch;
+        labelType label;
+        while (getline(file, line)) {
+            if (line.length() == 0 || !std::isdigit(line[0]))
+                continue;
+            std::istringstream iss(line);
+            iss >> vid;
+            iss >> ch;
+            if (ch != ',') assert(false);
+            iss >> label;
+            label_map_[vid - min_vertex_id] = label;
+            label_set_.insert(label);
+        }
+        file.close();
+    }
     
     {
         std::ifstream file(filename.c_str(), std::fstream::in);
@@ -491,6 +623,7 @@ void Graph::readLVIDFile(const std::string &filename)
     std::cout << "finish building CSR" << std::endl;
 }
 
+
 void Graph::writeBinFile(const std::string &filename)
 {
     std::string prefix = filename.substr(0, filename.rfind("."));
@@ -528,9 +661,20 @@ void Graph::writeGraphFile(const std::string &filename)
     std::ofstream file_out(output_filename, std::ofstream::out);
     
     file_out << "t " << vertex_count_ << " " << edge_count_/2 << "\n";
-    for (uintV i = 0; i < vertex_count_; ++i)
+
+    if (!label_map_.empty())
     {
-        file_out << "v " << i << " " << std::rand()%LABEL_SIZE << " " << row_ptrs_[i+1]-row_ptrs_[i] << "\n";
+        for (uintV i = 0; i < vertex_count_; ++i)
+        {
+            file_out << "v " << i << " " << new_labels_[i] << " " << row_ptrs_[i+1]-row_ptrs_[i] << "\n";
+        }
+    }
+    else 
+    {
+        for (uintV i = 0; i < vertex_count_; ++i)
+        {
+            file_out << "v " << i << " " << std::rand() % LABEL_SIZE << " " << row_ptrs_[i+1]-row_ptrs_[i] << "\n";
+        }
     }
     for (uintV i = 0; i < vertex_count_; ++i)
     {
@@ -615,7 +759,7 @@ void Graph::Preprocess() {
         if (row_ptrs[u] == row_ptrs[u + 1]) {
             new_vertex_ids[u] = vertex_count;
         } 
-        else 
+        else
         {
             new_vertex_ids[u] = max_vertex_id++;
             row_ptrs[new_vertex_ids[u]] = row_ptrs[u];
@@ -625,6 +769,17 @@ void Graph::Preprocess() {
     {
         cols[j] = new_vertex_ids[cols[j]];
     }
+
+    if (!label_map_.empty())
+    {
+        auto new_labels_ = new labelType[max_vertex_id];
+        for (uintV u = 0; u < vertex_count; ++u)
+        {
+            if (new_vertex_ids[u] != vertex_count)
+                new_labels_[new_vertex_ids[u]] = label_map_[u];
+        }
+    }
+
     delete[] new_vertex_ids;
     new_vertex_ids = NULL;
     vertex_count = max_vertex_id;
@@ -632,7 +787,8 @@ void Graph::Preprocess() {
 
     timer.EndTimer();
     std::cout << "finish preprocess, time=" << timer.GetElapsedMicroSeconds() / 1000.0 << "ms"
-              << ", now vertex_count=" << vertex_count << ",edge_count=" << edge_count << std::endl;
+              << ", now vertex_count=" << vertex_count << ",edge_count=" << edge_count 
+              << ", label_size=" << label_set_.size() << std::endl;
 
     SetVertexCount(vertex_count);
     SetEdgeCount(edge_count);
