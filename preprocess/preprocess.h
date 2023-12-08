@@ -517,8 +517,8 @@ void Graph::readSnapFileComma(const std::string &filename, const std::string &la
         std::string line;
         uintV vids[2];
         while (getline(file, line)) {
-            if (line.length() == 0 || !std::isdigit(line[0]))
-                continue;
+            // if (line.length() == 0 || !std::isdigit(line[0]))
+            //     continue;
             std::istringstream iss(line);
             // for (int i = 0; i < 2; ++i)
             {
@@ -548,8 +548,8 @@ void Graph::readSnapFileComma(const std::string &filename, const std::string &la
         std::string line;
         uintV vids[2];
         while (getline(file, line)) {
-            if (line.length() == 0 || !std::isdigit(line[0]))
-                continue;
+            // if (line.length() == 0 || !std::isdigit(line[0]))
+            //     continue;
             std::istringstream iss(line);
             // for (int i = 0; i < 2; ++i)
             {
