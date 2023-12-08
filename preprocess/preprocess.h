@@ -373,7 +373,6 @@ void Graph::readSnapFile(const std::string &filename, const std::string &label_f
         std::ifstream file(label_filename.c_str(), std::fstream::in);
         std::string line;
         uintV vid;
-        char ch;
         labelType label;
         int nline = 1;
         while (getline(file, line)) {
