@@ -677,7 +677,8 @@ void Graph::readGraphFile(const std::string &filename)
             uintV begin;
             uintV end;
             labelType label;
-            file_in >> begin >> end >> label;
+            int unknown;
+            file_in >> begin >> end >> label >> unknown;
 
             uintV offset = row_ptrs_[begin] + neighbors_offset[begin];
             cols_[offset] = end;
