@@ -973,7 +973,7 @@ void Graph::writeDistGraphFile(const std::string &filename)
     std::string output_filename = prefix + ".metis";
     std::ofstream file_out(output_filename, std::ofstream::out);
 
-    file_out << vertex_count_ << " " << edge_count_ << " 011\n";
+    file_out << vertex_count_ << " " << edge_count_/2 << " 011\n";
     for (uintV u = 0; u < vertex_count_; ++u)
     {
         file_out << label_map_[u] << " ";
