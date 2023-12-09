@@ -662,6 +662,8 @@ void Graph::readGraphFile(const std::string &filename)
     row_ptrs_[0] = 0;
 
     std::vector<uintV> neighbors_offset(vertex_count_, 0);
+
+    int line = 0;
     
     while (file_in >> type) {
         if (type == 'v') { // Read vertex.
@@ -682,7 +684,7 @@ void Graph::readGraphFile(const std::string &filename)
 
             if (label != 0 || unknown != 1)  
             {
-                std::cout << begin << " " << end << " " << label << " " << unknown << std::endl;
+                std::cout << begin << " " << end << " " << label << " " << unknown << " " << line << std::endl;
                 assert(false);
             }
 
@@ -693,6 +695,7 @@ void Graph::readGraphFile(const std::string &filename)
             neighbors_offset[begin] += 1;
             neighbors_offset[end] += 1;
         }
+        line++;
     }
 
     file_in.close();
