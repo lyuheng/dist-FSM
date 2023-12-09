@@ -990,7 +990,7 @@ void Graph::writeDistGraphFile(const std::string &filename)
         {
             file_out << cols_[j] + 1 << " 1 ";
         }
-        file_out << '\n';
+        file_out << "\n";
     }
     file_out.close();
     timer.EndTimer();
