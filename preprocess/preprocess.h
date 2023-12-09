@@ -978,7 +978,7 @@ void Graph::writeDistGraphFile(const std::string &filename)
         file_out << label_map_[u] + 1 << " ";
         for (uintE j = row_ptrs_[u]; j < row_ptrs_[u+1]; ++j)
         {
-            file_out << cols_[j] + 1 << " 1";
+            file_out << cols_[j] + 1 << " 1 ";
         }
         file_out << '\n';
     }
