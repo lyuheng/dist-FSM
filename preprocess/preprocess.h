@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <cstring>
 #include <limits>
+#include <cmath>
 
 #define LABEL_SIZE 10
 
