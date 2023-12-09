@@ -66,8 +66,9 @@ int main(int argc, char* argv[])
     if (label_filename == "")
     {
         Graph graph(filename);
-        graph.Preprocess();
-        graph.writeGraphFile(filename);
+        // graph.Preprocess();
+        // graph.writeGraphFile(filename);
+        graph.writeDistGraphFile(filename);
     }
     else 
     {

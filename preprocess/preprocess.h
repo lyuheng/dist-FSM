@@ -26,6 +26,17 @@ typedef unsigned int ui;
 typedef unsigned long long ull;
 typedef int labelType;
 
+long unfind(std::vector<long> &un_father, long u)
+{
+    return un_father[u] == u ? u : (un_father[u] = unfind(un_father, un_father[u]));
+}
+
+void ununion(std::vector<long> &un_father, long u, long v)
+{
+    un_father[u] = v;
+}
+
+
 class Timer {
  public:
   Timer() {}
@@ -88,10 +99,14 @@ public:
 
     void writeBinFile(const std::string &filename);
     void writeGraphFile(const std::string &filename);
+    void writeDistGraphFile(const std::string &filename);
 
     void Preprocess();
 
     void ReMapVertexId();
+
+    /** Only used by DistGraph */
+    void FennelPartition(const std::string &filename, int part_num=10, int hop=1);
 
 private:
     uintE *row_ptrs_;
@@ -109,9 +124,9 @@ Graph::Graph(const std::string &filename)
     std::string suffix = filename.substr(filename.rfind(".") + 1);
     if (suffix == "bin")
         readBinFile(filename);
-    else if (suffix == "graph")
+    else if (suffix == "graph" || suffix == "lg")
         readGraphFile(filename);
-    else if (suffix == "txt")
+    else if (suffix == "txt" || suffix == "edges")
         readSnapFile(filename);
     else if (suffix == "lvid")
         readLVIDFile(filename);
@@ -650,15 +665,18 @@ void Graph::readGraphFile(const std::string &filename)
     while (file_in >> type) {
         if (type == 'v') { // Read vertex.
             ui id;
-            ui label;
+            labelType label;
             ui degree;
             file_in >> id >> label >> degree;
             row_ptrs_[id + 1] = row_ptrs_[id] + degree;
+
+            label_map_[id] = label;
         }
         else if (type == 'e') { // Read edge.
             uintV begin;
             uintV end;
-            file_in >> begin >> end;
+            labelType label;
+            file_in >> begin >> end >> label;
 
             uintV offset = row_ptrs_[begin] + neighbors_offset[begin];
             cols_[offset] = end;
@@ -943,3 +961,107 @@ void Graph::Preprocess() {
     SetRowPtrs(row_ptrs);
     SetCols(cols);
 };
+
+void Graph::writeDistGraphFile(const std::string &filename)
+{
+    std::string prefix = filename.substr(0, filename.rfind("."));
+    Timer timer;
+    timer.StartTimer();
+    std::cout << "start write Graph file...." << std::endl;
+    std::string output_filename = prefix + ".metis";
+    std::ofstream file_out(output_filename, std::ofstream::out);
+
+    file_out << vertex_count_ << " " << edge_count_ << " 011\n";
+    for (uintV u = 0; u < vertex_count_; ++u)
+    {
+        file_out << label_map_[u] + 1 << " ";
+        for (uintE j = row_ptrs_[u]; j < row_ptrs_[u+1]; ++j)
+        {
+            file_out << cols_[j] + 1 << " 1";
+        }
+        file_out << '\n';
+    }
+    file_out.close();
+    timer.EndTimer();
+}
+
+void Graph::FennelPartition(const std::string &filename, int part_num=10, int hop=1)
+{
+    std::string prefix = filename.substr(0, filename.rfind("."));
+    Timer timer;
+    timer.StartTimer();
+
+    size_t vertex_num = GetVertexCount();
+    size_t edge_num = GetEdgeCount() / 2;
+
+    uintE *row_ptrs = GetRowPtrs();
+    uintV *cols = GetCols();
+
+    float gamma = 1.5;
+    float alpha = sqrt(part_num) * edge_num / pow(vertex_num, gamma);
+    float v = 1.1;
+    float miu = v * vertex_num / part_num;
+
+    std::vector<long> part_info = std::vector<long>(vertex_num, 0);
+    std::vector<long> vertex_num_part = std::vector<long>(part_num, 0);
+
+    std::vector<long> un_father(vertex_num);
+    std::vector<long> un_first(part_num, -1);
+
+    for (long i = 0; i < vertex_num; ++i)
+        un_father[i] = i;
+
+    for (uintV v = 0; v < vertex_num; v++)
+    {
+        if (v % 100000 == 0)
+            std::cout << v << std::endl;
+
+        float max_score = -99999.9;
+        int max_part = 0;
+        for (long i = 0; i < part_num; i++)
+        {
+            if (vertex_num_part[i] <= miu)
+            {
+                double delta_c = alpha * (pow(vertex_num_part[i] + 1, gamma) - pow(vertex_num_part[i], gamma));
+                float score = 0;
+                for (long j = row_ptrs[v]; j < row_ptrs[v + 1]; j++)
+                {
+                    uintV nid = cols[j];
+                    // this partition contains nid
+                    if (un_first[i] >= 0 && unfind(un_father, un_first[i]) == unfind(un_father, nid))
+                        score += 1;
+
+                    if (hop == 2)
+                    {
+                        for (long k = row_ptrs[nid]; k < row_ptrs[nid + 1]; k++)
+                        {
+                            uintV nnid = cols[k];
+                            if (un_first[i] >= 0 && unfind(un_father, un_first[i]) == unfind(un_father, nnid))
+                                score += 1;
+                        }
+                    }
+                }
+                score = score - delta_c;
+                if (max_score < score)
+                {
+                    max_score = score;
+                    max_part = i;
+                }
+            }
+        }
+        if (un_first[max_part] < 0)
+            un_first[max_part] = v;
+        ununion(un_father, v, un_first[max_part]);
+        vertex_num_part[max_part] += 1;
+        part_info[v] = max_part;
+    }
+
+    timer.EndTimer();
+    timer.PrintElapsedMicroSeconds("fennel");
+
+    std::string out_filename = prefix + ".metis.part." + std::to_string(part_num);
+    std::ofstream outfile(out_filename.c_str());
+    for (uintV v = 0; v < vertex_num; v++)
+        outfile << part_info[v] << std::endl;
+    outfile.close();
+}
