@@ -680,6 +680,8 @@ void Graph::readGraphFile(const std::string &filename)
             int unknown;
             file_in >> begin >> end >> label >> unknown;
 
+            if (label != 0 || unknown != 1)  assert(false);
+
             uintV offset = row_ptrs_[begin] + neighbors_offset[begin];
             cols_[offset] = end;
             offset = row_ptrs_[end] + neighbors_offset[end];
