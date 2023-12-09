@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
         // graph.Preprocess();
         // graph.writeGraphFile(filename);
         graph.writeDistGraphFile(filename);
-        graph.FennelPartition(filename, 2);
+        graph.FennelPartition(filename, 1);
     }
     else 
     {
