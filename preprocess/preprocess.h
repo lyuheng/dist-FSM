@@ -106,7 +106,7 @@ public:
     void ReMapVertexId();
 
     /** Only used by DistGraph */
-    void FennelPartition(const std::string &filename, int part_num=10, int hop=1);
+    void FennelPartition(const std::string &filename, int part_num, int hop);
 
 private:
     uintE *row_ptrs_;
@@ -998,7 +998,7 @@ void Graph::FennelPartition(const std::string &filename, int part_num=10, int ho
     uintV *cols = GetCols();
 
     float gamma = 1.5;
-    float alpha = sqrt(part_num) * edge_num / pow(vertex_num, gamma);
+    float alpha = std::sqrt(part_num) * edge_num / pow(vertex_num, gamma);
     float v = 1.1;
     float miu = v * vertex_num / part_num;
 
@@ -1022,7 +1022,7 @@ void Graph::FennelPartition(const std::string &filename, int part_num=10, int ho
         {
             if (vertex_num_part[i] <= miu)
             {
-                double delta_c = alpha * (pow(vertex_num_part[i] + 1, gamma) - pow(vertex_num_part[i], gamma));
+                double delta_c = alpha * (std::pow(vertex_num_part[i] + 1, gamma) - pow(vertex_num_part[i], gamma));
                 float score = 0;
                 for (long j = row_ptrs[v]; j < row_ptrs[v + 1]; j++)
                 {
