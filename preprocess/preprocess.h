@@ -19,7 +19,7 @@
 #include <limits>
 #include <cmath>
 
-#define LABEL_SIZE 15
+#define LABEL_SIZE 5
 
 typedef unsigned int uintV;
 typedef unsigned long long uintE;
