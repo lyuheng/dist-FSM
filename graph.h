@@ -249,6 +249,8 @@ public:
                               unordered_map<eLabel, int> &edgesByLabel,
                               unordered_set<vLabel> &freqNodeLabels);
 
+    void write_graph_on_disk(string &filename);
+
     eLabel get_edge_label(VertexID u, VertexID v);
 
     void build_nlf();
@@ -676,6 +678,9 @@ void Graph::load_graph(Graph &pruned_graph, const string &input_file, const stri
     find_frequent_labels(edgesByLabel, freqNodeLabels);
     construct_freq_graph(pruned_graph, input, edgesByLabel, freqNodeLabels);
 
+    string filename = "new_patent.lg"
+    write_graph_on_disk(filename);
+
     pruned_graph.nlf = new unordered_map<vLabel, int>[pruned_graph.size()];
     pruned_graph.build_nlf();
 }
@@ -911,6 +916,24 @@ void Graph::construct_freq_graph(Graph &pruned_graph, vector<vector<string>> &in
     }
 
     // cout << pruned_graph.hashedEdges.size() << "############# " << endl;
+}
+
+
+void Graph::write_graph_on_disk(string &filename)
+{
+    std::ofstream file_out(filename, std::ofstream::out);
+    file_out << "t " << size() << " " << get_nedges() << "\n";
+    for (ui i = 0; i < size(); ++i)
+        file_out << "v " << i << " " << get_p_vertex(i)->label << " " << get_p_vertex(i)->edges.size() << "\n";
+    for (ui i = 0; i < size(); ++i) {
+        for (ui j = 0; j < get_p_vertex(i)->edges.size(); ++j) {
+            ui ne = get_p_vertex(i)->edges[j].to;
+            if (i < ne) {
+                file_out << "e " << i << " " << ne << " 1\n"; 
+            }
+        }
+    }
+    file_out.close();
 }
 
 eLabel Graph::get_edge_label(VertexID u, VertexID v)
