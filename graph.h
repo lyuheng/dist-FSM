@@ -678,7 +678,7 @@ void Graph::load_graph(Graph &pruned_graph, const string &input_file, const stri
     find_frequent_labels(edgesByLabel, freqNodeLabels);
     construct_freq_graph(pruned_graph, input, edgesByLabel, freqNodeLabels);
 
-    string filename = "new_patent.lg"
+    string filename = "new_patent.lg";
     write_graph_on_disk(filename);
 
     pruned_graph.nlf = new unordered_map<vLabel, int>[pruned_graph.size()];
