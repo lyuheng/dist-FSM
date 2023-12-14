@@ -19,7 +19,7 @@
 #include <limits>
 #include <cmath>
 
-#define LABEL_SIZE 30
+#define LABEL_SIZE 35
 
 typedef unsigned int uintV;
 typedef unsigned long long uintE;
@@ -144,8 +144,8 @@ Graph::Graph(const std::string &filename, const std::string &label_filename)
 {
     std::string suffix = filename.substr(filename.rfind(".") + 1);
     if (suffix == "txt")
-        // readSnapFile(filename, label_filename);
-        readSnapFileComma(filename, label_filename);
+        readSnapFile(filename, label_filename);
+        // readSnapFileComma(filename, label_filename);
     else {
         std::cout << "Cannot read graph file based on its suffix ..." << std::endl;
         assert(false);
