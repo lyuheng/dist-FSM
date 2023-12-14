@@ -31,14 +31,14 @@ int main(int argc, char *argv[])
 	if(argfilename)
 		fileName = string(argfilename);
     else 
-        throw std::runtime_error("Input filename is empty!");
+        throw std::runtime_error("Input filename (-file) is empty!");
 
     // get user-given support threshold
 	char * argSupport = getCmdOption(argv, argv + argc, "-freq");
 	if(argSupport)
 		support = atoi(argSupport);
     else 
-        throw std::runtime_error("Input support value is empty!");
+        throw std::runtime_error("Input support frequency (-freq) is empty!");
 
     // parameter to set the maximum subgraph size (in terms of the number of vertices)
 	char * argMaxNodes = getCmdOption(argv, argv + argc, "-maxNodes");
