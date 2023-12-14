@@ -30,11 +30,15 @@ int main(int argc, char *argv[])
 	char * argfilename = getCmdOption(argv, argv + argc, "-file");
 	if(argfilename)
 		fileName = string(argfilename);
+    else 
+        throw std::runtime_error("Input filename is empty!");
 
     // get user-given support threshold
 	char * argSupport = getCmdOption(argv, argv + argc, "-freq");
 	if(argSupport)
 		support = atoi(argSupport);
+    else 
+        throw std::runtime_error("Input support value is empty!");
 
     // parameter to set the maximum subgraph size (in terms of the number of vertices)
 	char * argMaxNodes = getCmdOption(argv, argv + argc, "-maxNodes");
@@ -49,7 +53,11 @@ int main(int argc, char *argv[])
     if (thread_num > core_bindings.size())
     {
         if (_my_rank == MASTER_RANK)
-            throw std::runtime_error("Input number of threads exceeds number of CPU cores!");
+        {
+            istringstream iss;
+            iss << "Input number of threads " << thread_num << " exceeds number of CPU cores " << core_bindings.size() << "!";
+            throw std::runtime_error(iss.str());
+        }
     }
 
     char * argUseLB = getCmdOption(argv, argv + argc, "-lb");
@@ -63,7 +71,7 @@ int main(int argc, char *argv[])
    
     Worker worker(thread_num);
 
-    worker.load_data(support, argv[2]);
+    worker.load_data(support, fileName);
 
     auto time2 = steady_clock::now();
 
