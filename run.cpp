@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     {
         if (_my_rank == MASTER_RANK)
         {
-            istringstream iss;
+            stringstream iss;
             iss << "Input number of threads " << thread_num << " exceeds number of CPU cores " << core_bindings.size() << "!";
             throw std::runtime_error(iss.str());
         }
