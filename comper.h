@@ -1429,8 +1429,8 @@ public:
         /** case 1, # edges = 2, parent_prog = NULL
          *  case 2, # edges > 2, parent_prog != NULL, normal case
          *  case 3, # edges > 2, parent_prog = NULL, request from other machine.
-         *      - block here? <-- go this
-         *      - use KV-table to hold
+         *      - block here? 
+         *      - use KV-table to hold <-- go this
          */
         bool need_new_prog = false;
 
