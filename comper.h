@@ -1446,21 +1446,21 @@ public:
                 bucket.unlock();
                 tc_new->pattern->parent_prog = it->second;
             }
-            else 
-            {
-                tc_new->pattern->parent_prog = new PatternProgress;
-                /**
-                 * set to_delete = false
-                 * will not delete parent_domain since it's borrowed from elsewhere
-                 * parent_domain will be eventually deleted by cache_table
-                 */
-                delete tc_new->pattern->parent_prog->candidates;
-                tc_new->pattern->parent_prog->to_delete = false;
+            // else 
+            // {
+            //     tc_new->pattern->parent_prog = new PatternProgress;
+            //     /**
+            //      * set to_delete = false
+            //      * will not delete parent_domain since it's borrowed from elsewhere
+            //      * parent_domain will be eventually deleted by cache_table
+            //      */
+            //     delete tc_new->pattern->parent_prog->candidates;
+            //     tc_new->pattern->parent_prog->to_delete = false;
 
-                vector<Domain> * parent_domain = cache_table.get(tc_new->parent_qid);
-                tc_new->pattern->parent_prog->candidates = parent_domain;
-                need_new_prog = true;
-            }
+            //     vector<Domain> * parent_domain = cache_table.get(tc_new->parent_qid);
+            //     tc_new->pattern->parent_prog->candidates = parent_domain;
+            //     need_new_prog = true;
+            // }
         }        
         // ====== request parent domain here done =======
 
