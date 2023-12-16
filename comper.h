@@ -1866,7 +1866,7 @@ public:
                                 pending_patterns_num--;
                             }
                             else
-                                continue;
+                                break;
                         }
                     }
                     else 
