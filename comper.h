@@ -1472,7 +1472,7 @@ public:
             bool is_freq = gmatch_engine.filterToConsistency(grami.nsupport_);
             gmatch_engine.reset();
 
-            notify_finish(tc_new);
+            // notify_finish(tc_new);
 
             PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
 
@@ -1515,7 +1515,7 @@ public:
             
             bool keep = gmatch_engine.DPisoFilter(false, grami.nsupport_); // degree-based pruning
 
-            notify_finish(tc_new);
+            // notify_finish(tc_new);
 
             // delete parent pattern
             PatternProgress * pattern_prog = tc_new->pattern->parent_prog;
