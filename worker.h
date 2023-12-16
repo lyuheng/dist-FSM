@@ -399,9 +399,9 @@ public:
 
     void run()
     {
-        RespServer<int, vector<Domain>, PendingMap, PatternQueue> server_resp(*cache_table, *pending_patterns, *ready_patterns);
-        ReqServer server_req;
-        CacheGC<CacheTableT> gc(*cache_table);
+        // RespServer<int, vector<Domain>, PendingMap, PatternQueue> server_resp(*cache_table, *pending_patterns, *ready_patterns);
+        // ReqServer server_req;
+        // CacheGC<CacheTableT> gc(*cache_table);
 
         // create compers
         compers = new Comper[num_compers];
