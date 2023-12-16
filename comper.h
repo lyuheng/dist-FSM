@@ -1846,28 +1846,28 @@ public:
                 {
                     if (tc_new->pattern->get_nedges() > 2 && tc_new->pattern->parent_prog == NULL)
                     {
-                        if (GET_WORKER_ID(tc_new->parent_qid) == _my_rank)
+                        // if (GET_WORKER_ID(tc_new->parent_qid) == _my_rank)
                         {
                             ready_patterns.enqueue(tc_new);
                         }
-                        else
-                        {
-                            /**
-                             * insert into pending pattern in advance to prevent tc_new->qid can't be found 
-                             * in pending_patterns while being notified
-                             */
-                            pending_patterns_num++;
-                            pending_patterns.insert(tc_new->qid, tc_new);
-                            vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid, cache_counter);
-                            if (parent_domain)
-                            {
-                                ready_patterns.enqueue(tc_new);
-                                pending_patterns.erase(tc_new->qid);
-                                pending_patterns_num--;
-                            }
-                            else
-                                break;
-                        }
+                        // else
+                        // {
+                        //     /**
+                        //      * insert into pending pattern in advance to prevent tc_new->qid can't be found 
+                        //      * in pending_patterns while being notified
+                        //      */
+                        //     pending_patterns_num++;
+                        //     pending_patterns.insert(tc_new->qid, tc_new);
+                        //     vector<Domain> * parent_domain = cache_table.lock_and_get(tc_new->parent_qid, tc_new->qid, cache_counter);
+                        //     if (parent_domain)
+                        //     {
+                        //         ready_patterns.enqueue(tc_new);
+                        //         pending_patterns.erase(tc_new->qid);
+                        //         pending_patterns_num--;
+                        //     }
+                        //     else
+                        //         break;
+                        // }
                     }
                     else 
                         ready_patterns.enqueue(tc_new);
