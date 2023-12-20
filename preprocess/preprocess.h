@@ -935,15 +935,15 @@ void Graph::writeGraphFile(const std::string &filename)
     
     file_out << "t " << vertex_count_ << " " << edge_count_/2 << "\n";
 
-    if (!label_map_.empty())
-    {
-        for (uintV i = 0; i < vertex_count_; ++i)
-        {
-            // std::cout << new_labels_[i] << " ";
-            file_out << "v " << i << " " << new_labels_[i] << " " << row_ptrs_[i+1]-row_ptrs_[i] << "\n";
-        }
-    }
-    else 
+    // if (!label_map_.empty())
+    // {
+    //     for (uintV i = 0; i < vertex_count_; ++i)
+    //     {
+    //         // std::cout << new_labels_[i] << " ";
+    //         file_out << "v " << i << " " << new_labels_[i] << " " << row_ptrs_[i+1]-row_ptrs_[i] << "\n";
+    //     }
+    // }
+    // else 
     {
         for (uintV i = 0; i < vertex_count_; ++i)
         {
