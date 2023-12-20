@@ -1865,8 +1865,6 @@ public:
                                 pending_patterns.erase(tc_new->qid);
                                 pending_patterns_num--;
                             }
-                            else
-                                break;
                         }
                     }
                     else 
