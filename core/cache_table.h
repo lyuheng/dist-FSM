@@ -115,7 +115,7 @@ public:
     	bucket.lock();
     	auto & kvmap = bucket.get_map();
     	auto it = kvmap.find(key);
-    	if(it == kvmap.end())
+    	if (it == kvmap.end())
 		{
 			bool new_req = pcache.request(key, value, counter);
 			if(new_req)
@@ -161,6 +161,19 @@ public:
 		assert(inserted);
 		bucket.unlock();
     }
+
+	void unlock(KeyT key)
+	{
+		auto & bucket = candcache.get_bucket(key);
+		bucket.lock();
+		auto & kvmap = bucket.get_map();
+		auto it = kvmap.find(key);
+		assert(it != kvmap.end());
+		it->second.counter--;
+		if (it->second.counter == 0) 
+			bucket.zeros.insert(key); 
+    	bucket.unlock();
+	}
 
 	bool find_key(KeyT key)
 	{
