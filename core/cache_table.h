@@ -102,6 +102,7 @@ public:
     		auto & kvmap = bucket.get_map();
     		for(auto it = kvmap.begin(); it != kvmap.end(); it++)
     		{
+				assert(it->second.counter == 0);
     			delete it->second.value; // release cached vertices
     		}
     		bucket.unlock();
