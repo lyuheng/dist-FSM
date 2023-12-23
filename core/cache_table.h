@@ -192,7 +192,7 @@ public:
 		int start_pos = pos;
 		while (num_to_delete > 0)
 		{
-			assert(pos < CONMAP_BUCKET_NUM)
+			assert(pos < CONMAP_BUCKET_NUM);
 			auto & bucket = candcache.pos(pos);
 			bucket.lock();
 			auto iter = bucket.zeros.begin();
