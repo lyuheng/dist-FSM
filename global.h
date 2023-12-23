@@ -103,7 +103,7 @@ void * global_delete_queue;
 
 #define CACHE_COMMIT_FREQ 10
 atomic<int> global_cache_size{0};
-#define CACHE_LIMIT 100
+#define CACHE_LIMIT 10
 
 
 struct RequestMsg

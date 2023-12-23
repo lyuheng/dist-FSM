@@ -207,17 +207,16 @@ public:
 					counter.decrement();
 					delete cpair.value;
 					kvmap.erase(it);
-					iter = bucket.zeros.erase(iter); //update it
+					iter = bucket.zeros.erase(iter); // update iter
 					num_to_delete--;
-					if(num_to_delete == 0) //there's no need to look at more candidates
+					if(num_to_delete == 0) // there's no need to look at more candidates
 					{
 						bucket.unlock();
 						pos++; //current bucket has been checked, next time, start from next bucket
 						return 0;
 					}
-					continue;
 				}
-				iter++;
+				else iter++;
 			}
 			bucket.unlock();
 			pos++;
