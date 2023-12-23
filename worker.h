@@ -177,12 +177,12 @@ public:
             
             for (auto it = kvmap.begin(); it != kvmap.end(); it++)
             {
-                cout << "(" << it->first << ", " << it->second->children_cnt << ")"<< " ";
+                // cout << "(" << it->first << ", " << it->second->children_cnt << ")"<< " ";
                 delete it->second;
             }
             bucket.unlock();
         }
-        cout << "\n";
+        // cout << "\n";
     }
 
     bool steal_planning()
