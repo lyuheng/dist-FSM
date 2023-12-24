@@ -930,7 +930,7 @@ void Graph::writeGraphFile(const std::string &filename)
     Timer timer;
     timer.StartTimer();
     std::cout << "start write Graph file...." << std::endl;
-    std::string output_filename = prefix + "-new.lg";
+    std::string output_filename = prefix + ".lg";
     std::ofstream file_out(output_filename, std::ofstream::out);
     
     file_out << "t " << vertex_count_ << " " << edge_count_/2 << "\n";
