@@ -61,6 +61,8 @@ public:
                     pattern_prog->children_mtx.unlock();
                 }
             }
+            else
+                assert(false);
             bucket.unlock();
 		}
     }

@@ -217,7 +217,11 @@ public:
 						return 0;
 					}
 				}
-				else iter++;
+				else 
+				{
+					assert(false);
+					iter++;
+				}
 			}
 			bucket.unlock();
 			pos++;
