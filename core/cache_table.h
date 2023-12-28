@@ -217,7 +217,7 @@ public:
 						return 0;
 					}
 				}
-				else 
+				else
 				{
 					assert(false);
 					iter++;
