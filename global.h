@@ -29,7 +29,7 @@ using namespace std;
 #define OPTIMIZED_MATCH
 
 // enable timeout search
-#define TIMEOUT_THRESHOLD 0.1
+#define TIMEOUT_THRESHOLD 1
 
 // enable time threshold for decomposing tasks for timeout task
 #define DECOMPOSE_TIME_THRESHOLD 1
