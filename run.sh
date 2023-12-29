@@ -1,3 +1,3 @@
 #!/bin/sh
 
-mpiexec -host localhost -n 2 ./run -file mico.lg -freq 9480 -thread 4
+mpiexec -hostfile $PBS_NODEFILE -n $1 ./run -file ../datasets/yeast_fsm -freq 280 -thread 32 -maxNodes 12
