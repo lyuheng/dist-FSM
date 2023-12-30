@@ -69,20 +69,18 @@ void load_node_topo(void)
 
     num_cores = default_bindings.size();
 
-    if (_my_rank == MASTER_RANK)
-        dump_node_topo(cpu_topo);
+    // if (_my_rank == MASTER_RANK)
+    //     dump_node_topo(cpu_topo);
 }
 
 bool load_core_binding()
 {
     load_node_topo();
-    // int nnodes = cpu_topo.size(), tid = 0;
-    // for (int i = 0; i < nnodes; ++i)
-    // {
-    //     core_bindings[tid++] = cpu_topo[i/2][i%2];
-    // }
-    for (int i = 0; i < 64; ++i)
-        core_bindings[i] = i;
+    int nnodes = cpu_topo.size(), tid = 0;
+    for (int i = 0; i < nnodes; ++i)
+    {
+        core_bindings[tid++] = cpu_topo[i][0];
+    }
     return true;
 }
 
