@@ -1887,8 +1887,7 @@ public:
 
     void run()
     {
-        // bind_to_core(core_bindings[thread_id]);
-        bind_to_core(_my_rank * 8 + thread_id);
+        bind_to_core(core_bindings[thread_id]);
         while (global_end_label == false) // Otherwise, thread terminates
         {
             // Process task or batch of tasks
