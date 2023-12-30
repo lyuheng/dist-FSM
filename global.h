@@ -20,7 +20,7 @@
 
 using namespace std;
 
-#define WAIT_TIME_WHEN_IDLE 100000 // 0.1s
+#define WAIT_TIME_WHEN_IDLE 10000 // 0.1s
 
 // enable printing all found frequent patterns
 // #define VERBOSE_MODE
