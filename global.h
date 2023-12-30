@@ -32,7 +32,7 @@ using namespace std;
 #define TIMEOUT_THRESHOLD 0.1
 
 // enable time threshold for decomposing tasks for timeout task
-#define DECOMPOSE_TIME_THRESHOLD 1
+#define DECOMPOSE_TIME_THRESHOLD 0.1
 
 // Set max vertex sizes of mined patterns
 #define MAX_PATTERN_SIZE 32
