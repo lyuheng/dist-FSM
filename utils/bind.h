@@ -69,8 +69,8 @@ void load_node_topo(void)
 
     num_cores = default_bindings.size();
 
-    // if (_my_rank == MASTER_RANK)
-    //     dump_node_topo(cpu_topo);
+    if (_my_rank == MASTER_RANK)
+        dump_node_topo(cpu_topo);
 }
 
 bool load_core_binding()
