@@ -1,5 +1,5 @@
 #include "worker.h"
-// #include "systemI.h"
+#include "systemI.h"
 #include "setting.h"
 #include "mpi_global.h"
 #include "communication.h"
@@ -11,11 +11,11 @@ using namespace std::chrono;
 int main(int argc, char *argv[])
 {   
     // launch a thread to record memory
-    // char outputfilePeakMem[1000];
-    // sprintf(outputfilePeakMem, "maxmem.txt");
-    // ofstream foutPeakMem(outputfilePeakMem);
-    // GetCurrentPid();
-	// thread t = thread(info, GetCurrentPid(), ref(foutPeakMem));
+    char outputfilePeakMem[1000];
+    sprintf(outputfilePeakMem, "maxmem.txt");
+    ofstream foutPeakMem(outputfilePeakMem);
+    GetCurrentPid();
+	thread t = thread(info, GetCurrentPid(), ref(foutPeakMem));
 
     init_worker(&argc, &argv);
 
@@ -119,9 +119,10 @@ int main(int argc, char *argv[])
             }
         }
     }
-    // global_end_label_mem = false;
-    // t.join();
-	// foutPeakMem.close();
+
+    global_end_label_mem = false;
+    t.join();
+	foutPeakMem.close();
 
     worker.release_pattern_prog_map();
 
