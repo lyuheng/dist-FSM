@@ -79,7 +79,7 @@ bool load_core_binding()
     int nnodes = cpu_topo.size(), tid = 0;
     for (int i = 0; i < nnodes; ++i)
     {
-        core_bindings[tid++] = cpu_topo[i][0];
+        core_bindings[tid++] = cpu_topo[i/2][i%2];
     }
     return true;
 }
