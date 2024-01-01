@@ -290,6 +290,6 @@ int info(int current_pid, std::ofstream& foutPeakMem)
 	foutPeakMem << "memory usage: " << max_memory_usage << "MB" << std::endl;
 
     std::cout << "cpu usage ratio: " << max_cpu_ration * 100 << "%" << std::endl;
-	std::cout << "memory usage: " << max_memory_usage/1024.0 << "GB" << std::endl;
+	std::cout << "memory usage: " << max_memory_usage << "MB" << std::endl;
 	return 0;
 }
