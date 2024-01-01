@@ -278,7 +278,7 @@ int info(int current_pid, std::ofstream& foutPeakMem)
 
 	while (global_end_label_mem)
 	{
-		GoToSleep(1000); //1s
+		GoToSleep(100); //1s
 		//std::cout << "current pid: " << current_pid << std::endl;
 		float cpu_usage_ratio = GetCpuUsageRatio(current_pid);
 		float memory_usage = GetMemoryUsage(current_pid);
@@ -290,6 +290,6 @@ int info(int current_pid, std::ofstream& foutPeakMem)
 	foutPeakMem << "memory usage: " << max_memory_usage << "MB" << std::endl;
 
     std::cout << "cpu usage ratio: " << max_cpu_ration * 100 << "%" << std::endl;
-	std::cout << "memory usage: " << max_memory_usage << "MB" << std::endl;
+	std::cout << "memory usage: " << max_memory_usage/1024.0 << "GB" << std::endl;
 	return 0;
 }
