@@ -120,8 +120,10 @@ int main(int argc, char *argv[])
     //     }
     // }
 
-    vector<int> arr = {0,1,2};
-    cout << arr[0] << " " << arr[1] << " " << arr[2] << '\n';
+    vector<int> arr(100);
+    for(int i=0; i<100; ++i)
+        arr[i] = std::rand() % 10;
+    cout << std::accumulate(arr.begin(), arr.end(), 0) << endl;
 
     global_end_label_mem = false;
     t.join();
