@@ -11,126 +11,121 @@ using namespace std::chrono;
 int main(int argc, char *argv[])
 {   
     // launch a thread to record memory
-    char outputfilePeakMem[1000];
-    sprintf(outputfilePeakMem, "maxmem.txt");
-    ofstream foutPeakMem(outputfilePeakMem);
-    GetCurrentPid();
-	thread t = thread(info, GetCurrentPid(), ref(foutPeakMem));
+    // char outputfilePeakMem[1000];
+    // sprintf(outputfilePeakMem, "maxmem.txt");
+    // ofstream foutPeakMem(outputfilePeakMem);
+    // GetCurrentPid();
+	// thread t = thread(info, GetCurrentPid(), ref(foutPeakMem));
 
-    // init_worker(&argc, &argv);
+    init_worker(&argc, &argv);
 
-    // cout << "Rank: " << _my_rank << endl; 
+    cout << "Rank: " << _my_rank << endl; 
 
-    // load_core_binding();
+    load_core_binding();
 
-    // string fileName;
-    // int support, thread_num = 32;
+    string fileName;
+    int support, thread_num = 32;
 
-    // // load graph file
-	// char * argfilename = getCmdOption(argv, argv + argc, "-file");
-	// if(argfilename)
-	// 	fileName = string(argfilename);
-    // else 
-    //     throw std::runtime_error("Input filename (-file) is empty!");
+    // load graph file
+	char * argfilename = getCmdOption(argv, argv + argc, "-file");
+	if(argfilename)
+		fileName = string(argfilename);
+    else 
+        throw std::runtime_error("Input filename (-file) is empty!");
 
-    // // get user-given support threshold
-	// char * argSupport = getCmdOption(argv, argv + argc, "-freq");
-	// if(argSupport)
-	// 	support = atoi(argSupport);
-    // else 
-    //     throw std::runtime_error("Input support frequency (-freq) is empty!");
+    // get user-given support threshold
+	char * argSupport = getCmdOption(argv, argv + argc, "-freq");
+	if(argSupport)
+		support = atoi(argSupport);
+    else 
+        throw std::runtime_error("Input support frequency (-freq) is empty!");
 
-    // // parameter to set the maximum subgraph size (in terms of the number of vertices)
-	// char * argMaxNodes = getCmdOption(argv, argv + argc, "-maxNodes");
-	// if(argMaxNodes)
-	// 	Settings::maxNumNodes = atoi(argMaxNodes);
+    // parameter to set the maximum subgraph size (in terms of the number of vertices)
+	char * argMaxNodes = getCmdOption(argv, argv + argc, "-maxNodes");
+	if(argMaxNodes)
+		Settings::maxNumNodes = atoi(argMaxNodes);
     
-    // // get user-given number of threads
-    // char * argThreads = getCmdOption(argv, argv + argc, "-thread");
-	// if(argThreads)
-	// 	thread_num = atoi(argThreads);
+    // get user-given number of threads
+    char * argThreads = getCmdOption(argv, argv + argc, "-thread");
+	if(argThreads)
+		thread_num = atoi(argThreads);
 
-    // if (thread_num > core_bindings.size())
-    // {
-    //     if (_my_rank == MASTER_RANK)
-    //     {
-    //         stringstream iss;
-    //         iss << "Input number of threads " << thread_num << " exceeds number of CPU cores " << core_bindings.size() << "!";
-    //         throw std::runtime_error(iss.str());
-    //     }
-    // }
+    if (thread_num > core_bindings.size())
+    {
+        if (_my_rank == MASTER_RANK)
+        {
+            stringstream iss;
+            iss << "Input number of threads " << thread_num << " exceeds number of CPU cores " << core_bindings.size() << "!";
+            throw std::runtime_error(iss.str());
+        }
+    }
 
-    // char * argUseLB = getCmdOption(argv, argv + argc, "-lb");
-    // if(argUseLB)
-    //     Settings::useLB = atoi(argUseLB);
+    char * argUseLB = getCmdOption(argv, argv + argc, "-lb");
+    if(argUseLB)
+        Settings::useLB = atoi(argUseLB);
 
-    // auto time1 = steady_clock::now();
+    auto time1 = steady_clock::now();
 
-    // grami.nsupport_ = support;
-    // grami.pruned_graph.nsupport_ = support;
+    grami.nsupport_ = support;
+    grami.pruned_graph.nsupport_ = support;
    
-    // Worker worker(thread_num);
+    Worker worker(thread_num);
 
-    // worker.load_data(support, fileName);
+    worker.load_data(support, fileName);
 
-    // auto time2 = steady_clock::now();
+    auto time2 = steady_clock::now();
 
-    // worker.run();
+    worker.run();
 
-    // auto time3 = steady_clock::now();
+    auto time3 = steady_clock::now();
 
-    // if (_my_rank == MASTER_RANK)
-    // {
-    //     ui ttl_result = std::accumulate(results_counter.begin(), results_counter.end(), 0);
-    //     ui ttl_maxsize = *std::max_element(results_maximum_nodes.begin(), results_maximum_nodes.end());;
-    //     cout << "Results by each worker: {" << ttl_result; 
-    //     for (int i=0; i<_num_workers; ++i)
-    //     {
-    //         if (i != MASTER_RANK)
-    //         {
-    //             ui found = recv_data<ui>(i, RESULT_CHANNEL);
-    //             cout << ", " << found;
-    //             ttl_result += found;
-    //         }
-    //     }
-    //     for (int i=0; i<_num_workers; ++i)
-    //     {
-    //         if (i != MASTER_RANK)
-    //         {
-    //             ui found = recv_data<ui>(i, MAXSIZE_CHANNEL);
-    //             ttl_maxsize = ttl_maxsize > found ? ttl_maxsize : found;
-    //         }
-    //     }
-    //     cout << "}\n";
-    //     cout << "[TIME] Loading Graph Time: " << (float)duration_cast<milliseconds>(time2 - time1).count() / 1000 << " s" << endl;
-    //     cout << "[TIME] Mining Time: " << (float)duration_cast<milliseconds>(time3 - time2).count() / 1000 << " s" << endl;
-    //     cout << "[TIME] Total Elapsed Time: " << (float)duration_cast<milliseconds>(time3 - time1).count() / 1000 << " s" << endl;
-    //     cout << "[INFO] # Frequent Patterns: " << ttl_result << endl;
-    //     cout << "[INFO] Maximum number of vertices: " << ttl_maxsize << endl;
-    // }
-    // else
-    // {
-    //     for (int i=0; i<_num_workers; ++i)
-    //     {
-    //         if (i != MASTER_RANK)
-    //         {
-    //             send_data(std::accumulate(results_counter.begin(), results_counter.end(), 0), MASTER_RANK, RESULT_CHANNEL);
-    //             send_data(*std::max_element(results_maximum_nodes.begin(), results_maximum_nodes.end()), MASTER_RANK, MAXSIZE_CHANNEL);
-    //         }
-    //     }
-    // }
+    if (_my_rank == MASTER_RANK)
+    {
+        ui ttl_result = std::accumulate(results_counter.begin(), results_counter.end(), 0);
+        ui ttl_maxsize = *std::max_element(results_maximum_nodes.begin(), results_maximum_nodes.end());;
+        cout << "Results by each worker: {" << ttl_result; 
+        for (int i=0; i<_num_workers; ++i)
+        {
+            if (i != MASTER_RANK)
+            {
+                ui found = recv_data<ui>(i, RESULT_CHANNEL);
+                cout << ", " << found;
+                ttl_result += found;
+            }
+        }
+        for (int i=0; i<_num_workers; ++i)
+        {
+            if (i != MASTER_RANK)
+            {
+                ui found = recv_data<ui>(i, MAXSIZE_CHANNEL);
+                ttl_maxsize = ttl_maxsize > found ? ttl_maxsize : found;
+            }
+        }
+        cout << "}\n";
+        cout << "[TIME] Loading Graph Time: " << (float)duration_cast<milliseconds>(time2 - time1).count() / 1000 << " s" << endl;
+        cout << "[TIME] Mining Time: " << (float)duration_cast<milliseconds>(time3 - time2).count() / 1000 << " s" << endl;
+        cout << "[TIME] Total Elapsed Time: " << (float)duration_cast<milliseconds>(time3 - time1).count() / 1000 << " s" << endl;
+        cout << "[INFO] # Frequent Patterns: " << ttl_result << endl;
+        cout << "[INFO] Maximum number of vertices: " << ttl_maxsize << endl;
+    }
+    else
+    {
+        for (int i=0; i<_num_workers; ++i)
+        {
+            if (i != MASTER_RANK)
+            {
+                send_data(std::accumulate(results_counter.begin(), results_counter.end(), 0), MASTER_RANK, RESULT_CHANNEL);
+                send_data(*std::max_element(results_maximum_nodes.begin(), results_maximum_nodes.end()), MASTER_RANK, MAXSIZE_CHANNEL);
+            }
+        }
+    }
 
-    vector<int> arr(100);
-    for(int i=0; i<100; ++i)
-        arr[i] = std::rand() % 10;
-    cout << std::accumulate(arr.begin(), arr.end(), 0) << endl;
+    // global_end_label_mem = false;
+    // t.join();
+	// foutPeakMem.close();
 
-    global_end_label_mem = false;
-    t.join();
-	foutPeakMem.close();
+    worker.release_pattern_prog_map();
 
-    // worker.release_pattern_prog_map();
-
-    // worker_finalize();
+    worker_finalize();
     return 0;
 }
