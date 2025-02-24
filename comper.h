@@ -1278,7 +1278,9 @@ public:
                 Domain & vq_candidates = pattern->get_cands()[tc->refill_order[tc->next_vq]];
 
 
-                Task * t = new Task(tc->next_vq, vq_candidates[idx], idx);
+                // Task * t = new Task(tc->next_vq, vq_candidates[idx], idx);
+                Task * t = new Task(tc->refill_order[tc->next_vq], vq_candidates[idx], idx);
+
                 tmp_vector.push_back(t);
 
                 // update
