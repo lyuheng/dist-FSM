@@ -1251,6 +1251,33 @@ public:
         return true;
     }
 
+    bool refill_Q_adjust_order(bool unlock)
+    {
+        bool exit = false;
+        while(!exit)
+        {
+            tc->vq_stops_refill_mtx[tc->refill_order[tc->next_vq]].rdlock();
+            if(tc->vq_stops_refill[tc->refill_order[tc->next_vq]])
+            {
+                tc->vq_stops_refill_mtx[tc->refill_order[tc->next_vq]].unlock();
+
+                tc->next_vq ++;
+                if(tc->next_vq == tc->pattern->size()) // if last one, exit
+                {
+                    if(unlock) tc->refill_mtx.unlock();
+                    return false;
+                }
+            }
+            else
+            {
+                tc->vq_stops_refill_mtx[tc->refill_order[tc->next_vq]].unlock();
+                exit = true;
+            }
+        }
+
+        return true;
+    }
+
     bool refill_Q()
     {
         if(!tc->frequent_tag) return false;
@@ -1263,7 +1290,7 @@ public:
         if(!tc->nothing_to_refill())
         {
 
-            if(!refill_Q_adjust(true))
+            if(!refill_Q_adjust_order(true))
             {
                 return false;
             }
@@ -1290,7 +1317,7 @@ public:
                     tc->next_vq ++;
                     if(tc->nothing_to_refill())
                         break;
-                    if(!refill_Q_adjust(false))
+                    if(!refill_Q_adjust_order(false))
                         break;
                 }
             }
