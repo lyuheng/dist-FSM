@@ -131,7 +131,13 @@ struct task_container
 
     // Progress status
     // *** for round-robin refill
-    VertexID next_vq; // 0->1->2->3
+    // === 02/24/2025 ===
+    // Option 1: round-robin refill  0->1->2->3
+    // Option 2: Asscending ordered by size of candidate set (for efficiently filter infrequent patterns ???)
+    VertexID next_vq; 
+    vector<ui> refill_order;
+
+
     vector<ui> next_domainPos; // next_domainPos[v_q] = next position in domain(v_q) to refill with
     // *** for deciding the end condition of each v_q 
     vector<ui> domain_finished; // domain_finished[v_q] = how many domain elements of v_q are processed
@@ -226,6 +232,10 @@ struct task_container
         comper_counter = 0;
 
         next_vq = 0;
+
+        refill_order.resize(size);
+        for (ui i = 0; i < size; i++) 
+            refill_order[i] = i;
 
         domain_done = 0;
 
@@ -1260,8 +1270,13 @@ public:
 
             while(tmp_vector.size() < MINI_BATCH_NUM)
             {
-                VertexID & idx = tc->next_domainPos[tc->next_vq];
-                Domain & vq_candidates = pattern->get_cands()[tc->next_vq];
+                // 02/24/2025 
+                // VertexID & idx = tc->next_domainPos[tc->next_vq];
+                // Domain & vq_candidates = pattern->get_cands()[tc->next_vq];
+
+                VertexID & idx = tc->next_domainPos[refill_order[tc->next_vq]];
+                Domain & vq_candidates = pattern->get_cands()[refill_order[tc->next_vq]];
+
                 
                 Task * t = new Task(tc->next_vq, vq_candidates[idx], idx);
                 tmp_vector.push_back(t);
@@ -1540,6 +1555,14 @@ public:
 
             if(keep)
             {
+                // set refill_order here
+                std::sort(tc_new->refill_order.begin(), tc_new->refill_order.end(), 
+                    [&](const ui a, const ui b) {
+                        return tc_new->pattern->get_cands()[a].size() < 
+                                tc_new->pattern->get_cands()[b].size();
+                    });
+
+
                 gmatch_engine.buildTable(tc_new->edge_matrix);
                 for (ui i = 0; i < tc_new->pattern->size(); ++i)
                 {
