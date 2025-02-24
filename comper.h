@@ -1277,7 +1277,7 @@ public:
                 VertexID & idx = tc->next_domainPos[tc->refill_order[tc->next_vq]];
                 Domain & vq_candidates = pattern->get_cands()[tc->refill_order[tc->next_vq]];
 
-                
+
                 Task * t = new Task(tc->next_vq, vq_candidates[idx], idx);
                 tmp_vector.push_back(t);
 
@@ -1556,11 +1556,14 @@ public:
             if(keep)
             {
                 // set refill_order here
+                std::cout << "Before sort " << std::endl;
                 std::sort(tc_new->refill_order.begin(), tc_new->refill_order.end(), 
                     [&](const ui a, const ui b) {
                         return tc_new->pattern->get_cands()[a].size() < 
                                 tc_new->pattern->get_cands()[b].size();
                     });
+                std::cout << "after sort " << std::endl;
+                
 
 
                 gmatch_engine.buildTable(tc_new->edge_matrix);
