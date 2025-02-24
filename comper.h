@@ -1274,8 +1274,8 @@ public:
                 // VertexID & idx = tc->next_domainPos[tc->next_vq];
                 // Domain & vq_candidates = pattern->get_cands()[tc->next_vq];
 
-                VertexID & idx = tc->next_domainPos[refill_order[tc->next_vq]];
-                Domain & vq_candidates = pattern->get_cands()[refill_order[tc->next_vq]];
+                VertexID & idx = tc->next_domainPos[tc->refill_order[tc->next_vq]];
+                Domain & vq_candidates = pattern->get_cands()[tc->refill_order[tc->next_vq]];
 
                 
                 Task * t = new Task(tc->next_vq, vq_candidates[idx], idx);
