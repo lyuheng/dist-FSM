@@ -1585,11 +1585,11 @@ public:
             if(keep)
             {
                 // set refill_order here
-                std::sort(tc_new->refill_order.begin(), tc_new->refill_order.end(), 
-                    [&](const ui a, const ui b) {
-                        return tc_new->pattern->get_cands()[a].size() < 
-                                tc_new->pattern->get_cands()[b].size();
-                    });
+                // std::sort(tc_new->refill_order.begin(), tc_new->refill_order.end(), 
+                //     [&](const ui a, const ui b) {
+                //         return tc_new->pattern->get_cands()[a].size() < 
+                //                 tc_new->pattern->get_cands()[b].size();
+                //     });
 
                 gmatch_engine.buildTable(tc_new->edge_matrix);
                 for (ui i = 0; i < tc_new->pattern->size(); ++i)
