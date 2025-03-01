@@ -1588,7 +1588,7 @@ public:
 
             if(keep)
             {
-                set refill_order here
+                // set refill_order here
                 std::sort(tc_new->refill_order.begin(), tc_new->refill_order.end(), 
                     [&](const ui a, const ui b) {
                         return tc_new->pattern->get_cands()[a].size() < 
