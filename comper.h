@@ -1251,6 +1251,10 @@ public:
         return true;
     }
 
+    /**
+     * Optimized implementation of refill_Q_adjust()
+     * It considers the refilled order of vertices based on size of candidates
+     */
     bool refill_Q_adjust_order(bool unlock)
     {
         bool exit = false;
@@ -1584,7 +1588,7 @@ public:
 
             if(keep)
             {
-                // set refill_order here
+                // // set refill_order here
                 // std::sort(tc_new->refill_order.begin(), tc_new->refill_order.end(), 
                 //     [&](const ui a, const ui b) {
                 //         return tc_new->pattern->get_cands()[a].size() < 
