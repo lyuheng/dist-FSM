@@ -101,6 +101,19 @@ int main(int argc, char *argv[])
                 ttl_maxsize = ttl_maxsize > found ? ttl_maxsize : found;
             }
         }
+
+#ifdef COMM_STATS
+        float ttl_comm_data_size = comm_data_size[0] + comm_data_size[1];
+        for (int i=0; i<_num_workers; ++i)
+        {
+            if (i != MASTER_RANK)
+            {
+                float comm_size = recv_data<float>(i, COMM_STATS_CHANNEL);
+                ttl_comm_data_size += comm_size;
+            }
+        }
+        cout << "[INFO] Communication Data Size (MB): " << ttl_comm_data_size << endl;
+#endif
         cout << "}\n";
         cout << "[TIME] Loading Graph Time: " << (float)duration_cast<milliseconds>(time2 - time1).count() / 1000 << " s" << endl;
         cout << "[TIME] Mining Time: " << (float)duration_cast<milliseconds>(time3 - time2).count() / 1000 << " s" << endl;
@@ -116,6 +129,10 @@ int main(int argc, char *argv[])
             {
                 send_data(std::accumulate(results_counter.begin(), results_counter.end(), 0), MASTER_RANK, RESULT_CHANNEL);
                 send_data(*std::max_element(results_maximum_nodes.begin(), results_maximum_nodes.end()), MASTER_RANK, MAXSIZE_CHANNEL);
+
+#ifdef COMM_STATS
+                send_data(comm_data_size[0] + comm_data_size[1], MASTER_RANK, COMM_STATS_CHANNEL);
+#endif
             }
         }
     }

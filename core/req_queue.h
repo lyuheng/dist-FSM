@@ -57,6 +57,7 @@ public:
 					sth_sent = true;
 					//send reqs to tgt
 					MPI_Send(m0->get_buf(), m0->size(), MPI_CHAR, i, CHANNEL, MPI_COMM_WORLD);
+					comm_data_size[1] += m0->size() / 1024.0 / 1024.0;
 					//------
 					delete m0;
 					m0 = new ibinstream;
@@ -72,6 +73,7 @@ public:
 					sth_sent = true;
 					//send reqs to tgt
 					MPI_Send(m1->get_buf(), m1->size(), MPI_CHAR, i, CHANNEL, MPI_COMM_WORLD);
+					comm_data_size[1] += m1->size() / 1024.0 / 1024.0;
 					//------
 					delete m1;
 					m1 = new ibinstream;

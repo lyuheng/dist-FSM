@@ -63,6 +63,9 @@ public:
         results_counter.assign(comper_num, 0);
         results_maximum_nodes.assign(comper_num, 2);
 
+        comm_data_size[0] = 0.0f;
+        comm_data_size[1] = 0.0f;
+
         global_cache_table = cache_table = new CacheTableT;
 
         global_pending_patterns = pending_patterns = new PendingMap;

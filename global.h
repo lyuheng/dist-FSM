@@ -25,6 +25,9 @@ using namespace std;
 // enable printing all found frequent patterns
 // #define VERBOSE_MODE
 
+// enable printing network commnuication stats
+#define COMM_STATS
+
 // enable optimized version of subgraph matching methods
 #define OPTIMIZED_MATCH
 
@@ -70,6 +73,9 @@ atomic<bool> global_end_label(false);
 // results counter
 vector<ui> results_counter;
 vector<ui> results_maximum_nodes;
+
+// in MB
+float comm_data_size[2];
 
 TaskProgMap global_prog_map;
 
