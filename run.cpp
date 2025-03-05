@@ -112,7 +112,6 @@ int main(int argc, char *argv[])
                 ttl_comm_data_size += comm_size;
             }
         }
-        cout << "[STAT] Communication Data Size (MB): " << ttl_comm_data_size << endl;
 #endif
         cout << "}\n";
         cout << "[TIME] Loading Graph Time: " << (float)duration_cast<milliseconds>(time2 - time1).count() / 1000 << " s" << endl;
@@ -120,6 +119,10 @@ int main(int argc, char *argv[])
         cout << "[TIME] Total Elapsed Time: " << (float)duration_cast<milliseconds>(time3 - time1).count() / 1000 << " s" << endl;
         cout << "[INFO] # Frequent Patterns: " << ttl_result << endl;
         cout << "[INFO] Maximum number of vertices: " << ttl_maxsize << endl;
+        
+#ifdef COMM_STATS
+        cout << "[STAT] Communication Data Size (MB): " << ttl_comm_data_size << endl;
+#endif
     }
     else
     {
