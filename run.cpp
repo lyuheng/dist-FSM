@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
                 ttl_comm_data_size += comm_size;
             }
         }
-        cout << "[INFO] Communication Data Size (MB): " << ttl_comm_data_size << endl;
+        cout << "[STAT] Communication Data Size (MB): " << ttl_comm_data_size << endl;
 #endif
         cout << "}\n";
         cout << "[TIME] Loading Graph Time: " << (float)duration_cast<milliseconds>(time2 - time1).count() / 1000 << " s" << endl;
