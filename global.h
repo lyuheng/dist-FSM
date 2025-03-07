@@ -45,6 +45,8 @@ using namespace std;
 
 #define SEQNO_LIMIT 9223372036854775807
 
+inline double get_time();
+
 GraMi grami;
 
 int activeQ_num(0);
@@ -151,7 +153,7 @@ struct RespondMsg
     {
         m << msg.qid;
         m << msg.candidates;
-        m << msg.respond_ts;
+        m << get_time();
         return m;
     }
 };

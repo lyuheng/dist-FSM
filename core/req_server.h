@@ -30,9 +30,9 @@ public:
             bucket.unlock();
             // cout << "send value of key = " << key.parent_qid << endl;
 
-            double cur_ts = get_time(); // measure before serialization
-            
-            q_resp.add(RespondMsg{key.parent_qid, it->second->candidates, cur_ts}, src);
+            // double cur_ts = get_time(); // measure before serialization
+
+            q_resp.add(RespondMsg{key.parent_qid, it->second->candidates}, src);
 		}
     }
 
