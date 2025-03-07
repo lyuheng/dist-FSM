@@ -27,11 +27,11 @@ public:
         while (m.end() == false)
         {
             m >> value;
+            communication_time += get_time() - value.respond_ts;
+
             std::vector<KeyT> qid_collector;
             cache_table.insert(value.qid, value.candidates, qid_collector);
             // cout << &value << " Receive value of key = " << value.qid << endl;
-
-            communication_time += get_time() - value.respond_ts;
 
             // notify those patterns
             for (auto iter = qid_collector.begin(); iter < qid_collector.end(); ++iter)
