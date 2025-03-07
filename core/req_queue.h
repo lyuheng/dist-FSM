@@ -16,8 +16,6 @@ public:
     Queue q;
     std::thread main_thread;
 
-	double communication_time = 0.0;
-
     void get_msgs(int dst, ibinstream & m)
     {
 		// bind_to_all();
@@ -58,10 +56,8 @@ public:
 				{
 					sth_sent = true;
 					//send reqs to tgt
-					double cur_ts = get_time();
 					MPI_Send(m0->get_buf(), m0->size(), MPI_CHAR, i, CHANNEL, MPI_COMM_WORLD);
 					comm_data_size[1] += m0->size() / 1024.0 / 1024.0;
-					communication_time += get_time() - cur_ts;
 					//------
 					delete m0;
 					m0 = new ibinstream;
@@ -76,10 +72,8 @@ public:
 				{
 					sth_sent = true;
 					//send reqs to tgt
-					double cur_ts = get_time();
 					MPI_Send(m1->get_buf(), m1->size(), MPI_CHAR, i, CHANNEL, MPI_COMM_WORLD);
 					comm_data_size[1] += m1->size() / 1024.0 / 1024.0;
-					communication_time += get_time() - cur_ts;
 					//------
 					delete m1;
 					m1 = new ibinstream;

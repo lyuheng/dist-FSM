@@ -426,6 +426,6 @@ public:
             usleep(WAIT_TIME_WHEN_IDLE);
         }
 
-        comm_data_time = cache_table->q_req.communication_time;
+        comm_data_time = server_req.q_resp.communication_time;
     }
 };
