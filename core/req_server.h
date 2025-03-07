@@ -20,6 +20,8 @@ public:
 		RequestMsg key;
 		while(m.end() == false)
 		{
+            double cur_ts = get_time(); // measure before serialization
+
 		    m >> key;
             auto & bucket = g_pattern_prog_map.get_bucket(key.parent_qid);
             bucket.lock();
@@ -28,7 +30,7 @@ public:
             assert(it != kvmap.end());
             bucket.unlock();
             // cout << "send value of key = " << key.parent_qid << endl;
-            q_resp.add(RespondMsg{key.parent_qid, it->second->candidates}, src);
+            q_resp.add(RespondMsg{key.parent_qid, it->second->candidates, cur_ts}, src);
 		}
     }
 

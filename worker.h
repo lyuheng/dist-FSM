@@ -425,5 +425,7 @@ public:
             // Avoid busy-checking
             usleep(WAIT_TIME_WHEN_IDLE);
         }
+
+        comm_data_time = server_resp.communication_time;
     }
 };

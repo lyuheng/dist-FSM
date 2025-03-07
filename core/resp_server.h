@@ -17,6 +17,8 @@ public:
     PendingType & pending_patterns;
     ReadyType & ready_patterns;
 
+    double communication_time = 0.0;
+
     void thread_func(char * buf, int size, int src)
     {
         // bind_to_all();
@@ -28,6 +30,8 @@ public:
             std::vector<KeyT> qid_collector;
             cache_table.insert(value.qid, value.candidates, qid_collector);
             // cout << &value << " Receive value of key = " << value.qid << endl;
+
+            communication_time += get_time() - value.respond_ts;
 
             // notify those patterns
             for (auto iter = qid_collector.begin(); iter < qid_collector.end(); ++iter)

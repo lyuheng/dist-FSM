@@ -8,6 +8,7 @@
 #include <list>
 #include <vector>
 #include <fstream>
+#include <sys/time.h>
 
 #include "constack.h"
 #include "conque.h"
@@ -76,6 +77,7 @@ vector<ui> results_maximum_nodes;
 
 // in MB
 float comm_data_size[2];
+double comm_data_time;
 
 TaskProgMap global_prog_map;
 
@@ -116,6 +118,7 @@ struct RequestMsg
 {
     int qid;
     int parent_qid;
+
     friend obinstream & operator>>(obinstream & m, RequestMsg & msg)
     {
         m >> msg.qid;
@@ -135,16 +138,27 @@ struct RespondMsg
     typedef vector<Domain> DomainT;
     int qid;
     DomainT * candidates;
+    double respond_ts = 0.0; // initialized as 0
+
     friend obinstream & operator>>(obinstream & m, RespondMsg & msg)
     {
         m >> msg.qid;
         m >> msg.candidates;
+        m >> msg.respond_ts;
         return m;
     }
     friend ibinstream & operator<<(ibinstream & m, const RespondMsg & msg)
     {
         m << msg.qid;
         m << msg.candidates;
+        m << msg.respond_ts;
         return m;
     }
 };
+
+// 03/07/25: function for network communication time measurement
+inline double get_time() {
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	return tv.tv_sec + (tv.tv_usec / 1e6);
+}
