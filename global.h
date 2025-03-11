@@ -57,9 +57,9 @@ int activeQ_list_capacity = 40;
 
 void *global_data_stack;
 
-size_t MINI_BATCH_NUM = 800;
+size_t MINI_BATCH_NUM = 80;
 
-int RT_THRESHOLD_FOR_REFILL = 800;
+int RT_THRESHOLD_FOR_REFILL = MINI_BATCH_NUM; // 800;
 
 atomic<int> global_qid{1}; // 0 is occupied by a void pattern
 
@@ -140,20 +140,17 @@ struct RespondMsg
     typedef vector<Domain> DomainT;
     int qid;
     DomainT * candidates;
-    double respond_ts = 0.0; // initialized as 0
 
     friend obinstream & operator>>(obinstream & m, RespondMsg & msg)
     {
         m >> msg.qid;
         m >> msg.candidates;
-        m >> msg.respond_ts;
         return m;
     }
     friend ibinstream & operator<<(ibinstream & m, const RespondMsg & msg)
     {
         m << msg.qid;
         m << msg.candidates;
-        m << get_time();
         return m;
     }
 };
