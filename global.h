@@ -57,7 +57,7 @@ int activeQ_list_capacity = 40;
 
 void *global_data_stack;
 
-size_t MINI_BATCH_NUM = 8;
+size_t MINI_BATCH_NUM = 80;
 
 int RT_THRESHOLD_FOR_REFILL = MINI_BATCH_NUM; // 800;
 
