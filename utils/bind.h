@@ -83,7 +83,11 @@ bool load_core_binding()
     // }
     // return true;
 
-    core_bindings[0] = 0;
+    for (int i = 0; i < 32; ++i)
+    {
+        core_bindings[i] = 0;
+    }
+    
 }
 
 // /*
