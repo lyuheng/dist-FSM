@@ -83,10 +83,7 @@ bool load_core_binding()
     // }
     // return true;
 
-    for (int i = 0; i < nnodes; ++i)
-    {
-        core_bindings[i] = i;
-    }
+    core_bindings[0] = 0;
 }
 
 // /*
