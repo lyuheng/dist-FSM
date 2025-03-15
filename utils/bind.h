@@ -12,7 +12,7 @@
 #include <hwloc.h>
 
 std::vector<std::vector<int>> cpu_topo;
-int num_cores;
+int num_cores = 0;
 
 std::vector<int> default_bindings; // bind to core one-by-one
 std::unordered_map<int, int> core_bindings; // user-defined core binding
