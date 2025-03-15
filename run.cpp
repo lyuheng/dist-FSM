@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 
     cout << "Rank: " << _my_rank << endl; 
 
-    // load_core_binding();
+    load_core_binding();
 
     string fileName;
     int support, thread_num = 32;

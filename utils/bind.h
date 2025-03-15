@@ -12,7 +12,7 @@
 #include <hwloc.h>
 
 std::vector<std::vector<int>> cpu_topo;
-int num_cores = 0;
+int num_cores = 32;
 
 std::vector<int> default_bindings; // bind to core one-by-one
 std::unordered_map<int, int> core_bindings; // user-defined core binding
@@ -73,16 +73,21 @@ std::unordered_map<int, int> core_bindings; // user-defined core binding
 //     //     dump_node_topo(cpu_topo);
 // }
 
-// bool load_core_binding()
-// {
-//     load_node_topo();
-//     int nnodes = cpu_topo.size(), tid = 0;
-//     for (int i = 0; i < nnodes; ++i)
-//     {
-//         core_bindings[tid++] = cpu_topo[i][0];
-//     }
-//     return true;
-// }
+bool load_core_binding()
+{
+    // load_node_topo();
+    // int nnodes = cpu_topo.size(), tid = 0;
+    // for (int i = 0; i < nnodes; ++i)
+    // {
+    //     core_bindings[tid++] = cpu_topo[i][0];
+    // }
+    // return true;
+
+    for (int i = 0; i < nnodes; ++i)
+    {
+        core_bindings[i] = i;
+    }
+}
 
 // /*
 //  * Bind the current thread to a special core (core number)
