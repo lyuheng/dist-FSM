@@ -7,7 +7,7 @@
 
 #define SLEEP_PARAM 2000 // POLLING_TIME = SLEEP_PARAM * _num_workers
 
-#define MAX_STEAL_PATTERN_NUM 100000000
+#define MAX_STEAL_PATTERN_NUM 10
 
 #define MAX_BATCH_SIZE 1000 //number of bytes sent in a batch
 
