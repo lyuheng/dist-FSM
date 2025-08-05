@@ -527,10 +527,19 @@ public:
         m >> p.right_most_path;
         
         // !!!!!!!!!!!!!!!!!!!
-        p.parent_prog = new PatternProgress;
-        p.parent_prog->candidates = new vector<Domain>;  //@@@@@: temporarily don't copy parent prog;
-        m >> p.parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
+        // p.parent_prog = new PatternProgress;
+        // p.parent_prog->candidates = new vector<Domain>;  //@@@@@: temporarily don't copy parent prog;
+        // m >> p.parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
         // m >> p.non_candidates; // since this struct is empty, no need to be copied
+
+        vector<Domain> * candidates_tmp = new vector<Domain>;
+        asm volatile("" : : "r"(candidates_tmp) : "memory");
+
+        m >> candidates_tmp;
+        asm volatile("" : : "r"(candidates_tmp) : "memory");
+
+        // !!!!!!!!!!!!!!!!!!!
+
         m >> p.edge2vertex;
         return m;
     }
