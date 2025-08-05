@@ -536,9 +536,9 @@ public:
         // asm volatile("" : : "r"(candidates_tmp) : "memory");
         bool t;
         m >> t;
-        if (t) {
-            m >> candidates_tmp;
-        }
+        // if (t) {
+        //     m >> candidates_tmp;
+        // }
         // asm volatile("" : : "r"(candidates_tmp) : "memory");
 
         // !!!!!!!!!!!!!!!!!!!
@@ -558,7 +558,7 @@ public:
         if (p.parent_prog->candidates) {
             bool t = true;
             m << t;
-            m << p.parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
+            // m << p.parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
         } else {
             bool t = false;
             m << t;
