@@ -190,8 +190,7 @@ struct task_container
         // add into global g_pattern_prog_map
         tc.pattern->prog = new PatternProgress;
         g_pattern_prog_map.insert(tc.qid, tc.pattern->prog);
-        // !!!!!!!!!!!!!!!!!!!!
-        // tc.pattern->parent_prog = NULL;
+        tc.pattern->parent_prog = NULL;
         tc.pattern->non_candidates.resize(tc.pattern->size());
         return m;
     }
