@@ -525,7 +525,7 @@ public:
         m >> p.vertices_; 
         m >> p.dfscodes;
         m >> p.right_most_path;
-        // m >> parent_prog;  //@@@@@: temporarily don't copy parent prog;
+        m >> parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
         // m >> p.non_candidates; // since this struct is empty, no need to be copied
         m >> p.edge2vertex;
         return m;
@@ -537,7 +537,7 @@ public:
         m << p.vertices_; 
         m << p.dfscodes;
         m << p.right_most_path;
-        // m << parent_prog;  //@@@@@: temporarily don't copy parent prog;
+        m << parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
         // m << p.non_candidates; // since this struct is empty, no need to be copied
         m << p.edge2vertex;
         return m;
