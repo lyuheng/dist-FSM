@@ -181,6 +181,7 @@ struct task_container
 
     bool has_init = false;
 
+
     friend obinstream & operator>>(obinstream & m, task_container & tc)
     {
         m >> tc.parent_qid;
