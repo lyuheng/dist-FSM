@@ -512,6 +512,9 @@ public:
 
     PatternProgress * parent_prog;
 
+    // !!!!!!!!!!!!!!
+    vector<Domain> parent_domain_LB;
+
     VtxSetVec non_candidates; // invalid assignment, used for push-down pruning, will be added into cache
 
     // unordered_map<EdgeID, edge_t> edge2vertex; // EdgeID to edge entity
@@ -531,6 +534,8 @@ public:
         // p.parent_prog->candidates = new vector<Domain>;  //@@@@@: temporarily don't copy parent prog;
         // m >> p.parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
         // m >> p.non_candidates; // since this struct is empty, no need to be copied
+
+        m >> p.parent_domain_LB;
         // !!!!!!!!!!!!!!!!!!!
 
         m >> p.edge2vertex;
@@ -545,9 +550,12 @@ public:
         m << p.right_most_path;
 
         // !!!!!!!!!!!!!!!!!!!
-        // m << p.parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
+        if (p.parent_prog && p.parent_prog->candidates) 
+            m << p.parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
+        else
+            m << p.parent_domain_LB;
         // m << p.non_candidates; // since this struct is empty, no need to be copied
-        
+
         m << p.edge2vertex;
         return m;
     }
