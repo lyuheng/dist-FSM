@@ -21,7 +21,7 @@
 
 using namespace std;
 
-#define WAIT_TIME_WHEN_IDLE 100'000 // 0.1s
+#define WAIT_TIME_WHEN_IDLE 10'000 // 0.1s
 
 
 // enable printing all found frequent patterns
