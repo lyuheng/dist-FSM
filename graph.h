@@ -532,11 +532,11 @@ public:
         // m >> p.parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
         // m >> p.non_candidates; // since this struct is empty, no need to be copied
 
-        vector<Domain> * candidates_tmp = new vector<Domain>;
-        asm volatile("" : : "r"(candidates_tmp) : "memory");
+        vector<Domain> candidates_tmp;
+        // asm volatile("" : : "r"(candidates_tmp) : "memory");
 
         m >> candidates_tmp;
-        asm volatile("" : : "r"(candidates_tmp) : "memory");
+        // asm volatile("" : : "r"(candidates_tmp) : "memory");
 
         // !!!!!!!!!!!!!!!!!!!
 
