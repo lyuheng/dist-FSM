@@ -513,7 +513,7 @@ public:
     PatternProgress * parent_prog;
 
     // !!!!!!!!!!!!!!
-    vector<Domain> parent_domain_LB;
+    volatile vector<Domain> parent_domain_LB;
 
     VtxSetVec non_candidates; // invalid assignment, used for push-down pruning, will be added into cache
 
