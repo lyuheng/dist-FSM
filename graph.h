@@ -534,8 +534,11 @@ public:
 
         vector<Domain> candidates_tmp;
         // asm volatile("" : : "r"(candidates_tmp) : "memory");
-
-        m >> candidates_tmp;
+        bool t;
+        m >> t;
+        if (t) {
+            m >> candidates_tmp;
+        }
         // asm volatile("" : : "r"(candidates_tmp) : "memory");
 
         // !!!!!!!!!!!!!!!!!!!
@@ -552,7 +555,14 @@ public:
         m << p.right_most_path;
 
         // !!!!!!!!!!!!!!!!!!!
-        m << p.parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
+        if (p.parent_prog->candidates) {
+            bool t = true;
+            m << t;
+            m << p.parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
+        } else {
+            bool t = false;
+            m << t;
+        }
         // m << p.non_candidates; // since this struct is empty, no need to be copied
         m << p.edge2vertex;
         return m;
