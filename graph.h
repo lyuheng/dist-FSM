@@ -513,7 +513,7 @@ public:
     PatternProgress * parent_prog;
 
     // !!!!!!!!!!!!!!
-    volatile vector<Domain> parent_domain_LB;
+    vector<Domain> parent_domain_LB;
 
     VtxSetVec non_candidates; // invalid assignment, used for push-down pruning, will be added into cache
 
@@ -536,6 +536,7 @@ public:
         // m >> p.non_candidates; // since this struct is empty, no need to be copied
 
         m >> p.parent_domain_LB;
+        asm volatile("" : : "r"(&p.parent_domain_LB) : "memory");
         // !!!!!!!!!!!!!!!!!!!
 
         m >> p.edge2vertex;
