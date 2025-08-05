@@ -536,7 +536,7 @@ public:
         // m >> p.non_candidates; // since this struct is empty, no need to be copied
 
         m >> p.parent_domain_LB;
-        asm volatile("" : : "r"(&p.parent_domain_LB) : "memory");
+        std::atomic_thread_fence(std::memory_order_seq_cst);
         // !!!!!!!!!!!!!!!!!!!
 
         m >> p.edge2vertex;
