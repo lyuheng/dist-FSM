@@ -555,7 +555,7 @@ public:
         m << p.right_most_path;
 
         // !!!!!!!!!!!!!!!!!!!
-        if (p.parent_prog->candidates) {
+        if (p.parent_prog && p.parent_prog->candidates) {
             bool t = true;
             m << t;
             // m << p.parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
