@@ -525,6 +525,9 @@ public:
         m >> p.vertices_; 
         m >> p.dfscodes;
         m >> p.right_most_path;
+        
+        // !!!!!!!!!!!!!!!!!!!
+        p.parent_prog->candidates = new vector<Domain>;  //@@@@@: temporarily don't copy parent prog;
         m >> p.parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
         // m >> p.non_candidates; // since this struct is empty, no need to be copied
         m >> p.edge2vertex;
@@ -538,7 +541,7 @@ public:
         m << p.dfscodes;
         m << p.right_most_path;
 
-        p.parent_prog->candidates = new vector<Domain>;  //@@@@@: temporarily don't copy parent prog;
+        // !!!!!!!!!!!!!!!!!!!
         m << p.parent_prog->candidates;  //@@@@@: temporarily don't copy parent prog;
         // m << p.non_candidates; // since this struct is empty, no need to be copied
         m << p.edge2vertex;
