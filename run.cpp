@@ -105,6 +105,10 @@ int main(int argc, char *argv[])
 #ifdef COMM_STATS
         float ttl_comm_data_size = comm_data_size[0] + comm_data_size[1];
         double ttl_comm_data_time = comm_data_time;
+
+        float ttl_additional_comm_data_size = additional_comm_size;
+        double ttl_additional_comm_data_time = additional_comm_time;
+
         for (int i=0; i<_num_workers; ++i)
         {
             if (i != MASTER_RANK)
@@ -114,6 +118,12 @@ int main(int argc, char *argv[])
 
                 double comm_time = recv_data<double>(i, COMM_STATS_CHANNEL);
                 ttl_comm_data_time += comm_time;
+
+                float additional_comm_size = recv_data<float>(i, COMM_STATS_CHANNEL);
+                ttl_additional_comm_data_size += additional_comm_size;
+
+                double additional_comm_time = recv_data<double>(i, COMM_STATS_CHANNEL);
+                ttl_additional_comm_data_time += additional_comm_time;
             }
         }
 #endif
@@ -127,6 +137,9 @@ int main(int argc, char *argv[])
 #ifdef COMM_STATS
         cout << "[STAT] Communication Data Size (MB): " << ttl_comm_data_size << endl;
         cout << "[STAT] Average Communication Data Time (sec): " << ttl_comm_data_time / _num_workers  << endl;
+
+        cout << "[STAT] Additional Communication Data Size (MB): " << ttl_additional_comm_data_size << endl;
+        cout << "[STAT] Average Additional Communication Data Time (sec): " << ttl_additional_comm_data_time / _num_workers  << endl;
 #endif
     }
     else
@@ -141,6 +154,9 @@ int main(int argc, char *argv[])
 #ifdef COMM_STATS
                 send_data(comm_data_size[0] + comm_data_size[1], MASTER_RANK, COMM_STATS_CHANNEL);
                 send_data(comm_data_time, MASTER_RANK, COMM_STATS_CHANNEL);
+
+                send_data(additional_comm_size, MASTER_RANK, COMM_STATS_CHANNEL);
+                send_data(additional_comm_time, MASTER_RANK, COMM_STATS_CHANNEL);
 #endif
             }
         }

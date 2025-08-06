@@ -24,11 +24,18 @@
 #include "serialization.h"
 #include "mpi_global.h"
 
+float additional_comm_size = 0.0;
+double additional_comm_time = 0.0;
+
 //============================================
 //binstream-level send/recv
 void send_ibinstream(ibinstream& m, int dst, int tag)
 {
+    double cur_ts = get_time();
     MPI_Send(m.get_buf(), m.size(), MPI_CHAR, dst, tag, MPI_COMM_WORLD);
+
+    additional_comm_size += m.size() / 1024.0 / 1024.0;
+    additional_comm_time += get_time() - cur_ts;
 }
 
 obinstream recv_obinstream(int src, int tag)
